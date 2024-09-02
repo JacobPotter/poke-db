@@ -3,9 +3,11 @@ package models
 
 import (
 	_ "ariga.io/atlas-provider-gorm/gormschema"
-	"gorm.io/driver/sqlite"
+	"fmt"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"os"
 )
 
 var DB *gorm.DB
@@ -15,7 +17,13 @@ var DB *gorm.DB
 // If an error occurs during the connection or migration, a fatal log is generated.
 func ConnectDatabase() {
 
-	database, err := gorm.Open(sqlite.Open("pokemon.db"), &gorm.Config{})
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=postgres port=5432 sslmode=disable TimeZone=UTC",
+		os.Getenv("DB_HOST"),
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+	)
+	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err.Error())

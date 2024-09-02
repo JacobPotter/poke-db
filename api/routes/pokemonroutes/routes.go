@@ -1,12 +1,12 @@
 package pokemonroutes
 
 import (
+	"github.com/JacobPotter/poke-db/api/controllers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"poke-db/controllers"
 )
 
-func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
+func RegisterRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	handler := controllers.NewPokemonHandler(db)
 	// Define routes
 	router.POST("/pokemon", handler.CreatePokemon)

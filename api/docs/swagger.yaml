@@ -1,0 +1,534 @@
+basePath: /api/v1
+definitions:
+  models.Evolution:
+    properties:
+      evolution_requirement:
+        $ref: '#/definitions/models.EvolutionRequirement'
+      evolution_requirement_id:
+        type: integer
+      id:
+        type: integer
+      level_requirement:
+        type: integer
+      pokemon_id:
+        type: integer
+      target_pokemon_id:
+        type: integer
+    type: object
+  models.EvolutionRequirement:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Evolutions:
+    properties:
+      evolutions:
+        items:
+          $ref: '#/definitions/models.Evolution'
+        type: array
+    type: object
+  models.Move:
+    properties:
+      damage:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/models.Type'
+      type_id:
+        type: integer
+    type: object
+  models.Moves:
+    properties:
+      moves:
+        items:
+          $ref: '#/definitions/models.Move'
+        type: array
+    type: object
+  models.Pokemon:
+    properties:
+      evolutions:
+        items:
+          $ref: '#/definitions/models.Evolution'
+        type: array
+      id:
+        type: integer
+      move_set:
+        items:
+          $ref: '#/definitions/models.Move'
+        type: array
+      name:
+        type: string
+      previous_evolution:
+        $ref: '#/definitions/models.Evolution'
+      primary_type:
+        $ref: '#/definitions/models.Type'
+      primary_type_id_id:
+        type: integer
+      secondary_type:
+        $ref: '#/definitions/models.Type'
+      secondary_type_id:
+        type: integer
+    type: object
+  models.Pokemons:
+    properties:
+      pokemon:
+        items:
+          $ref: '#/definitions/models.Pokemon'
+        type: array
+    type: object
+  models.Type:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      no_effect:
+        items:
+          type: integer
+        type: array
+      not_very_effective:
+        items:
+          type: integer
+        type: array
+      super_effective:
+        items:
+          type: integer
+        type: array
+    type: object
+  models.Types:
+    properties:
+      types:
+        items:
+          $ref: '#/definitions/models.Type'
+        type: array
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: pttr.jcb@gmail.com
+    name: Jacob Potter
+  description: Pokemon Database API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: PokeDB API
+  version: "1.0"
+paths:
+  /evolution:
+    get:
+      consumes:
+      - application/json
+      description: List Evolutions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Evolutions'
+      summary: List Evolutions
+      tags:
+      - evolution
+    post:
+      consumes:
+      - application/json
+      description: create a new evolution
+      parameters:
+      - description: The new evolution
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Evolution'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Evolution'
+      summary: Creates Evolution
+      tags:
+      - evolution
+  /evolution/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete evolution by ID
+      parameters:
+      - description: Evolution ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted
+          schema:
+            type: string
+      summary: Delete Evolution
+      tags:
+      - evolution
+    get:
+      consumes:
+      - application/json
+      description: Get evolution by ID
+      parameters:
+      - description: Evolution ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Evolution'
+      summary: Get Evolution
+      tags:
+      - evolution
+    put:
+      consumes:
+      - application/json
+      description: Update evolution by ID
+      parameters:
+      - description: Evolution ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: The updated evolution
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Evolution'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Evolution'
+      summary: Update Evolution
+      tags:
+      - evolution
+  /moves:
+    get:
+      consumes:
+      - application/json
+      description: List Moves
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Moves'
+      summary: List Moves
+      tags:
+      - moves
+    post:
+      consumes:
+      - application/json
+      description: create a new move
+      parameters:
+      - description: The new move
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Move'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Move'
+      summary: Creates Move
+      tags:
+      - moves
+  /moves/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete move by ID
+      parameters:
+      - description: Move ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted
+          schema:
+            type: string
+      summary: Delete Move
+      tags:
+      - moves
+    get:
+      consumes:
+      - application/json
+      description: Get move by ID
+      parameters:
+      - description: Move ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Move'
+      summary: Get Move
+      tags:
+      - moves
+    put:
+      consumes:
+      - application/json
+      description: Update move by ID
+      parameters:
+      - description: Move ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: The updated move
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Move'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Move'
+      summary: Update Move
+      tags:
+      - moves
+  /pokemon:
+    get:
+      consumes:
+      - application/json
+      description: List Pokemon
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pokemons'
+      summary: List Pokemon
+      tags:
+      - pokemon
+    post:
+      consumes:
+      - application/json
+      description: create a new pokemon
+      parameters:
+      - description: The new pokemon
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pokemon'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Pokemon'
+      summary: Creates Pokemon
+      tags:
+      - pokemon
+  /pokemon/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete pokemon by ID
+      parameters:
+      - description: Pokemon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted
+          schema:
+            type: string
+      summary: Delete Pokemon
+      tags:
+      - pokemon
+    get:
+      consumes:
+      - application/json
+      description: Get pokemon by ID
+      parameters:
+      - description: Pokemon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pokemon'
+      summary: Get Pokemon
+      tags:
+      - pokemon
+    put:
+      consumes:
+      - application/json
+      description: Update pokemon by ID
+      parameters:
+      - description: Pokemon ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: The updated pokemon
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Pokemon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Pokemon'
+      summary: Update Pokemon
+      tags:
+      - pokemon
+  /type:
+    get:
+      consumes:
+      - application/json
+      description: List Types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Types'
+      summary: List Types
+      tags:
+      - type
+    post:
+      consumes:
+      - application/json
+      description: create a new type
+      parameters:
+      - description: The new type
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Type'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Type'
+      summary: Creates Type
+      tags:
+      - type
+  /type/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete type by ID
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted
+          schema:
+            type: string
+      summary: Delete Type
+      tags:
+      - type
+    get:
+      consumes:
+      - application/json
+      description: Get type by ID
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Type'
+      summary: Get Type
+      tags:
+      - type
+    put:
+      consumes:
+      - application/json
+      description: Update type by ID
+      parameters:
+      - description: Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: The updated type
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Type'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Type'
+      summary: Update Type
+      tags:
+      - type
+swagger: "2.0"
