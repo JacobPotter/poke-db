@@ -12,17 +12,15 @@ package models
 // The PreviousEvolution field represents the previous evolution of the Pokémon.
 // The MoveSet field is a list of moves that the Pokémon can learn.
 type Pokemon struct {
-	ID                uint        `gorm:"primary_key" json:"id"`
-	Name              string      `json:"name"`
-	PrimaryType       Type        `gorm:"foreignKey:PrimaryTypeId" json:"primary_type"`
-	PrimaryTypeId     uint        `json:"primary_type_id_id"`
-	SecondaryType     Type        `gorm:"foreignKey:SecondaryTypeId" json:"secondary_type"`
-	SecondaryTypeId   uint        `json:"secondary_type_id"`
-	Evolutions        []Evolution `json:"evolutions"`
-	PreviousEvolution Evolution   `gorm:"foreignKey:TargetPokemonId" json:"previous_evolution"`
-	MoveSet           []Move      `gorm:"many2many:pokemon_move_set" json:"move_set"`
-}
-
-type Pokemons struct {
-	Pokemon []Pokemon `json:"pokemon"`
+	ID              uint     `gorm:"primary_key" json:"id"`
+	Name            string   `gorm:"unique" json:"name"`
+	PrimaryType     MoveType `gorm:"foreignKey:PrimaryTypeId" json:"primary_type"`
+	PrimaryTypeId   *uint    `json:"primary_type_id"`
+	SecondaryType   MoveType `gorm:"foreignKey:SecondaryTypeId;" json:"secondary_type,omitempty"`
+	SecondaryTypeId *uint    `json:"secondary_type_id"`
+	MoveSet         []Move   `gorm:"many2many:pokemon_move_set" json:"move_set"`
+	SpriteUrl       string   `json:"sprite_url"`
+	Cry             string   `json:"cry"`
+	Weight          int      `json:"weight"`
+	Height          int      `json:"height"`
 }

@@ -13,10 +13,7 @@ func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 			page = 1
 		}
 
-		switch {
-		case pageSize > 100:
-			pageSize = 100
-		case pageSize <= 0:
+		if pageSize <= 0 {
 			pageSize = 10
 		}
 
@@ -30,6 +27,6 @@ func GetPaginationQueryParams(c *gin.Context) (int, int) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "bad value for query parameter page"})
 	}
-	pageSize, err := strconv.ParseInt(c.DefaultQuery("pageSize", "10"), 10, 64)
+	pageSize, err := strconv.ParseInt(c.DefaultQuery("pageSize", "100"), 10, 64)
 	return int(page), int(pageSize)
 }

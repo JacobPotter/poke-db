@@ -178,6 +178,162 @@ const docTemplate = `{
                 }
             }
         },
+        "/evolution_requirements": {
+            "get": {
+                "description": "List Evolution Requirements",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evolution_requirements"
+                ],
+                "summary": "List Evolution Requirements",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create a new evolution requirement",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evolution_requirements"
+                ],
+                "summary": "Creates Evolution Requirement",
+                "parameters": [
+                    {
+                        "description": "The new evolution requirement",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                }
+            }
+        },
+        "/evolution_requirements/{id}": {
+            "get": {
+                "description": "Get evolution requirement by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evolution_requirements"
+                ],
+                "summary": "Get Evolution Requirement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Evolution Requirement ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update evolution requirement by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evolution_requirements"
+                ],
+                "summary": "Update Evolution Requirement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Evolution Requirement ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "The updated evolution requirement",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.EvolutionRequirement"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete evolution requirement by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "evolution_requirements"
+                ],
+                "summary": "Delete Evolution Requirement",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Evolution Requirement ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "deleted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/moves": {
             "get": {
                 "description": "List Moves",
@@ -805,7 +961,7 @@ const docTemplate = `{
         "models.Types": {
             "type": "object",
             "properties": {
-                "types": {
+                "moveTypes": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Type"
