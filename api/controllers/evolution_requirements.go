@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// @BasePath /api/v1
+
 // EvolutionRequirementHandler represents a handler for evolution requirements.
 // It contains a database connection object.
 type EvolutionRequirementHandler struct {
@@ -27,6 +29,20 @@ func NewEvolutionRequirementHandler(db *gorm.DB) *EvolutionRequirementHandler {
 // which page of results to retrieve. If an error occurs during the database query, it returns
 // an HTTP 500 Internal Server Error response with the error message. Otherwise, it returns
 // an HTTP 200 OK response with the list of evolution requirements in the "evolution_requirements" field of the JSON response body.
+//
+// @Summary List Evolution Requirements
+//
+// @Description List Evolution Requirements
+//
+// @Tags evolution_requirements
+//
+// @Accept json
+//
+// @Produce json
+//
+// @Success 200 {object} models.EvolutionRequirement
+//
+// @Router /evolution_requirements [get]
 func (h *EvolutionRequirementHandler) ListEvolutionRequirements(c *gin.Context) {
 	var evolutionRequirements []models.EvolutionRequirement
 
@@ -45,6 +61,22 @@ func (h *EvolutionRequirementHandler) ListEvolutionRequirements(c *gin.Context) 
 // It takes the ID parameter from the request URL and queries the database for the corresponding evolution requirement.
 // If the evolution requirement is found, it returns an HTTP 200 OK response with the evolution requirement in the "evolution_requirement" field of the JSON response body.
 // If the evolution requirement is not found, it returns an HTTP 500 Internal Server Error response with an error message.
+//
+// @Summary Get Evolution Requirement
+//
+// @Description Get evolution requirement by ID
+//
+// @Tags evolution_requirements
+//
+// @Accept json
+//
+// @Param id  path int true "Evolution Requirement ID"
+//
+// @Produce json
+//
+// @Success 200 {object} models.EvolutionRequirement
+//
+// @Router /evolution_requirements/{id} [get]
 func (h *EvolutionRequirementHandler) GetEvolutionRequirement(c *gin.Context) {
 	id := c.Param("id")
 	var evolutionRequirement models.EvolutionRequirement
@@ -60,7 +92,22 @@ func (h *EvolutionRequirementHandler) GetEvolutionRequirement(c *gin.Context) {
 // it returns an HTTP 400 Bad Request response with the error message. Otherwise, it inserts the new evolution requirement
 // into the database, and returns an HTTP 200 OK response with the created evolution requirement in the "evolution_requirement" field
 // of the JSON response body.
-
+//
+// @Summary Creates Evolution Requirement
+//
+// @Description create a new evolution requirement
+//
+// @Tags evolution_requirements
+//
+// @Accept json
+//
+// @Produce json
+//
+// @Param data body models.EvolutionRequirement true "The new evolution requirement"
+//
+// @Success 201 {object} models.EvolutionRequirement
+//
+// @Router /evolution_requirements [post]
 func (h *EvolutionRequirementHandler) CreateEvolutionRequirement(c *gin.Context) {
 	var evolutionRequirement models.EvolutionRequirement
 	if err := c.ShouldBindJSON(&evolutionRequirement); err != nil {
@@ -77,6 +124,24 @@ func (h *EvolutionRequirementHandler) CreateEvolutionRequirement(c *gin.Context)
 // If the input is valid, it updates the corresponding fields of the evolution requirement in the database with the new values and returns an HTTP 200 OK response with the updated evolution requirement in the "evolution_requirement" field of the JSON response body.
 // If the evolution requirement is not found, it returns an HTTP 500 Internal Server Error response with an error message.
 // If the input is invalid, it returns an HTTP 400 Bad Request response with the error message.
+//
+// @Summary Update Evolution Requirement
+//
+// @Description Update evolution requirement by ID
+//
+// @Tags evolution_requirements
+//
+// @Accept json
+//
+// @Produce json
+//
+// @Param id  path int true "Evolution Requirement ID"
+//
+// @Param data body models.EvolutionRequirement true "The updated evolution requirement"
+//
+// @Success 200 {object} models.EvolutionRequirement
+//
+// @Router /evolution_requirements/{id} [put]
 func (h *EvolutionRequirementHandler) UpdateEvolutionRequirement(c *gin.Context) {
 	id := c.Param("id")
 	var evolutionRequirement models.EvolutionRequirement
@@ -103,6 +168,22 @@ func (h *EvolutionRequirementHandler) UpdateEvolutionRequirement(c *gin.Context)
 // If the evolution requirement is found, it deletes it from the database and returns an HTTP 200 OK response with the "deleted" message in the response body.
 // If the evolution requirement is not found, it returns an HTTP 500 Internal Server Error response with an error message.
 // It uses the gin.Context parameter to access the HTTP request and write the response.
+//
+// @Summary Delete Evolution Requirement
+//
+// @Description Delete evolution requirement by ID
+//
+// @Tags evolution_requirements
+//
+// @Accept json
+//
+// @Produce json
+//
+// @Param id  path int true "Evolution Requirement ID"
+//
+// @Success 200 {string} string "deleted"
+//
+// @Router /evolution_requirements/{id} [delete]
 func (h *EvolutionRequirementHandler) DeleteEvolutionRequirement(c *gin.Context) {
 	id := c.Param("id")
 	var evolutionRequirement models.EvolutionRequirement

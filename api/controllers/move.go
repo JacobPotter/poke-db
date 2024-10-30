@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// @BasePath /api/v1
+
 // MoveHandler is responsible for handling move-related requests and operations.
 // It contains methods for creating, getting, listing, updating, and deleting moves.
 type MoveHandler struct {

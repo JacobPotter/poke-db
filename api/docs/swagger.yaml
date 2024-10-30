@@ -222,6 +222,109 @@ paths:
       summary: Update Evolution
       tags:
       - evolution
+  /evolution_requirements:
+    get:
+      consumes:
+      - application/json
+      description: List Evolution Requirements
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EvolutionRequirement'
+      summary: List Evolution Requirements
+      tags:
+      - evolution_requirements
+    post:
+      consumes:
+      - application/json
+      description: create a new evolution requirement
+      parameters:
+      - description: The new evolution requirement
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.EvolutionRequirement'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.EvolutionRequirement'
+      summary: Creates Evolution Requirement
+      tags:
+      - evolution_requirements
+  /evolution_requirements/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete evolution requirement by ID
+      parameters:
+      - description: Evolution Requirement ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: deleted
+          schema:
+            type: string
+      summary: Delete Evolution Requirement
+      tags:
+      - evolution_requirements
+    get:
+      consumes:
+      - application/json
+      description: Get evolution requirement by ID
+      parameters:
+      - description: Evolution Requirement ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EvolutionRequirement'
+      summary: Get Evolution Requirement
+      tags:
+      - evolution_requirements
+    put:
+      consumes:
+      - application/json
+      description: Update evolution requirement by ID
+      parameters:
+      - description: Evolution Requirement ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: The updated evolution requirement
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.EvolutionRequirement'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EvolutionRequirement'
+      summary: Update Evolution Requirement
+      tags:
+      - evolution_requirements
   /moves:
     get:
       consumes:

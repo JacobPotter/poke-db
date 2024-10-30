@@ -1,0 +1,8 @@
+###
+GET {{host}}/api/v1/type
+
+
+
+###
+GET {{host}}/pokemon?pageSize=1500
+

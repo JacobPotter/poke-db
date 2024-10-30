@@ -13,14 +13,14 @@ import (
 
 // TestTypeHandler_ListType is a unit test function that tests the "ListType" functionality
 // of the TypeHandler. It sets up the necessary dependencies, such as the router, mock, and
-// database, and executes a test case where the expected SQL query is "SELECT * FROM \"types\"",
+// database, and executes a test case where the expected SQL query is "SELECT * FROM \"moveTypes\"",
 // and the expected result is a HTTP response with status code 200 (OK). After the test execution,
 // it verifies if all expectations of the mock have been met.
 func TestTypeHandler_ListType(t *testing.T) {
 	router, mock, db := setupTest(t)
 	defer db.Close()
-	t.Run("should list types", func(t *testing.T) {
-		expectedSQL := `SELECT * FROM "types" LIMIT $1`
+	t.Run("should list moveTypes", func(t *testing.T) {
+		expectedSQL := `SELECT * FROM "moveTypes" LIMIT $1`
 		rows := sqlmock.NewRows([]string{"id", "name"}).AddRow("1", "Fire")
 		mock.ExpectQuery(expectedSQL).WithArgs(10).WillReturnRows(rows)
 
@@ -47,7 +47,7 @@ func TestTypeHandler_GetType(t *testing.T) {
 	t.Run("should get single type by id", func(t *testing.T) {
 		rows := mock.NewRows([]string{"id", "name"}).AddRow("1", "Fire")
 
-		expectedSQL := "SELECT * FROM \"types\" WHERE id = $1 ORDER BY \"types\".\"id\" LIMIT $2"
+		expectedSQL := "SELECT * FROM \"moveTypes\" WHERE id = $1 ORDER BY \"moveTypes\".\"id\" LIMIT $2"
 		mock.ExpectQuery(expectedSQL).
 			WithArgs("1", 1).
 			WillReturnRows(rows)
@@ -74,8 +74,8 @@ func TestTypeHandler_CreateType(t *testing.T) {
 	router, mock, db := setupTest(t)
 	defer db.Close()
 	t.Run("should create type", func(t *testing.T) {
-		newType := models.Type{Name: "Fire"}
-		expectedSQL := "INSERT INTO \"types\" (\"name\",\"super_effective\",\"not_very_effective\",\"no_effect\") VALUES ($1,$2,$3,$4) RETURNING \"id\""
+		newType := models.MoveType{Name: "Fire"}
+		expectedSQL := "INSERT INTO \"moveTypes\" (\"name\",\"super_effective\",\"not_very_effective\",\"no_effect\") VALUES ($1,$2,$3,$4) RETURNING \"id\""
 
 		mock.ExpectBegin()
 		mock.ExpectQuery(expectedSQL).WithArgs(
@@ -103,23 +103,23 @@ func TestTypeHandler_CreateType(t *testing.T) {
 }
 
 // TestTypeHandler_UpdateType is a test function that verifies the behavior of the UpdateType handler
-// in the TypeHandler. It tests whether the handler correctly updates a Type in the database
+// in the TypeHandler. It tests whether the handler correctly updates a MoveType in the database
 // when the corresponding API endpoint is called. The test creates a mock database, sets up a test router,
-// and sends a HTTP PUT request with a request body containing the updated Type information.
-// The handler should update the Type in the database and return a 200 status code.
+// and sends a HTTP PUT request with a request body containing the updated MoveType information.
+// The handler should update the MoveType in the database and return a 200 status code.
 // This function should be run as a subtest using the "go test" command.
 func TestTypeHandler_UpdateType(t *testing.T) {
 	router, mock, db := setupTest(t)
 	defer db.Close()
 	t.Run("should update type", func(t *testing.T) {
-		updatedType := models.Type{Name: "Water"}
+		updatedType := models.MoveType{Name: "Water"}
 
 		row := sqlmock.NewRows([]string{"id", "name"}).AddRow("1", "Fire")
-		mock.ExpectQuery("SELECT * FROM \"types\" WHERE \"types\".\"id\" = $1 ORDER BY \"types\".\"id\" LIMIT $2").
+		mock.ExpectQuery("SELECT * FROM \"moveTypes\" WHERE \"moveTypes\".\"id\" = $1 ORDER BY \"moveTypes\".\"id\" LIMIT $2").
 			WithArgs("1", 1).WillReturnRows(row)
 
 		mock.ExpectBegin()
-		mock.ExpectExec("UPDATE \"types\" SET \"name\"=$1 WHERE \"id\" = $2").
+		mock.ExpectExec("UPDATE \"moveTypes\" SET \"name\"=$1 WHERE \"id\" = $2").
 			WithArgs(updatedType.Name, 1).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 		mock.ExpectCommit()
@@ -148,11 +148,11 @@ func TestTypeHandler_DeleteType(t *testing.T) {
 	router, mock, db := setupTest(t)
 	defer db.Close()
 	t.Run("should delete type", func(t *testing.T) {
-		expectedSQLSel := "SELECT * FROM \"types\" WHERE \"types\".\"id\" = $1 ORDER BY \"types\".\"id\" LIMIT $2"
+		expectedSQLSel := "SELECT * FROM \"moveTypes\" WHERE \"moveTypes\".\"id\" = $1 ORDER BY \"moveTypes\".\"id\" LIMIT $2"
 		mock.ExpectQuery(expectedSQLSel).WithArgs("1", 1).
 			WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow("1"))
 
-		expectedSQLDel := "DELETE FROM \"types\" WHERE \"types\".\"id\" = $1"
+		expectedSQLDel := "DELETE FROM \"moveTypes\" WHERE \"moveTypes\".\"id\" = $1"
 
 		mock.ExpectBegin()
 		mock.ExpectExec(expectedSQLDel).

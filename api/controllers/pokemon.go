@@ -4,8 +4,11 @@ import (
 	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"net/http"
 )
+
+// @BasePath /api/v1
 
 // PokemonHandler represents a handler for Pokemon-related operations.
 type PokemonHandler struct {
@@ -112,7 +115,7 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	var pokemon []models.Pokemon
 	page, pageSize := models.GetPaginationQueryParams(c)
-	if err := h.db.Scopes(models.Paginate(page, pageSize)).Find(&pokemon).Error; err != nil {
+	if err := h.db.Scopes(models.Paginate(page, pageSize)).Preload("PrimaryType").Preload("SecondaryType").Order(clause.OrderByColumn{Column: clause.Column{Name: "id"}, Desc: false}).Find(&pokemon).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch Pokemon"})
 		return
 	}
