@@ -15,9 +15,12 @@ require (
 	gorm.io/gorm v1.25.11
 )
 
-require github.com/JacobPotter/pokeapi-go v1.5.4
+require (
+	github.com/JacobPotter/pokeapi-go v1.5.4
+	github.com/rs/cors/wrapper/gin v0.0.0-20240830163046-1084d89a1692
+)
 
-require github.com/gin-contrib/cors v1.7.2 // indirect
+require github.com/rs/cors v1.11.0 // indirect
 
 require (
 	ariga.io/atlas-go-sdk v0.5.7 // indirect
