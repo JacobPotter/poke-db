@@ -53,7 +53,7 @@ func main() {
 	if initJobs == "true" {
 		jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
 	}
-	err = jobrunner.Schedule("@every 1h", jobs.RefreshDB{DB: models.DB})
+	err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
 	if err != nil {
 		log.Fatalf("Failed to schedule job: %v", err)
 		return

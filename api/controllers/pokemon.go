@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -95,6 +96,11 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 	c.JSON(http.StatusOK, pokemon)
 }
 
+type ListPokemonParams struct {
+	PokemonName string `form:"pokemonName" json:"pokemonName,omitempty"`
+	PokemonType string `form:"pokemonType" json:"pokemonType,omitempty"`
+}
+
 // ListPokemon fetches all Pokemon from the database and returns them as JSON data in the HTTP response.
 // If there is an error fetching the Pokemon, it returns a 500 Internal Server Error response.
 // This method is a handler for the "/pokemon" GET route.
@@ -114,12 +120,72 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 // @Router /pokemon [get]
 func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	var pokemon []models.Pokemon
+	var queryParams ListPokemonParams
+
+	hostPath := c.Request.Host + c.Request.URL.Path
+
 	page, pageSize := models.GetPaginationQueryParams(c)
-	if err := h.db.Scopes(models.Paginate(page, pageSize)).Preload("PrimaryType").Preload("SecondaryType").Order(clause.OrderByColumn{Column: clause.Column{Name: "id"}, Desc: false}).Find(&pokemon).Error; err != nil {
+
+	if err := c.ShouldBind(&queryParams); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var count int64
+
+	tx := h.db.Model(&models.Pokemon{}).
+		Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "id"},
+			Desc:   false,
+		}).
+		Preload("PrimaryType").
+		Preload("SecondaryType").
+		Session(&gorm.Session{})
+
+	if queryParams.PokemonType != "" {
+		tx = tx.
+			Joins("JOIN move_types p on (pokemons.primary_type_id = p.id and p.name = ?) OR (pokemons.secondary_type_id = p.id and p.name = ?)", queryParams.PokemonType, queryParams.PokemonType)
+	}
+
+	if queryParams.PokemonName != "" {
+		tx = tx.Where("name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
+	}
+
+	tx = tx.Count(&count)
+
+	if tx.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch Pokemon"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"pokemon": pokemon})
+
+	tx = tx.Scopes(models.Paginate(page, pageSize)).Find(&pokemon)
+
+	if tx.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch Pokemon"})
+		return
+	}
+
+	var nextPage string
+
+	if page < int(count)/pageSize {
+		nextPage = fmt.Sprintf("https://%s?page=%d&pageSize=%d", hostPath, page+1, pageSize)
+	}
+
+	var prevPage string
+
+	if page > 1 {
+		prevPage = fmt.Sprintf("https://%s?page=%d&pageSize=%d", hostPath, page-1, pageSize)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"pokemon":  pokemon,
+		"page":     page,
+		"pageSize": pageSize,
+		"total":    count,
+		"params":   queryParams,
+		"nextPage": nextPage,
+		"prevPage": prevPage,
+	})
 }
 
 // UpdatePokemon updates the details of a Pokemon based on the provided ID.

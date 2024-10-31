@@ -6,3 +6,13 @@ GET {{host}}/api/v1/type
 ###
 GET {{host}}/pokemon?pageSize=1500
 
+
+###
+GET {{host}}/pokemon?page=2&pageSize=12
+
+###
+GET {{host}}/pokemon?pokemonName=bulba
+
+###
+GET {{host}}/pokemon?pokemonType=poison&pageSize=20
+
