@@ -1,7 +1,7 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
 import Layout from './components/layout/Layout.tsx'
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Navigate, RouterProvider} from "react-router-dom";
 import './index.css'
 import {DarkModeProvider} from "./context/DarkModeContext.tsx";
 import {PokemonPage} from "./components/pages/PokemonPage.tsx";
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <PokemonPage/>
+                element: <Navigate to={'pokemon'}/>
             },
             {
                 path: 'pokemon',
