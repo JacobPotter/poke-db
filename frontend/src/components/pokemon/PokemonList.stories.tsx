@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
     args: {
         pokemon: mockPokemon.pokemon as unknown as Pokemon[],
-        listIndex: 0,
+        pokemonId: '4',
         onPokemonSelect: () => {
         }
     }

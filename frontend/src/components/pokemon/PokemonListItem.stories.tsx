@@ -21,7 +21,6 @@ export const Default: Story = {
     args: {
         pokemon: pokemon.pokemon[0] as unknown as Pokemon,
         active: true,
-        index: 0,
         onPokemonSelect: () => {
         }
     },
