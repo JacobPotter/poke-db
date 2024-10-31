@@ -67,10 +67,7 @@ func main() {
 	// template from above
 	router.GET("/jobrunner/html", JobHtml)
 
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-
-	router.Use(cors.New(config))
+	router.Use(cors.Default())
 	port := os.Getenv("PORT")
 
 	if port == "" {
