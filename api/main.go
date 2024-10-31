@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/JacobPotter/poke-db/api/docs"
 	"github.com/JacobPotter/poke-db/api/jobs"
 	"github.com/JacobPotter/poke-db/api/models"
@@ -64,7 +65,14 @@ func main() {
 	// Returns html page at given endpoint based on the loaded
 	// template from above
 	router.GET("/jobrunner/html", JobHtml)
-	err = router.Run()
+
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
+	err = router.Run(fmt.Sprintf(":%s", port))
 
 	if err != nil {
 		log.Fatalf("router err: %v", err)
