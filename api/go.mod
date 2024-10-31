@@ -17,6 +17,8 @@ require (
 
 require github.com/JacobPotter/pokeapi-go v1.5.4
 
+require github.com/gin-contrib/cors v1.7.2 // indirect
+
 require (
 	ariga.io/atlas-go-sdk v0.5.7 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect

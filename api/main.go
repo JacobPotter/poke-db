@@ -7,6 +7,7 @@ import (
 	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/JacobPotter/poke-db/api/routes"
 	"github.com/bamzi/jobrunner"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	swaggerfiles "github.com/swaggo/files"
@@ -66,6 +67,10 @@ func main() {
 	// template from above
 	router.GET("/jobrunner/html", JobHtml)
 
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"https://poke-db.webwizardssoftware.com"}
+
+	router.Use(cors.New(config))
 	port := os.Getenv("PORT")
 
 	if port == "" {
