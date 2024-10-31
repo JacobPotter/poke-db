@@ -67,6 +67,11 @@ const TabButton: FC<RoundedButtonProps> = ({onClick, type, pulse}) => {
     </button>
 };
 
+export const KeyboardButtonContainer: FC<PropsWithChildren<Sizeable>> = ({children}) => <section
+    className={`row-span-1 self-center p-3 bg-slate-600 rounded-lg items-center justify-center h-fit`}>
+    {children}
+</section>;
+
 interface KeyboardButtonProps {
     onClick?: () => void;
     disabled?: boolean;
@@ -85,7 +90,7 @@ export const KeyboardButton: FC<PropsWithChildren<KeyboardButtonProps & Sizeable
                                                                                           size = 'small'
                                                                                       }) =>
     <div
-        className={`group ${className}`}>
+        className={`group ${className ?? ''}`}>
         <button
             onClick={onClick}
             disabled={disabled}
@@ -149,7 +154,9 @@ const LeftScreenLoading: React.FC = () => {
     </div>
 }
 const RightScreenLoading: React.FC = () => {
-    return <div className="hidden md:grid grid-cols-2 gap-6 animate-pulse items-center justify-center">
+    return <div className="hidden md:grid grid-cols-2 gap-4 animate-pulse items-center justify-center">
+        <SkeletonBlock thick withIcon/>
+        <SkeletonBlock thick withIcon/>
         <SkeletonBlock thick withIcon/>
         <SkeletonBlock thick withIcon/>
         <SkeletonBlock thick withIcon/>
@@ -164,7 +171,7 @@ const RightScreenLoading: React.FC = () => {
 }
 
 export const LeftScreenContainer: React.FC<PropsWithChildren<Loadable>> = ({children, loading}) => <div
-    className={`min-h-72 md:max-h-[570px] md:min-h-96 border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-b-none md:rounded-b-lg p-4 md:row-span-5`}>
+    className={`min-h-72 md:max-h-full md:min-h-[590px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-b-none md:rounded-b-lg p-4 md:row-span-6`}>
     {loading ? <LeftScreenLoading/> : children}
 </div>;
 export const RightScreenContainer: React.FC<PropsWithChildren<Sizeable & Loadable>> = ({
@@ -172,23 +179,17 @@ export const RightScreenContainer: React.FC<PropsWithChildren<Sizeable & Loadabl
                                                                                            loading = false,
                                                                                            size = 'small'
                                                                                        }) => <div
-    className={`min-h-56 max-h-64 md:max-h-[570px]  md:min-h-96  border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-t-none md:rounded-t-lg p-4 overflow-scroll ${size === 'small' ? "md:row-span-4" : 'md:row-span-5'}`}>
+    className={`max-h-60 md:max-h-full md:min-h-[590px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-t-none md:rounded-t-lg px-1 py-1 md:px-3 md:py-2 overflow-scroll ${size === 'small' ? "md:row-span-5" : 'md:row-span-6'}`}>
     {loading ? <RightScreenLoading/> : children}
 </div>;
 
 export const PokedexRoot: React.FC<PropsWithChildren> = ({children}) => (
     <div
-        className={"relative grid grid-cols-1 md:grid-cols-2 md:grid-rows-6 md:gap-x-6 md:gap-y-3 bg-red-700 px-12 md:px-6 rounded-xl max-w-lg md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto pt-8 pb-6 min-h-[726px] max-h-screen"}>
+        className={"relative grid grid-cols-1 gap-2 md:grid-cols-2 md:grid-rows-7 md:gap-x-3 bg-red-700 px-12 md:px-6 rounded-xl max-w-md md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto pt-8 pb-6 min-h-[726px] max-h-screen"}>
         {children}
         <div className="h-1 rounded-full bg-slate-700 w-full md:col-span-2 mx-auto self-end mt-1.5"></div>
     </div>
 );
-
-
-export const KeyboardButtonContainer: FC<PropsWithChildren<Sizeable>> = ({children, size = 'small'}) => <section
-    className={`${size == 'small' ? "row-span-1" : 'row-span-2'} grid grid-cols-2 gap-3  p-3 bg-slate-600 rounded-lg items-center justify-center mt-3 md:mt-0`}>
-    {children}
-</section>;
 
 
 const Pokedex = PokedexRoot as typeof PokedexRoot & {

@@ -1,17 +1,24 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 interface HamburgerButtonProps {
     onClick: () => void;
+    reset?: boolean
 }
 
 
-export function HamburgerButton({onClick}: HamburgerButtonProps) {
+export function HamburgerButton({onClick, reset}: HamburgerButtonProps) {
     const [active, setActive] = useState(false)
 
     const handleClick = () => {
         setActive(prevActive => !prevActive)
         onClick()
     }
+
+    useEffect(() => {
+        if (reset) {
+            setActive(false)
+        }
+    }, [reset]);
 
     return <div className={"md:hidden mt-1"}>
         <button

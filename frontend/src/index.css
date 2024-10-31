@@ -14,21 +14,21 @@
     position: absolute;
     width: 24px;
     height: 2px;
-    top:0;
+    top: 0;
     left: 0;
     transform: rotate(0);
     transition: all 0.5s;
 }
 
-.hamburger-middle{
+.hamburger-middle {
     transform: translateY(7px);
 }
 
-.hamburger-bottom{
+.hamburger-bottom {
     transform: translateY(14px);
 }
 
-.open{
+.open {
     transform: rotate(90deg);
 }
 
@@ -42,4 +42,15 @@
 
 .open .hamburger-bottom {
     transform: rotate(-45deg) translateY(6px) translateX(-6px);
+}
+
+input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
 }

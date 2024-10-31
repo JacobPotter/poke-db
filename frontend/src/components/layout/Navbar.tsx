@@ -16,17 +16,25 @@ import {NavbarItem} from "./NavbarItem.tsx";
 export function Navbar() {
 
     const [showHamburgerMenu, setShowHamburgerMenu] = useState(false)
+    const [resetHamburgerMenu, setResetHamburgerMenu] = useState(false)
 
     const handleHamburgerClick = () => {
         setShowHamburgerMenu(prevState => !prevState)
     }
+
+
+    let clearHamburgerMenu = () => {
+        setResetHamburgerMenu(true)
+        setTimeout(() => setResetHamburgerMenu(false), 500)
+        setShowHamburgerMenu(false)
+    };
     return <>
         <nav className={"flex items-center justify-between px-3"}>
             <div className={"flex items-center justify-center space-x-2 z-40 font-mono"}>
                 <Logo className={"py-2 h-12"}/>
                 <h1 className="text-3xl">PokeDB</h1>
                 <div className="hidden h-10 md:flex md:space-x-6 items-center justify-center text-center pl-10">
-                    <NavbarItem path={'pokemon'} text={'Pokemon'}/>
+                    <NavbarItem path={'pokemon/1'} text={'Pokemon'}/>
                     <NavbarItem path={'types'} text={'Types'}/>
                     <NavbarItem path={'evolutions'} text={'Evolutions'}/>
                     <NavbarItem path={'moves'} text={'Moves'}/>
@@ -35,16 +43,23 @@ export function Navbar() {
             </div>
             <div className="flex items-center justify-center space-x-2">
                 <DarkModeButton/>
-                <HamburgerButton onClick={handleHamburgerClick}/>
+                <HamburgerButton reset={resetHamburgerMenu} onClick={handleHamburgerClick}/>
             </div>
         </nav>
         {/*Mobile Menu*/}
         <div id="menu"
-             className={`absolute top-0 bottom-0 left-0 flex-col self-end w-full min-h-screen pb-1 pt-40 pl-12 space-y-3 text-lg uppercase bg-red-700 dark:bg-red-900 text-white z-30 bg-opacity-85 ${showHamburgerMenu ? "flex" : "hidden"}`}>
-            <NavLink to={"pokemon"} className="">Pokemon</NavLink>
-            <NavLink to={"types"} className="">Types</NavLink>
-            <NavLink to={"evolutions"} className="">Evolutions</NavLink>
-            <NavLink to={"moves"} className="">Moves</NavLink>
+             className={`absolute top-0 bottom-0 left-0 w-full min-h-screen text-lg text-center uppercase bg-red-700 dark:bg-red-900 text-white z-30 bg-opacity-85 ${!showHamburgerMenu ? "hidden" : ""}`}>
+            <div className="grid grid-cols-2 justify-center items-center gap-3 my-32 mx-6">
+                <NavLink onClick={clearHamburgerMenu} to={"pokemon/1"}
+                         className="rounded-md shadow bg-red-500 dark:bg-red-700">Pokemon</NavLink>
+                <NavLink onClick={clearHamburgerMenu} to={"types"}
+                         className="rounded-md shadow bg-red-500 dark:bg-red-700">Types</NavLink>
+                <NavLink onClick={clearHamburgerMenu} to={"evolutions"}
+                         className="rounded-md shadow bg-red-500 dark:bg-red-700">Evolutions</NavLink>
+                <NavLink onClick={clearHamburgerMenu} to={"moves"}
+                         className="rounded-md shadow bg-red-500 dark:bg-red-700">Moves</NavLink>
+            </div>
         </div>
     </>
 }
+

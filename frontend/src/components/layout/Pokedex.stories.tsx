@@ -27,8 +27,9 @@ const MockPokeContainer: FC<{ leftLoading?: boolean, rightLoading?: boolean }> =
                 <Pokedex.TabButton type={'refresh'}/>
             </Pokedex.TabButtons>
             <Pokedex.KeyboardButtons>
-                <Pokedex.KeyboardButton prefixIcon={<ArrowLeftIcon/>}>Previous</Pokedex.KeyboardButton>
-                <Pokedex.KeyboardButton suffixIcon={<ArrowRightIcon/>}>Next</Pokedex.KeyboardButton>
+                <div className="flex justify-evenly"><Pokedex.KeyboardButton
+                ><ArrowLeftIcon className={'w-5'}/></Pokedex.KeyboardButton>
+                    <Pokedex.KeyboardButton><ArrowRightIcon className={'w-5'}/></Pokedex.KeyboardButton></div>
             </Pokedex.KeyboardButtons>
 
         </>

@@ -8,6 +8,7 @@ import {PokemonPage} from "./components/pages/PokemonPage.tsx";
 import {EvolutionsPage} from "./components/pages/EvolutionsPage.tsx";
 import {TypesPage} from "./components/pages/TypesPage.tsx";
 import {MovesPage} from "./components/pages/MovesPage.tsx";
+import {MoveTypeProvider} from "./context/MoveTypeContext.tsx";
 
 
 export const router = createBrowserRouter([
@@ -48,7 +49,9 @@ export const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <DarkModeProvider>
-            <RouterProvider router={router}/>
+            <MoveTypeProvider>
+                <RouterProvider router={router}/>
+            </MoveTypeProvider>
         </DarkModeProvider>
     </StrictMode>,
 )

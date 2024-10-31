@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import {PlayIcon} from "@heroicons/react/24/solid";
 import {isSafari} from 'react-device-detect';
 
-export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | undefined }) => {
+export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progress, setProgress] = useState(0);
 

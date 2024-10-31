@@ -1,21 +1,18 @@
 import Pokedex from "../layout/Pokedex.tsx";
-import {useState} from "react";
-import {MoveTypeResp} from "../../models/pokemon.ts";
-import useAxios from "axios-hooks";
+import {useContext, useState} from "react";
 import {TypeList} from "../moveTypes/TypesList.tsx";
 import {TypesSummary} from "../moveTypes/TypesSummary.tsx";
 import {TypeDetails} from "../moveTypes/TypeDetails.tsx";
 import {TypesChart} from "../moveTypes/TypesChart.tsx";
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
+import {MoveTypeContext} from "../../context/MoveTypeContext.tsx";
 
 export function TypesPage() {
 
     const [listIndex, setListIndex] = useState(0);
     const [tabIndex, setTabIndex] = useState(0);
 
-    const [{data, loading}, refetch] = useAxios<MoveTypeResp>(
-        `/api/v1/type`
-    )
+    const {moveTypes, loading, refresh} = useContext(MoveTypeContext)
 
     const handlePrev = () => {
         if (listIndex > 0) {
@@ -24,7 +21,7 @@ export function TypesPage() {
     }
 
     const handleNext = () => {
-        if (data?.data && listIndex < data?.data.length - 1) {
+        if (moveTypes && listIndex < moveTypes.length - 1) {
             setListIndex(prevState => prevState + 1)
         }
     }
@@ -35,24 +32,29 @@ export function TypesPage() {
 
     return <Pokedex>
         <Pokedex.LeftScreen loading={loading}>
-            {tabIndex === 0 ? <TypesSummary moveType={data?.data[listIndex]}/> : tabIndex === 1 ?
+            {tabIndex === 0 ? <TypesSummary moveType={moveTypes[listIndex]}/> : tabIndex === 1 ?
                 <TypeDetails/> : <TypesChart/>}
         </Pokedex.LeftScreen>
         <Pokedex.RightScreen size={'large'} loading={loading}>
-            <TypeList onTypeSelect={handleTypeSelect} moveTypes={data?.data} listIndex={listIndex}/>
+            <TypeList onTypeSelect={handleTypeSelect} moveTypes={moveTypes} listIndex={listIndex}/>
         </Pokedex.RightScreen>
         <Pokedex.TabButtons>
             <Pokedex.TabButton pulse={tabIndex === 0} onClick={() => setTabIndex(0)} type={'info'}/>
             <Pokedex.TabButton pulse={tabIndex === 1} onClick={() => setTabIndex(1)} type={'details'}/>
             <Pokedex.TabButton pulse={tabIndex === 2} onClick={() => setTabIndex(2)} type={'other'}/>
-            <Pokedex.TabButton onClick={refetch} type={'refresh'}/>
+            <Pokedex.TabButton onClick={refresh} type={'refresh'}/>
         </Pokedex.TabButtons>
         <Pokedex.KeyboardButtons>
-            <Pokedex.KeyboardButton prefixIcon={<ArrowLeftIcon/>} disabled={listIndex < 1}
-                                    onClick={handlePrev}>Previous</Pokedex.KeyboardButton>
-            <Pokedex.KeyboardButton suffixIcon={<ArrowRightIcon/>}
-                                    disabled={data?.data && listIndex >= data?.data.length}
-                                    onClick={handleNext}>Next</Pokedex.KeyboardButton>
+            <div className="flex justify-evenly items-center">
+                <Pokedex.KeyboardButton prefixIcon={<ArrowLeftIcon/>}
+                                        disabled={listIndex < 1}
+                                        onClick={handlePrev}
+                                        className={'w-2/5'}>Previous</Pokedex.KeyboardButton>
+                <Pokedex.KeyboardButton suffixIcon={<ArrowRightIcon/>}
+                                        disabled={moveTypes && listIndex >= moveTypes.length}
+                                        onClick={handleNext}
+                                        className={'w-2/5'}>Next</Pokedex.KeyboardButton>
+            </div>
         </Pokedex.KeyboardButtons>
 
     </Pokedex>;
