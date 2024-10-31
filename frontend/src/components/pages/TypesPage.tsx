@@ -7,7 +7,6 @@ import {TypesSummary} from "../moveTypes/TypesSummary.tsx";
 import {TypeDetails} from "../moveTypes/TypeDetails.tsx";
 import {TypesChart} from "../moveTypes/TypesChart.tsx";
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
-import environment from "../../../environments/environment.ts";
 
 export function TypesPage() {
 
@@ -15,7 +14,7 @@ export function TypesPage() {
     const [tabIndex, setTabIndex] = useState(0);
 
     const [{data, loading}, refetch] = useAxios<MoveTypeResp>(
-        `${environment.host}/api/v1/type`
+        `/api/v1/type`
     )
 
     const handlePrev = () => {

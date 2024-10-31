@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to={'pokemon'}/>
+                element: <Navigate to={'pokemon/1'}/>
             },
             {
                 path: 'pokemon',
