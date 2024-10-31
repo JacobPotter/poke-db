@@ -1,3 +1,3 @@
 export default {
-    host: 'https://poke-db.webwizardssoftware.com',
+    host: 'https://poke-db-api.webwizardssoftware.com',
 }
