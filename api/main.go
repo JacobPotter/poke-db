@@ -68,7 +68,7 @@ func main() {
 	router.GET("/jobrunner/html", JobHtml)
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"https://poke-db.webwizardssoftware.com"}
+	config.AllowAllOrigins = true
 
 	router.Use(cors.New(config))
 	port := os.Getenv("PORT")
