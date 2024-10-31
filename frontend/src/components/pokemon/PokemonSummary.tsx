@@ -3,10 +3,12 @@ import {SummaryItem} from "../ui/SummaryItem.tsx";
 import {capitalize} from "lodash";
 import {useEffect, useRef, useState} from "react";
 import {PlayIcon} from "@heroicons/react/24/solid";
+import {isSafari} from 'react-device-detect';
 
 export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | undefined }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progress, setProgress] = useState(0);
+
 
     const handlePlay = () => {
         audioRef.current && audioRef?.current.play();
@@ -60,7 +62,7 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | undefined }) => {
                 </div>
             </div>
             <div className={'grid grid-cols-2 gap-2 w-full'}>
-                <div className={'col-span-2'}>
+                {!isSafari && <div className={'col-span-2'}>
                     <div className="flex items-center justify-between">
                         <button
                             className={'rounded-full bg-sky-800 p-2'} onClick={handlePlay}>
@@ -75,7 +77,7 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | undefined }) => {
                         </div>
                     </div>
                     <audio ref={audioRef} src={pokemon?.cry}/>
-                </div>
+                </div>}
                 <SummaryItem><img className={'mx-auto'} src={pokemon?.primary_type.img_url}
                                   alt={pokemon?.primary_type.name}/></SummaryItem>
                 <SummaryItem>{pokemon?.secondary_type?.name ?
