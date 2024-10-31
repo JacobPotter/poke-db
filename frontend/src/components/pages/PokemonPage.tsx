@@ -9,6 +9,7 @@ import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 import useAxios from "axios-hooks";
 import {Pokemon} from "../../models/pokemon.ts";
 import {useNavigate, useParams} from "react-router-dom";
+import environment from "../../../environments/environment.ts";
 
 export function PokemonPage() {
 
@@ -18,8 +19,9 @@ export function PokemonPage() {
 
     const [tabIndex, setTabIndex] = useState(0);
 
+
     const [{data, loading}, refetch] = useAxios<{ pokemon: Pokemon[] }>(
-        '/api/v1/pokemon?pageSize=1500'
+        `${environment.host}/api/v1/pokemon?pageSize=1500`
     )
 
     const handlePrev = () => {
