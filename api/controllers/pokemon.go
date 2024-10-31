@@ -148,7 +148,7 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	}
 
 	if queryParams.PokemonName != "" {
-		tx = tx.Where("name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
+		tx = tx.Where("pokemons.name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
 	}
 
 	tx = tx.Count(&count)
