@@ -20,12 +20,12 @@ const MockPokeContainer: FC<{ leftLoading?: boolean, rightLoading?: boolean }> =
 
             <Pokedex.RightScreen size={'large'} loading={rightLoading}></Pokedex.RightScreen>
 
-            <Pokedex.RoundedButtons>
-                <Pokedex.RoundedButton type={'info'}/>
-                <Pokedex.RoundedButton type={'details'}/>
-                <Pokedex.RoundedButton type={'other'}/>
-                <Pokedex.RoundedButton type={'refresh'}/>
-            </Pokedex.RoundedButtons>
+            <Pokedex.TabButtons>
+                <Pokedex.TabButton type={'info'}/>
+                <Pokedex.TabButton type={'details'}/>
+                <Pokedex.TabButton type={'other'}/>
+                <Pokedex.TabButton type={'refresh'}/>
+            </Pokedex.TabButtons>
             <Pokedex.KeyboardButtons>
                 <Pokedex.KeyboardButton prefixIcon={<ArrowLeftIcon/>}>Previous</Pokedex.KeyboardButton>
                 <Pokedex.KeyboardButton suffixIcon={<ArrowRightIcon/>}>Next</Pokedex.KeyboardButton>

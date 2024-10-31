@@ -19,7 +19,9 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        types: types.data as unknown as MoveType[],
-        listIndex: 0
+        moveTypes: types.data as unknown as MoveType[],
+        listIndex: 0,
+        onTypeSelect: () => {
+        }
     }
 };
