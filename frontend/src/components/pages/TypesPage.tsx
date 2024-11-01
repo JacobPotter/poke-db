@@ -1,4 +1,4 @@
-import Pokedex from "../layout/Pokedex.tsx";
+import Pokedex from "../ui/pokedex/Pokedex.tsx";
 import {useContext, useState} from "react";
 import {TypeList} from "../moveTypes/TypesList.tsx";
 import {TypesSummary} from "../moveTypes/TypesSummary.tsx";
@@ -46,14 +46,14 @@ export function TypesPage() {
         </Pokedex.TabButtons>
         <Pokedex.KeyboardButtons>
             <div className="flex justify-evenly items-center">
-                <Pokedex.KeyboardButton prefixIcon={<ArrowLeftIcon/>}
-                                        disabled={listIndex < 1}
-                                        onClick={handlePrev}
-                                        className={'w-2/5'}>Previous</Pokedex.KeyboardButton>
-                <Pokedex.KeyboardButton suffixIcon={<ArrowRightIcon/>}
-                                        disabled={moveTypes && listIndex >= moveTypes.length}
-                                        onClick={handleNext}
-                                        className={'w-2/5'}>Next</Pokedex.KeyboardButton>
+                <Pokedex.KeyboardButton
+                    disabled={listIndex < 1}
+                    onClick={handlePrev}
+                ><ArrowLeftIcon className={'w-4 h-4 sm:w-6 sm:h-6'}/></Pokedex.KeyboardButton>
+                <Pokedex.KeyboardButton
+                    disabled={moveTypes && listIndex >= moveTypes.length}
+                    onClick={handleNext}
+                ><ArrowRightIcon className={'w-4 h-4 sm:w-6 sm:h-6'}/></Pokedex.KeyboardButton>
             </div>
         </Pokedex.KeyboardButtons>
 

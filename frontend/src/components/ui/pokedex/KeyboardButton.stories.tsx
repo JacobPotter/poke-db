@@ -1,6 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
 
-import Pokedex, {KeyboardButton} from "../layout/Pokedex.tsx";
+import Pokedex from "./Pokedex.tsx";
+import {KeyboardButton} from "./KeyboardButton.tsx";
 
 const meta = {
     component: KeyboardButton,

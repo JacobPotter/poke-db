@@ -2,7 +2,7 @@ import type {Meta, StoryObj} from '@storybook/react';
 
 import {PokemonList} from './PokemonList.tsx';
 import mockPokemon from '../../fixtures/pokemon.json'
-import Pokedex from "../layout/Pokedex.tsx";
+import Pokedex from "../ui/pokedex/Pokedex.tsx";
 import {Pokemon} from "../../models/pokemon.ts";
 
 const meta = {

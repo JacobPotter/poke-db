@@ -23,11 +23,9 @@ export const TypeListItem = ({
     }
 
     return (<button onClick={handleClick}
-                    className={`flex items-center justify-between bg-sky-500 px-3 py-2 rounded-lg shadow-lg ${!active ? "opacity-70" : ''}`}>
-        <div className={'flex flex-col items-start justify-center'}>
-            <h2
-                className={'text-sm md:text-base font-bold'}>{capitalize(type.name)}</h2>
-        </div>
-        <img src={type.img_url} alt={type.name} className={'h-auto w-16 md:w-20'}/>
+                    className={`flex items-center justify-between bg-sky-500 p-1 xs:px-3 xs:py-2 md:px-4 md:py-2.5 rounded-lg shadow-lg ${!active ? "opacity-70" : ''}`}>
+        <h2
+            className={'text-xs sm:text-sm lg:text-base font-bold'}>{capitalize(type.name)}</h2>
+        <img src={type.img_url} alt={type.name} className={'h-auto w-12 sm:w-16 lg:w-20'}/>
     </button>)
 }

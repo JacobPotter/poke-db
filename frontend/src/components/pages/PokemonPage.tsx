@@ -1,4 +1,4 @@
-import Pokedex from "../layout/Pokedex.tsx";
+import Pokedex from "../ui/pokedex/Pokedex.tsx";
 import {PokemonList} from "../pokemon/PokemonList.tsx";
 import {ChangeEventHandler, useCallback, useEffect, useState} from "react";
 import {PokemonSummary} from "../pokemon/PokemonSummary.tsx";
@@ -165,22 +165,22 @@ export function PokemonPage() {
         <Pokedex.KeyboardButtons>
             <div className="grid grid-cols-5 gap-2 items-center justify-center w-full">
                 <Pokedex.KeyboardButton onClick={handlePrev} className={'justify-self-end'}><ArrowLeftIcon
-                    className={'w-5'}/></Pokedex.KeyboardButton>
+                    className={'w-4 xs:w-5'}/></Pokedex.KeyboardButton>
                 <div
-                    className={'text-xs md:text-base lg:text-lg text-center flex items-center justify-center gap-1.5 text-slate-50'}>
+                    className={'text-xs xs:text-sm md:text-base lg:text-lg text-center flex items-center justify-center gap-1.5 text-slate-50'}>
                                          <span className={'w-1/3'}><input type={'number'}
                                                                           className={'bg-slate-700 w-full text-center'}
                                                                           value={pageInput}
-                                                                          onChange={handlePageChange}/></span> of {Math.floor((data?.total ?? 1) / (data?.pageSize ?? 1))}
+                                                                          onChange={handlePageChange}/></span>/{Math.floor((data?.total ?? 1) / (data?.pageSize ?? 1))}
                 </div>
                 <Pokedex.KeyboardButton onClick={handleNext} className={'justify-self-start'}>
-                    <ArrowRightIcon className={'w-5'}/>
+                    <ArrowRightIcon className={'w-4 xs:w-5'}/>
                 </Pokedex.KeyboardButton>
                 <Pokedex.KeyboardButton onClick={toggleFilter}>
-                    <FunnelIcon className={'w-5'}/>
+                    <FunnelIcon className={'w-4 xs:w-5'}/>
                 </Pokedex.KeyboardButton>
                 <Pokedex.KeyboardButton onClick={handleReset}>
-                    <ArrowUturnLeftIcon className={'w-5'}/>
+                    <ArrowUturnLeftIcon className={'w-4 xs:w-5'}/>
                 </Pokedex.KeyboardButton>
             </div>
 

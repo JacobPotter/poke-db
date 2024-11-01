@@ -29,10 +29,10 @@ export const Default: Story = {
     parameters: {
         msw: {
             handlers: [
-                http.get('/api/v1/pokemon?page=1&pageSize=10', async () => {
+                http.get('/api/v1/pokemon?page=1&pageSize=12', async () => {
                     return HttpResponse.json(pokemon1_10);
                 }),
-                http.get('/api/v1/pokemon?page=2&pageSize=10', async () => {
+                http.get('/api/v1/pokemon?page=2&pageSize=12', async () => {
                     return HttpResponse.json(pokemon11_20);
                 }),
             ],

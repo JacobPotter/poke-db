@@ -25,10 +25,10 @@ export const FilterForm = ({onSubmit}: { onSubmit: (params: ListPokemonParams) =
     };
 
     return <form onSubmit={handleSubmit} className={'flex flex-col gap-2 '}>
-        <h1 className={'text-2xl md:text-4xl'}>Filter Pokemon</h1>
-        <label htmlFor={'pokemonName'} className={'text-xl'}>Pokemon Name</label>
+        <h1 className={'hidden sm:block text-2xl md:text-4xl'}>Filter Pokemon</h1>
+        <label htmlFor={'pokemonName'} className={'text-sm sm:text-xl'}>Pokemon Name</label>
         <input id={'pokemonName'} name={'pokemonName'} className={'bg-sky-500 md:p-4 rounded-lg shadow'}/>
-        <label htmlFor={'pokemonType'} className={'text-xl'}>Pokemon Type</label>
+        <label htmlFor={'pokemonType'} className={'text-sm sm:text-xl'}>Pokemon Type</label>
         <select id={'pokemonType'} name={'pokemonType'} className={'bg-sky-500 md:p-4 rounded-lg shadow'}>
             <option value={'-'}>-</option>
             {moveTypes.map((moveType) => (
@@ -37,7 +37,9 @@ export const FilterForm = ({onSubmit}: { onSubmit: (params: ListPokemonParams) =
                 </option>
             ))}
         </select>
-        <button className={'p-3 bg-sky-600 md:mt-6 rounded-lg shadow-md'}>Filter</button>
+        <button
+            className={'py-1 sm:p-3 bg-sky-600 md:mt-6 rounded-lg shadow-md active:bg-sky-500 hover:bg-sky-500'}>Filter
+        </button>
     </form>;
 
 };

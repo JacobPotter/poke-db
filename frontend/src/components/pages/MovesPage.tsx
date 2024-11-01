@@ -1,4 +1,4 @@
-import Pokedex from "../layout/Pokedex.tsx";
+import Pokedex from "../ui/pokedex/Pokedex.tsx";
 import {ComingSoon} from "../ui/ComingSoon.tsx";
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
 

@@ -3,9 +3,15 @@ import {delay, http, HttpResponse} from 'msw';
 import types from '../../fixtures/types.json'
 
 import {TypesPage} from './TypesPage.tsx';
+import {MoveTypeProvider} from "../../context/MoveTypeContext.tsx";
 
 const meta = {
     component: TypesPage,
+    decorators: [(Story) => (
+        <MoveTypeProvider>
+            <Story/>
+        </MoveTypeProvider>
+    )]
 } satisfies Meta<typeof TypesPage>;
 
 export default meta;

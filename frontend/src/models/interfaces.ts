@@ -11,3 +11,7 @@ export interface ListPokemonParams {
     pokemonName: string | null
     pokemonType: string | null
 }
+
+export interface Loadable {
+    loading?: boolean
+}
