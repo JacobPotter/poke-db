@@ -67,7 +67,7 @@ export const TabButton: FC<TabButtonProps> = ({onClick, type, pulse}) => {
 export const TabButtonContainer: FC<PropsWithChildren> = ({children}) => {
 
     return <div
-        className="absolute top-1.5 left-3 sm:top-8 sm:left-1 sm:h-1/3 md:h-auto px-1 py-1 md:px-3 md:py-2 md:static flex flex-row sm:flex-col md:flex-row gap-6 lg:gap-12 xl:gap-16 bg-red-600 rounded-full items-center justify-center">
+        className="absolute top-1.5 left-3 sm:top-8 sm:left-1 sm:h-1/3 md:h-auto px-1 py-1 xl:px-3 xl:py-2 md:static flex flex-row sm:flex-col md:flex-row gap-6 lg:gap-12 xl:gap-16 bg-red-600 rounded-full items-center justify-center">
         {children}
     </div>;
 };

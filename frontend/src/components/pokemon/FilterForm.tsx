@@ -1,7 +1,7 @@
-import {ListPokemonParams} from "../../models/interfaces.ts";
 import {FormEventHandler, useContext} from "react";
 import {MoveTypeContext} from "../../context/MoveTypeContext.tsx";
 import {capitalize} from "lodash";
+import {ListPokemonParams} from "../../models/pokemon.ts";
 
 export const FilterForm = ({onSubmit}: { onSubmit: (params: ListPokemonParams) => void }) => {
 

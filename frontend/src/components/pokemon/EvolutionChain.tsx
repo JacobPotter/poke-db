@@ -1,4 +1,4 @@
-import {Pokemon} from "../../models/pokemon.ts";
+import {PokemonSpecies} from "../../models/pokemon.ts";
 import {ComingSoon} from "../ui/ComingSoon.tsx";
 
-export const EvolutionChain = ({}: { pokemon: Pokemon | null }) => <ComingSoon/>;
+export const EvolutionChain = ({}: { pokemon: PokemonSpecies | null }) => <ComingSoon/>;

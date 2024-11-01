@@ -1,0 +1,1096 @@
+{
+  "nextPage": "https://localhost:8080/api/v1/pokemon?page=3&pageSize=12",
+  "page": 2,
+  "pageSize": 12,
+  "params": {},
+  "pokemon": [
+    {
+      "id": 13,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "weedle",
+      "varieties": [
+        {
+          "id": 13,
+          "name": "weedle",
+          "primary_type": {
+            "id": 7,
+            "name": "bug",
+            "double_damage_to": [
+              12,
+              14,
+              17
+            ],
+            "half_damage_to": [
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              18
+            ],
+            "double_damage_from": [
+              3,
+              6,
+              10
+            ],
+            "half_damage_from": [
+              2,
+              5,
+              12
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png"
+          },
+          "primary_type_id": 7,
+          "secondary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "secondary_type_id": 4,
+          "pokemon_species_id": 13,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/13.ogg",
+          "weight": 32,
+          "height": 3,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "kakuna",
+      "varieties": [
+        {
+          "id": 14,
+          "name": "kakuna",
+          "primary_type": {
+            "id": 7,
+            "name": "bug",
+            "double_damage_to": [
+              12,
+              14,
+              17
+            ],
+            "half_damage_to": [
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              18
+            ],
+            "double_damage_from": [
+              3,
+              6,
+              10
+            ],
+            "half_damage_from": [
+              2,
+              5,
+              12
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png"
+          },
+          "primary_type_id": 7,
+          "secondary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "secondary_type_id": 4,
+          "pokemon_species_id": 14,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/14.ogg",
+          "weight": 100,
+          "height": 6,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "beedrill",
+      "varieties": [
+        {
+          "id": 15,
+          "name": "beedrill",
+          "primary_type": {
+            "id": 7,
+            "name": "bug",
+            "double_damage_to": [
+              12,
+              14,
+              17
+            ],
+            "half_damage_to": [
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              18
+            ],
+            "double_damage_from": [
+              3,
+              6,
+              10
+            ],
+            "half_damage_from": [
+              2,
+              5,
+              12
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png"
+          },
+          "primary_type_id": 7,
+          "secondary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "secondary_type_id": 4,
+          "pokemon_species_id": 15,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/15.ogg",
+          "weight": 295,
+          "height": 10,
+          "is_default": false
+        },
+        {
+          "id": 10090,
+          "name": "beedrill-mega",
+          "primary_type": {
+            "id": 7,
+            "name": "bug",
+            "double_damage_to": [
+              12,
+              14,
+              17
+            ],
+            "half_damage_to": [
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              18
+            ],
+            "double_damage_from": [
+              3,
+              6,
+              10
+            ],
+            "half_damage_from": [
+              2,
+              5,
+              12
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png"
+          },
+          "primary_type_id": 7,
+          "secondary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "secondary_type_id": 4,
+          "pokemon_species_id": 15,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10090.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10090.ogg",
+          "weight": 405,
+          "height": 14,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "pidgey",
+      "varieties": [
+        {
+          "id": 16,
+          "name": "pidgey",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 16,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/16.ogg",
+          "weight": 18,
+          "height": 3,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "pidgeotto",
+      "varieties": [
+        {
+          "id": 17,
+          "name": "pidgeotto",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 17,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/17.ogg",
+          "weight": 300,
+          "height": 11,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "pidgeot",
+      "varieties": [
+        {
+          "id": 18,
+          "name": "pidgeot",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 18,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/18.ogg",
+          "weight": 395,
+          "height": 15,
+          "is_default": false
+        },
+        {
+          "id": 10073,
+          "name": "pidgeot-mega",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 18,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10073.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10073.ogg",
+          "weight": 505,
+          "height": 22,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "has_gender_differences": true,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "rattata",
+      "varieties": [
+        {
+          "id": 19,
+          "name": "rattata",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 0,
+            "name": ""
+          },
+          "secondary_type_id": null,
+          "pokemon_species_id": 19,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/19.ogg",
+          "weight": 35,
+          "height": 3,
+          "is_default": false
+        },
+        {
+          "id": 10091,
+          "name": "rattata-alola",
+          "primary_type": {
+            "id": 17,
+            "name": "dark",
+            "double_damage_to": [
+              8,
+              14
+            ],
+            "half_damage_to": [
+              2,
+              17,
+              18
+            ],
+            "double_damage_from": [
+              2,
+              7,
+              18
+            ],
+            "half_damage_from": [
+              8,
+              17
+            ],
+            "no_damage_from": [
+              14
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png"
+          },
+          "primary_type_id": 17,
+          "secondary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "secondary_type_id": 1,
+          "pokemon_species_id": 19,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10091.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10091.ogg",
+          "weight": 38,
+          "height": 3,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "has_gender_differences": true,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "raticate",
+      "varieties": [
+        {
+          "id": 20,
+          "name": "raticate",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 0,
+            "name": ""
+          },
+          "secondary_type_id": null,
+          "pokemon_species_id": 20,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/20.ogg",
+          "weight": 185,
+          "height": 7,
+          "is_default": false
+        },
+        {
+          "id": 10092,
+          "name": "raticate-alola",
+          "primary_type": {
+            "id": 17,
+            "name": "dark",
+            "double_damage_to": [
+              8,
+              14
+            ],
+            "half_damage_to": [
+              2,
+              17,
+              18
+            ],
+            "double_damage_from": [
+              2,
+              7,
+              18
+            ],
+            "half_damage_from": [
+              8,
+              17
+            ],
+            "no_damage_from": [
+              14
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png"
+          },
+          "primary_type_id": 17,
+          "secondary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "secondary_type_id": 1,
+          "pokemon_species_id": 20,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10092.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10092.ogg",
+          "weight": 255,
+          "height": 7,
+          "is_default": false
+        },
+        {
+          "id": 10093,
+          "name": "raticate-totem-alola",
+          "primary_type": {
+            "id": 17,
+            "name": "dark",
+            "double_damage_to": [
+              8,
+              14
+            ],
+            "half_damage_to": [
+              2,
+              17,
+              18
+            ],
+            "double_damage_from": [
+              2,
+              7,
+              18
+            ],
+            "half_damage_from": [
+              8,
+              17
+            ],
+            "no_damage_from": [
+              14
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png"
+          },
+          "primary_type_id": 17,
+          "secondary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "secondary_type_id": 1,
+          "pokemon_species_id": 20,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10093.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10093.ogg",
+          "weight": 1050,
+          "height": 14,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "spearow",
+      "varieties": [
+        {
+          "id": 21,
+          "name": "spearow",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 21,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/21.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/21.ogg",
+          "weight": 20,
+          "height": 3,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "has_gender_differences": false,
+      "hatch_counter": 15,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "fearow",
+      "varieties": [
+        {
+          "id": 22,
+          "name": "fearow",
+          "primary_type": {
+            "id": 1,
+            "name": "normal",
+            "half_damage_to": [
+              6,
+              9
+            ],
+            "no_damage_to": [
+              8
+            ],
+            "double_damage_from": [
+              2
+            ],
+            "no_damage_from": [
+              8
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+          },
+          "primary_type_id": 1,
+          "secondary_type": {
+            "id": 3,
+            "name": "flying",
+            "double_damage_to": [
+              2,
+              7,
+              12
+            ],
+            "half_damage_to": [
+              6,
+              9,
+              13
+            ],
+            "double_damage_from": [
+              6,
+              13,
+              15
+            ],
+            "half_damage_from": [
+              2,
+              7,
+              12
+            ],
+            "no_damage_from": [
+              5
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+          },
+          "secondary_type_id": 3,
+          "pokemon_species_id": 22,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/22.ogg",
+          "weight": 380,
+          "height": 12,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "has_gender_differences": false,
+      "hatch_counter": 20,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "ekans",
+      "varieties": [
+        {
+          "id": 23,
+          "name": "ekans",
+          "primary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "primary_type_id": 4,
+          "secondary_type": {
+            "id": 0,
+            "name": ""
+          },
+          "secondary_type_id": null,
+          "pokemon_species_id": 23,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/23.ogg",
+          "weight": 69,
+          "height": 20,
+          "is_default": false
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "has_gender_differences": false,
+      "hatch_counter": 20,
+      "is_baby": false,
+      "is_legendary": false,
+      "is_mythical": false,
+      "name": "arbok",
+      "varieties": [
+        {
+          "id": 24,
+          "name": "arbok",
+          "primary_type": {
+            "id": 4,
+            "name": "poison",
+            "double_damage_to": [
+              12,
+              18
+            ],
+            "half_damage_to": [
+              4,
+              5,
+              6,
+              8
+            ],
+            "no_damage_to": [
+              9
+            ],
+            "double_damage_from": [
+              5,
+              14
+            ],
+            "half_damage_from": [
+              2,
+              4,
+              7,
+              12,
+              18
+            ],
+            "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+          },
+          "primary_type_id": 4,
+          "secondary_type": {
+            "id": 0,
+            "name": ""
+          },
+          "secondary_type_id": null,
+          "pokemon_species_id": 24,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png",
+          "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/24.ogg",
+          "weight": 650,
+          "height": 35,
+          "is_default": false
+        }
+      ]
+    }
+  ],
+  "prevPage": "https://localhost:8080/api/v1/pokemon?page=1&pageSize=12",
+  "total": 1025
+}

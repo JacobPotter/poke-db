@@ -1,12 +1,40 @@
-export interface Pokemon {
-    name: string;
+export interface ListPokemonResponse {
+    nextPage: string;
+    page: number;
+    pageSize: number;
+    params: Params;
+    pokemon: PokemonSpecies[];
+    prevPage: string;
+    total: number;
+}
+
+export interface Params {
+}
+
+export interface PokemonSpecies {
     id: number;
-    primary_type: MoveType
-    secondary_type: MoveType | null
+    has_gender_differences: boolean;
+    hatch_counter: number;
+    is_baby: boolean;
+    is_legendary: boolean;
+    is_mythical: boolean;
+    name: string;
+    varieties: PokemonVariety[];
+}
+
+export interface PokemonVariety {
+    id: number;
+    name: string;
+    primary_type: MoveType;
+    primary_type_id: number;
+    secondary_type: MoveType | null;
+    secondary_type_id: number | null;
+    pokemon_species_id: number;
     sprite_url: string;
-    cry: string
+    cry: string;
     weight: number;
-    height: number
+    height: number;
+    is_default: boolean;
 }
 
 
@@ -27,4 +55,9 @@ export interface MoveType {
     half_damage_from?: number[]
     img_url?: string
     no_damage_from?: number[]
+}
+
+export interface ListPokemonParams {
+    pokemonName: string | null
+    pokemonType: string | null
 }

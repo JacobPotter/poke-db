@@ -7,10 +7,9 @@ import {EvolutionChain} from "../pokemon/EvolutionChain.tsx";
 import {UnknownTab} from "../ui/UnknownTab.tsx";
 import {ArrowLeftIcon, ArrowRightIcon, ArrowUturnLeftIcon, FunnelIcon} from "@heroicons/react/24/outline";
 import useAxios from "axios-hooks";
-import {Pokemon} from "../../models/pokemon.ts";
+import {ListPokemonParams, ListPokemonResponse, PokemonSpecies} from "../../models/pokemon.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDebounce} from "use-debounce";
-import {ListPokemonParams, PokemonResponse} from "../../models/interfaces.ts";
 import {FilterForm} from "../pokemon/FilterForm.tsx";
 
 
@@ -33,7 +32,7 @@ export function PokemonPage() {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    const [{data, loading}, refetch] = useAxios<PokemonResponse>(
+    const [{data, loading}, refetch] = useAxios<ListPokemonResponse>(
         {
             url: '/api/v1/pokemon',
             params: {
@@ -44,7 +43,7 @@ export function PokemonPage() {
         }
     )
 
-    const [currentPokemon, setCurrentPokemon] = useState<Pokemon | null>(null);
+    const [currentPokemon, setCurrentPokemon] = useState<PokemonSpecies | null>(null);
 
     const handlePrev = useCallback(() => {
 
@@ -145,7 +144,7 @@ export function PokemonPage() {
 
     return <Pokedex>
         <Pokedex.LeftScreen loading={loading}>
-            {tabIndex === 0 ? <PokemonSummary pokemon={currentPokemon}/> : tabIndex === 1 ?
+            {tabIndex === 0 ? <PokemonSummary pokemonSpecies={currentPokemon}/> : tabIndex === 1 ?
                 <PokemonDetails pokemon={currentPokemon}/> : tabIndex === 2 ?
                     <EvolutionChain pokemon={currentPokemon}/> : <UnknownTab/>}
         </Pokedex.LeftScreen>
