@@ -11,8 +11,11 @@ GET {{host}}/pokemon?pageSize=1500
 GET {{host}}/pokemon?page=2&pageSize=12
 
 ###
+GET {{host}}/pokemon
+
+###
 GET {{host}}/pokemon?pokemonName=bulba
 
 ###
-GET {{host}}/pokemon?pokemonType=poison&pageSize=20
+GET {{host}}/pokemon?pokemonId=1&pageSize=20
 

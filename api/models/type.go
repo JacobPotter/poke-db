@@ -8,8 +8,9 @@ import "github.com/lib/pq"
 // this type. The HalfDamage field contains a list of type IDs that are not very effective against this type.
 // The NoDamage field contains a list of type IDs that have no effect on this type.
 type MoveType struct {
-	ID               uint          `gorm:"primary_key" json:"id"`
-	Name             string        `gorm:"not null;unique" json:"name"`
+	ID   uint   `gorm:"primary_key" json:"id"`
+	Name string `gorm:"not null;unique" json:"name"`
+	//TODO: convert to manytomany table somehow
 	DoubleDamageTo   pq.Int64Array `gorm:"type:integer[]" json:"double_damage_to,omitempty"`
 	HalfDamageTo     pq.Int64Array `gorm:"type:integer[]"  json:"half_damage_to,omitempty"`
 	NoDamageTo       pq.Int64Array `gorm:"type:integer[]"  json:"no_damage_to,omitempty"`

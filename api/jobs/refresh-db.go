@@ -120,46 +120,37 @@ func (r RefreshDB) refreshPokemon() {
 		return
 	}
 
-	var pokemon []*models.Pokemon
+	pokemonSpecies := make([]*models.PokemonSpecies, len(pokemonResource.Results))
 
-	log.Printf("Found %d pokemons", len(pokemonResource.Results))
+	log.Printf("Found %d pokemon species", len(pokemonResource.Results))
 
-	for _, result := range pokemonResource.Results {
-		clientPokemon, err := pokeapi.Pokemon(result.Name)
+	for i, result := range pokemonResource.Results {
+
+		clientSpecies, err := pokeapi.PokemonSpecies(result.Name)
+
 		if err != nil {
-			log.Printf("Failed to get pokemon: %s\nError:%s", result.Name, err)
+			log.Printf("Failed to get pokemon species: %s", err)
 			continue
 		}
 
-		var primaryType uint
-		var secondaryType uint
+		varieties := make([]models.Pokemon, len(clientSpecies.Varieties))
 
-		tx := r.DB.Model(models.MoveType{}).Select("id").Where("name = ?", clientPokemon.Types[0].Type.Name).First(&primaryType)
-
-		if tx.Error != nil {
-			log.Printf("Failed to get pokemon type: %s", tx.Error)
-		}
-		newPokemon := &models.Pokemon{
-			ID:            uint(clientPokemon.ID),
-			Name:          clientPokemon.Name,
-			PrimaryTypeId: &primaryType,
-			SpriteUrl:     clientPokemon.Sprites.FrontDefault,
-			Cry:           clientPokemon.Cries.Latest,
-			Weight:        clientPokemon.Weight,
-			Height:        clientPokemon.Height,
+		for i, v := range clientSpecies.Varieties {
+			varieties[i] = r.getPokemonVariety(v.Pokemon.Name)
 		}
 
-		if len(clientPokemon.Types) > 1 {
-			tx = r.DB.Model(models.MoveType{}).Select("id").Where("name = ?", clientPokemon.Types[1].Type.Name).First(&secondaryType)
-
-			if tx.Error != nil {
-				log.Printf("Failed to get pokemon type: %s", tx.Error)
-			}
-			newPokemon.SecondaryTypeId = &secondaryType
+		s := &models.PokemonSpecies{
+			ID:                   uint(clientSpecies.ID),
+			HasGenderDifferences: clientSpecies.HasGenderDifferences,
+			HatchCounter:         clientSpecies.HatchCounter,
+			IsBaby:               clientSpecies.IsBaby,
+			IsLegendary:          clientSpecies.IsLegendary,
+			IsMythical:           clientSpecies.IsMythical,
+			Name:                 clientSpecies.Name,
+			Varieties:            varieties,
 		}
 
-		pokemon = append(pokemon, newPokemon)
-
+		pokemonSpecies[i] = s
 	}
 
 	log.Print("Creating Pokemon")
@@ -167,13 +158,51 @@ func (r RefreshDB) refreshPokemon() {
 	tx := r.DB.Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "id"}},
 		UpdateAll: true,
-	}).Create(pokemon)
+	}).Create(pokemonSpecies)
 
 	if tx.Error != nil {
-		log.Printf("Error with creating pokemon: %v", tx.Error)
+		log.Printf("Error with creating pokemon species: %v", tx.Error)
 	}
 
-	log.Printf("Created # of new Pokemon: %d", tx.RowsAffected)
+	log.Printf("Created # of new Pokemon species: %d", tx.RowsAffected)
+}
+
+func (r RefreshDB) getPokemonVariety(varietyName string) (pokemon models.Pokemon) {
+	clientPokemon, err := pokeapi.Pokemon(varietyName)
+	if err != nil {
+		log.Printf("Failed to get pokemon: %s\nError:%s", varietyName, err)
+		return pokemon
+	}
+
+	var primaryType uint
+	var secondaryType uint
+
+	tx := r.DB.Model(models.MoveType{}).Select("id").Where("name = ?", clientPokemon.Types[0].Type.Name).First(&primaryType)
+
+	if tx.Error != nil {
+		log.Printf("Failed to get pokemon type: %s", tx.Error)
+	}
+	pokemon = models.Pokemon{
+		ID:            uint(clientPokemon.ID),
+		Name:          clientPokemon.Name,
+		PrimaryTypeId: &primaryType,
+		SpriteUrl:     clientPokemon.Sprites.FrontDefault,
+		Cry:           clientPokemon.Cries.Latest,
+		Weight:        clientPokemon.Weight,
+		Height:        clientPokemon.Height,
+		IsDefault:     clientPokemon.IsDefault,
+	}
+
+	if len(clientPokemon.Types) > 1 {
+		tx = r.DB.Model(models.MoveType{}).Select("id").Where("name = ?", clientPokemon.Types[1].Type.Name).First(&secondaryType)
+
+		if tx.Error != nil {
+			log.Printf("Failed to get pokemon type: %s", tx.Error)
+		}
+		pokemon.SecondaryTypeId = &secondaryType
+	}
+
+	return pokemon
 }
 
 func (r RefreshDB) linkDamage(damageModifiers interface{}) []int64 {
