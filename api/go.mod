@@ -16,7 +16,7 @@ require (
 )
 
 require (
-	github.com/JacobPotter/pokeapi-go v1.5.4
+	github.com/JacobPotter/pokeapi-go v1.5.5
 	github.com/rs/cors/wrapper/gin v0.0.0-20240830163046-1084d89a1692
 )
 

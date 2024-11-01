@@ -56,7 +56,7 @@ func NewPokemonHandler(db *gorm.DB) *PokemonHandler {
 //
 // @Router /pokemon [post]
 func (h *PokemonHandler) CreatePokemon(c *gin.Context) {
-	var pokemon models.Pokemon
+	var pokemon models.PokemonSpecies
 
 	if err := c.ShouldBindJSON(&pokemon); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -88,7 +88,7 @@ func (h *PokemonHandler) CreatePokemon(c *gin.Context) {
 // @Router /pokemon/{id} [get]
 func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 	id := c.Param("id")
-	var pokemon models.Pokemon
+	var pokemon models.PokemonSpecies
 	if err := h.db.First(&pokemon, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
 		return
@@ -98,7 +98,7 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 
 type ListPokemonParams struct {
 	PokemonName string `form:"pokemonName" json:"pokemonName,omitempty"`
-	PokemonType string `form:"pokemonType" json:"pokemonType,omitempty"`
+	PokemonId   int64  `form:"pokemonType" json:"pokemonId,omitempty"`
 }
 
 // ListPokemon fetches all Pokemon from the database and returns them as JSON data in the HTTP response.
@@ -119,7 +119,7 @@ type ListPokemonParams struct {
 //
 // @Router /pokemon [get]
 func (h *PokemonHandler) ListPokemon(c *gin.Context) {
-	var pokemon []models.Pokemon
+	var pokemon []models.PokemonSpecies
 	var queryParams ListPokemonParams
 
 	hostPath := c.Request.Host + c.Request.URL.Path
@@ -133,23 +133,24 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 
 	var count int64
 
-	tx := h.db.Model(&models.Pokemon{}).
+	tx := h.db.Model(&models.PokemonSpecies{}).
 		Order(clause.OrderByColumn{
 			Column: clause.Column{Name: "id"},
 			Desc:   false,
 		}).
-		Preload("PrimaryType").
-		Preload("SecondaryType").
 		Session(&gorm.Session{})
 
-	if queryParams.PokemonType != "" {
-		tx = tx.
-			Joins("JOIN move_types p on (pokemons.primary_type_id = p.id and p.name = ?) OR (pokemons.secondary_type_id = p.id and p.name = ?)", queryParams.PokemonType, queryParams.PokemonType)
+	if queryParams.PokemonName != "" {
+		tx = tx.Where("name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
 	}
 
-	if queryParams.PokemonName != "" {
-		tx = tx.Where("pokemons.name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
+	if queryParams.PokemonId != 0 {
+		tx = tx.Preload("Varieties", "primary_type_id = ? or secondary_type_id = ?", queryParams.PokemonId)
+	} else {
+		tx = tx.Preload("Varieties")
 	}
+
+	tx = tx.Preload("Varieties.PrimaryType").Preload("Varieties.SecondaryType")
 
 	tx = tx.Count(&count)
 
@@ -213,13 +214,13 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 // @Router /pokemon/{id} [put]
 func (h *PokemonHandler) UpdatePokemon(c *gin.Context) {
 	id := c.Param("id")
-	var pokemon models.Pokemon
+	var pokemon models.PokemonSpecies
 	if err := h.db.Model(&pokemon).Where("id = ?", id).First(&pokemon).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
 		return
 	}
 
-	var updatedPokemon models.Pokemon
+	var updatedPokemon models.PokemonSpecies
 	if err := c.ShouldBindJSON(&updatedPokemon); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -252,7 +253,7 @@ func (h *PokemonHandler) UpdatePokemon(c *gin.Context) {
 // @Router /pokemon/{id} [delete]
 func (h *PokemonHandler) DeletePokemon(c *gin.Context) {
 	id := c.Param("id")
-	var pokemon models.Pokemon
+	var pokemon models.PokemonSpecies
 	if err := h.db.First(&pokemon, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
 		return

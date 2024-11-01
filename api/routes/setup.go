@@ -1,9 +1,6 @@
 package routes
 
 import (
-	"github.com/JacobPotter/poke-db/api/routes/evolutionrequirementroutes"
-	"github.com/JacobPotter/poke-db/api/routes/evolutionroutes"
-	"github.com/JacobPotter/poke-db/api/routes/moveroutes"
 	"github.com/JacobPotter/poke-db/api/routes/pokemonroutes"
 	"github.com/JacobPotter/poke-db/api/routes/typeroutes"
 	"github.com/gin-gonic/gin"
@@ -21,9 +18,6 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	v1 := router.Group("/api/v1")
 	{
 		pokemonroutes.RegisterRoutes(v1, db)
-		evolutionroutes.RegisterRoutes(v1, db)
-		evolutionrequirementroutes.RegisterRoutes(v1, db)
-		moveroutes.RegisterRoutes(v1, db)
 		typeroutes.RegisterRoutes(v1, db)
 	}
 	return router
