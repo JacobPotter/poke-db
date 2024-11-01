@@ -1,11 +1,20 @@
-import {Pokemon} from "../../models/pokemon.ts";
+import {PokemonSpecies, PokemonVariety} from "../../models/pokemon.ts";
 import {SummaryItem} from "../ui/SummaryItem.tsx";
 import {capitalize} from "lodash";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {PlayIcon} from "@heroicons/react/24/solid";
 import {isSafari} from 'react-device-detect';
+import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
 
-export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
+interface PokemonSummaryProps {
+    pokemonSpecies: PokemonSpecies | null
+}
+
+export const PokemonSummary = ({pokemonSpecies}: PokemonSummaryProps) => {
+
+    const [selectedPokemonVariety, setSelectedPokemonVariety] = useState<PokemonVariety>();
+    const [varietyIndex, setVarietyIndex] = useState(0);
+
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progress, setProgress] = useState(0);
 
@@ -14,9 +23,13 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
         audioRef.current && audioRef?.current.play();
     };
 
+    useEffect(() => {
+        setVarietyIndex(0)
+    }, [pokemonSpecies]);
+
 
     useEffect(() => {
-        if (!pokemon) {
+        if (!selectedPokemonVariety) {
             return
         }
 
@@ -38,7 +51,14 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
             clearTimeout(to)
         }
 
-    }, [pokemon?.cry]);
+    }, [selectedPokemonVariety?.cry]);
+
+
+    useEffect(() => {
+        if (!pokemonSpecies) return;
+        setSelectedPokemonVariety(pokemonSpecies?.varieties[varietyIndex]);
+    }, [pokemonSpecies, varietyIndex]);
+
 
     useEffect(() => {
         let timeout: NodeJS.Timeout;
@@ -52,12 +72,17 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
 
     }, [progress]);
 
+
+    const showVariety = useCallback(() => {
+        return pokemonSpecies && pokemonSpecies?.varieties.length > 1 && selectedPokemonVariety && selectedPokemonVariety?.name?.split("-").length > 2;
+    }, [pokemonSpecies, selectedPokemonVariety]);
+
     return (
-        <section className={'flex flex-col items-center justify-center font-mono h-full'}>
+        <section className={'relative flex flex-col items-center justify-center font-mono h-full'}>
             <div className={'max-w-md flex flex-col flex-grow w-full justify-between'}>
-                <h1 className="sm:text-lg md:text-3xl lg:text-4xl">{capitalize(pokemon?.name)} #{pokemon?.id}</h1>
+                <h1 className="sm:text-lg md:text-3xl lg:text-4xl z-10">{pokemonSpecies && pokemonSpecies.name?.split("-").length > 1 ? `${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[0])} ${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[1])}` : capitalize(pokemonSpecies?.varieties[0]?.name)} #{pokemonSpecies?.varieties[0]?.id} {varietyIndex > 0 ? showVariety() ? capitalize(`${selectedPokemonVariety?.name.split("-")[1]}-${capitalize(selectedPokemonVariety?.name.split("-")[2])}`) : capitalize(selectedPokemonVariety?.name.split("-")[1]) : <></>}</h1>
                 <div className="translate-y-[10%] flex items-center justify-end sm:justify-center">
-                    <img src={pokemon?.sprite_url} alt={pokemon?.name}
+                    <img src={selectedPokemonVariety?.sprite_url} alt={selectedPokemonVariety?.name}
                          className={'h-auto w-2/5 md:w-3/4 animate-bounce'}/>
                 </div>
             </div>
@@ -76,16 +101,33 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
                             </div>
                         </div>
                     </div>
-                    <audio ref={audioRef} src={pokemon?.cry}/>
+                    <audio ref={audioRef} src={selectedPokemonVariety?.cry}/>
                 </div>}
-                <SummaryItem><img className={'w-16 xs:w-20 sm:w-auto mx-auto'} src={pokemon?.primary_type.img_url}
-                                  alt={pokemon?.primary_type.name}/></SummaryItem>
-                <SummaryItem>{pokemon?.secondary_type?.name ?
-                    <img className={'w-16 xs:w-20 sm:w-auto mx-auto'} src={pokemon.secondary_type.img_url}
-                         alt={pokemon.secondary_type.img_url}/> : 'None'}</SummaryItem>
-                <SummaryItem>Weight: {(pokemon?.weight ?? 0) / 10}kg</SummaryItem>
-                <SummaryItem>Height: {(pokemon?.height ?? 0) / 10}m</SummaryItem>
+                <SummaryItem><img className={'w-16 xs:w-20 sm:w-auto mx-auto'}
+                                  src={selectedPokemonVariety?.primary_type.img_url}
+                                  alt={selectedPokemonVariety?.primary_type.name}/></SummaryItem>
+                <SummaryItem>{selectedPokemonVariety?.secondary_type?.name ?
+                    <img className={'w-16 xs:w-20 sm:w-auto mx-auto'}
+                         src={selectedPokemonVariety.secondary_type.img_url}
+                         alt={selectedPokemonVariety.secondary_type.img_url}/> : 'None'}</SummaryItem>
+                <SummaryItem>Weight: {(selectedPokemonVariety?.weight ?? 0) / 10}kg</SummaryItem>
+                <SummaryItem>Height: {(selectedPokemonVariety?.height ?? 0) / 10}m</SummaryItem>
             </div>
+
+            {pokemonSpecies && pokemonSpecies?.varieties.length > 1 && <>
+                <button disabled={!pokemonSpecies?.varieties[varietyIndex - 1]}
+                        className={`absolute top-1/4 -left-3 md:top-1/3`}
+                        onClick={() => setVarietyIndex(varietyIndex - 1)}>
+                    <ChevronLeftIcon
+                        className={'w-5 h-5'}/></button>
+                <button disabled={!pokemonSpecies?.varieties[varietyIndex + 1]}
+                        className={'absolute top-1/4 -right-3 md:top-1/3'}
+                        onClick={() => setVarietyIndex(varietyIndex + 1)}>
+                    <ChevronRightIcon
+                        className={'w-5 h-5'}/></button>
+            </>}
+
+
         </section>
     )
 };

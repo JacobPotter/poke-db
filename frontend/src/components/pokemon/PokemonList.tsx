@@ -1,9 +1,9 @@
 import React from "react";
-import {Pokemon} from "../../models/pokemon.ts";
+import {PokemonSpecies} from "../../models/pokemon.ts";
 import {PokemonListItem} from "./PokemonListItem.tsx";
 
 interface PokemonListProps {
-    pokemon: Pokemon[];
+    pokemon: PokemonSpecies[];
     pokemonId: string | undefined;
     onPokemonSelect: (pokemonId: number) => void;
 }
@@ -15,7 +15,7 @@ export const PokemonList: React.FC<PokemonListProps> = ({pokemon, pokemonId, onP
         {pokemon.map((pokemon, index) => {
             return <PokemonListItem onPokemonSelect={onPokemonSelect} key={`${pokemon.name}_list_item`}
                                     active={pokemonId ? pokemon.id === parseInt(pokemonId) : index === 0}
-                                    pokemon={pokemon}/>
+                                    pokemonSpecies={pokemon}/>
         })}
     </div>)
 }

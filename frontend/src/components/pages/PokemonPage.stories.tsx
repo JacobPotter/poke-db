@@ -2,8 +2,8 @@ import type {Meta, StoryObj} from '@storybook/react';
 
 import {PokemonPage} from './PokemonPage.tsx';
 import {delay, http, HttpResponse} from "msw";
-import pokemon1_10 from "../../fixtures/pokemon1-10.json";
-import pokemon11_20 from "../../fixtures/pokemon-11-20.json";
+import pokemon_page_1 from "../../fixtures/pokemon_page_1.json";
+import pokemon_page_2 from "../../fixtures/pokemon_page_2.json";
 import {reactRouterParameters, withRouter} from "storybook-addon-remix-react-router";
 
 
@@ -30,10 +30,10 @@ export const Default: Story = {
         msw: {
             handlers: [
                 http.get('/api/v1/pokemon?page=1&pageSize=12', async () => {
-                    return HttpResponse.json(pokemon1_10);
+                    return HttpResponse.json(pokemon_page_1);
                 }),
                 http.get('/api/v1/pokemon?page=2&pageSize=12', async () => {
-                    return HttpResponse.json(pokemon11_20);
+                    return HttpResponse.json(pokemon_page_2);
                 }),
             ],
         },
@@ -45,8 +45,8 @@ export const WithLoading: Story = {
         msw: {
             handlers: [
                 http.get('/api/v1/pokemon', async () => {
-                    await delay(800)
-                    return HttpResponse.json(pokemon1_10);
+                    await delay(2800)
+                    return HttpResponse.json(pokemon_page_1);
                 }),
             ],
         },

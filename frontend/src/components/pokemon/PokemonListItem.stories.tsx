@@ -1,8 +1,7 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import pokemon from '../../fixtures/pokemon.json'
+import pokemon_page_1 from '../../fixtures/pokemon_page_1.json'
 
 import {PokemonListItem} from './PokemonListItem.tsx';
-import {Pokemon} from "../../models/pokemon.ts";
 
 const meta = {
     component: PokemonListItem,
@@ -19,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
     args: {
-        pokemon: pokemon.pokemon[0] as unknown as Pokemon,
+        pokemonSpecies: pokemon_page_1.pokemon[0],
         active: true,
         onPokemonSelect: () => {
         }
