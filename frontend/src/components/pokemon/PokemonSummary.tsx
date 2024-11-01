@@ -56,9 +56,9 @@ export const PokemonSummary = ({pokemon}: { pokemon: Pokemon | null }) => {
         <section className={'flex flex-col items-center justify-center font-mono h-full'}>
             <div className={'max-w-md flex flex-col flex-grow w-full justify-between'}>
                 <h1 className="sm:text-lg md:text-3xl lg:text-4xl">{capitalize(pokemon?.name)} #{pokemon?.id}</h1>
-                <div className="translate-y-[10%]">
+                <div className="translate-y-[10%] flex items-center justify-end sm:justify-center">
                     <img src={pokemon?.sprite_url} alt={pokemon?.name}
-                         className={'h-auto w-2/5 md:w-3/4 place-self-end sm:place-self-center animate-bounce'}/>
+                         className={'h-auto w-2/5 md:w-3/4 animate-bounce'}/>
                 </div>
             </div>
             <div className={'grid grid-cols-2 gap-2 w-full'}>
