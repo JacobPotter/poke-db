@@ -59,5 +59,5 @@ export interface MoveType {
 
 export interface ListPokemonParams {
     pokemonName: string | null
-    pokemonType: string | null
+    pokemonTypeId: number | null
 }

@@ -17,5 +17,5 @@ GET {{host}}/pokemon
 GET {{host}}/pokemon?pokemonName=bulba
 
 ###
-GET {{host}}/pokemon?pokemonId=1&pageSize=20
+GET {{host}}/pokemon?pokemonTypeId=10&pageSize=20
 

@@ -19,8 +19,8 @@ export const FilterForm = ({onSubmit}: { onSubmit: (params: ListPokemonParams) =
         }
 
         onSubmit({
-            pokemonName: pokemonName && (pokemonName as string).toLowerCase(),
-            pokemonType: pokemonType && pokemonType as string,
+            pokemonName: pokemonName !== "" ? (pokemonName as string).toLowerCase() : null,
+            pokemonTypeId: moveTypes.find(moveType => moveType.name.toLowerCase() === pokemonType?.toString().toLowerCase())?.id ?? null,
         })
     };
 
