@@ -97,8 +97,8 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 }
 
 type ListPokemonParams struct {
-	PokemonName string `form:"pokemonName" json:"pokemonName,omitempty"`
-	PokemonId   int64  `form:"pokemonType" json:"pokemonId,omitempty"`
+	PokemonName   string `form:"pokemonName" json:"pokemonName,omitempty"`
+	PokemonTypeId int64  `form:"pokemonTypeId" json:"pokemonTypeId,omitempty"`
 }
 
 // ListPokemon fetches all Pokemon from the database and returns them as JSON data in the HTTP response.
@@ -134,20 +134,28 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	var count int64
 
 	tx := h.db.Model(&models.PokemonSpecies{}).
-		Order(clause.OrderByColumn{
-			Column: clause.Column{Name: "id"},
-			Desc:   false,
-		}).
 		Session(&gorm.Session{})
 
 	if queryParams.PokemonName != "" {
 		tx = tx.Where("name LIKE ?", fmt.Sprintf("%%%s%%", queryParams.PokemonName))
 	}
 
-	if queryParams.PokemonId != 0 {
-		tx = tx.Preload("Varieties", "primary_type_id = ? or secondary_type_id = ?", queryParams.PokemonId)
+	if queryParams.PokemonTypeId != 0 {
+		tx = tx.InnerJoins("JOIN pokemons p ON p.pokemon_species_id = pokemon_species.id").
+			Where("p.primary_type_id = ?", queryParams.PokemonTypeId).
+			Or("p.secondary_type_id = ?", queryParams.PokemonTypeId).
+			Group("pokemon_species.id").
+			Order(clause.OrderByColumn{
+				Column: clause.Column{Name: "pokemon_species.id"},
+				Desc:   false,
+			})
 	} else {
-		tx = tx.Preload("Varieties")
+		tx = tx.Preload("Varieties", func(db *gorm.DB) *gorm.DB {
+			return db.Order("id ASC")
+		}).Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "id"},
+			Desc:   false,
+		})
 	}
 
 	tx = tx.Preload("Varieties.PrimaryType").Preload("Varieties.SecondaryType")
