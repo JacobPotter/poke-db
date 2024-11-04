@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test:browser": "vitest --workspace=vitest.workspace.ts --passWithNoTests"
+    "test": "vitest --workspace=vitest.workspace.ts --passWithNoTests"
   },
   "dependencies": {
     "@fontsource/roboto": "^5.0.14",
@@ -40,6 +40,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.0",
     "@vitest/browser": "^2.1.4",
+    "@vitest/coverage-v8": "^2.1.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",

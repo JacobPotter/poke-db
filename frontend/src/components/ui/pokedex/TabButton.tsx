@@ -18,7 +18,7 @@ export const TabButton: FC<TabButtonProps> = ({onClick, type, pulse}) => {
 
     switch (type) {
         case "info":
-            content = <InformationCircleIcon className={'text-blue-200'}/>
+            content = <InformationCircleIcon data-testid={"info-icon"} className={'text-blue-200'}/>
             break;
         case "details":
             content = <DocumentTextIcon className={'text-green-200'}/>

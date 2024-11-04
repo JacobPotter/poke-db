@@ -12,6 +12,7 @@ export default defineWorkspace([
                 provider: 'playwright',
                 // https://playwright.dev
                 providerOptions: {},
+                headless: true,
             },
 
         },

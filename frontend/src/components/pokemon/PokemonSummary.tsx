@@ -44,11 +44,11 @@ export const PokemonSummary = ({pokemonSpecies}: PokemonSummaryProps) => {
             audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
         }
 
-        const to = setTimeout(handlePlay, 400);
+        // const to = setTimeout(handlePlay, 400);
 
         return () => {
             audioRef.current && audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
-            clearTimeout(to)
+            // clearTimeout(to)
         }
 
     }, [selectedPokemonVariety?.cry]);

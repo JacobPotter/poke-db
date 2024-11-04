@@ -61,13 +61,16 @@ jobs:
           node-version: 18.8.x
 
       - name: Install
-        run: npm ci
+        run: npm install
+
+      - name: Playwright Install
+        run: npx playwright install
 
       - name: Build
         run: npm run build
 
       - name: Test
-        run: npm run test:browser
+        run: npm run test
        
      
        
