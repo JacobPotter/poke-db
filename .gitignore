@@ -1,3 +1,5 @@
 
 .DS_Store
-api/.idea/dataSources.xml
+api/.idea/
+/frontend/coverage/
+/.vite/vitest/results.json
