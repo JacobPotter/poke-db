@@ -507,7 +507,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Pokemons"
+                            "$ref": "#/definitions/models.Varieties"
                         }
                     }
                 }
@@ -918,7 +918,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Pokemons": {
+        "models.Varieties": {
             "type": "object",
             "properties": {
                 "pokemon": {

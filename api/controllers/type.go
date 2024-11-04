@@ -65,19 +65,19 @@ func NewTypeHandler(db *gorm.DB) *TypeHandler {
 //
 // @Success 201 {object} models.MoveType
 //
-// @Router /type [post]
-func (h *TypeHandler) CreateType(c *gin.Context) {
-	var pokeType models.MoveType
-	if err := c.ShouldBindJSON(&pokeType); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := h.db.Model(&pokeType).Create(&pokeType).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create MoveType"})
-		return
-	}
-	c.JSON(http.StatusCreated, gin.H{"data": pokeType})
-}
+//// @Router /type [post]
+//func (h *TypeHandler) CreateType(c *gin.Context) {
+//	var pokeType models.MoveType
+//	if err := c.ShouldBindJSON(&pokeType); err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//	if err := h.db.Model(&pokeType).Create(&pokeType).Error; err != nil {
+//		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create MoveType"})
+//		return
+//	}
+//	c.JSON(http.StatusCreated, gin.H{"data": pokeType})
+//}
 
 // GetType retrieves a type from the database based on the given ID.
 // It expects the ID to be passed as a URL parameter.
@@ -165,23 +165,23 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 // @Success 200 {object} models.MoveType
 //
 // @Router /type/{id} [put]
-func (h *TypeHandler) UpdateType(c *gin.Context) {
-	id := c.Param("id")
-	var pokeType models.MoveType
-	if err := h.db.First(&pokeType, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "MoveType not found"})
-		return
-	}
-
-	var updatedType models.MoveType
-	if err := c.ShouldBindJSON(&updatedType); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	h.db.Model(&pokeType).Updates(updatedType)
-	c.JSON(http.StatusOK, gin.H{"data": pokeType})
-}
+//func (h *TypeHandler) UpdateType(c *gin.Context) {
+//	id := c.Param("id")
+//	var pokeType models.MoveType
+//	if err := h.db.First(&pokeType, id).Error; err != nil {
+//		c.JSON(http.StatusNotFound, gin.H{"error": "MoveType not found"})
+//		return
+//	}
+//
+//	var updatedType models.MoveType
+//	if err := c.ShouldBindJSON(&updatedType); err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//
+//	h.db.Model(&pokeType).Updates(updatedType)
+//	c.JSON(http.StatusOK, gin.H{"data": pokeType})
+//}
 
 // DeleteType deletes a type from the application.
 // It expects the type ID to be passed as a URL parameter.
@@ -203,18 +203,18 @@ func (h *TypeHandler) UpdateType(c *gin.Context) {
 // @Success 200 {string} string "deleted"
 //
 // @Router /type/{id} [delete]
-func (h *TypeHandler) DeleteType(c *gin.Context) {
-	id := c.Param("id")
-	var pokeType models.MoveType
-	if err := h.db.First(&pokeType, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "MoveType not found"})
-		return
-	}
-
-	if err := h.db.Delete(&pokeType).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete MoveType"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": "MoveType deleted successfully"})
-}
+//func (h *TypeHandler) DeleteType(c *gin.Context) {
+//	id := c.Param("id")
+//	var pokeType models.MoveType
+//	if err := h.db.First(&pokeType, id).Error; err != nil {
+//		c.JSON(http.StatusNotFound, gin.H{"error": "MoveType not found"})
+//		return
+//	}
+//
+//	if err := h.db.Delete(&pokeType).Error; err != nil {
+//		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete MoveType"})
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, gin.H{"data": "MoveType deleted successfully"})
+//}

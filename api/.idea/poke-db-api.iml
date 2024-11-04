@@ -7,5 +7,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="poke-db-frontend" />
     <orderEntry type="module" module-name="pokeapi-go" />
+    <orderEntry type="module" module-name="poke-db" />
   </component>
 </module>

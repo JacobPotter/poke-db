@@ -55,16 +55,16 @@ func NewPokemonHandler(db *gorm.DB) *PokemonHandler {
 // @Success 201 {object} models.Pokemon
 //
 // @Router /pokemon [post]
-func (h *PokemonHandler) CreatePokemon(c *gin.Context) {
-	var pokemon models.PokemonSpecies
-
-	if err := c.ShouldBindJSON(&pokemon); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	h.db.Create(&pokemon)
-	c.JSON(http.StatusCreated, pokemon)
-}
+//func (h *PokemonHandler) CreatePokemon(c *gin.Context) {
+//	var pokemon models.PokemonSpecies
+//
+//	if err := c.ShouldBindJSON(&pokemon); err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//	h.db.Create(&pokemon)
+//	c.JSON(http.StatusCreated, pokemon)
+//}
 
 // GetPokemon retrieves the details of a Pokemon based on the given ID.
 // It first retrieves the Pokemon from the database using the provided ID.
@@ -96,11 +96,6 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 	c.JSON(http.StatusOK, pokemon)
 }
 
-type ListPokemonParams struct {
-	PokemonName   string `form:"pokemonName" json:"pokemonName,omitempty"`
-	PokemonTypeId int64  `form:"pokemonTypeId" json:"pokemonTypeId,omitempty"`
-}
-
 // ListPokemon fetches all Pokemon from the database and returns them as JSON data in the HTTP response.
 // If there is an error fetching the Pokemon, it returns a 500 Internal Server Error response.
 // This method is a handler for the "/pokemon" GET route.
@@ -115,12 +110,12 @@ type ListPokemonParams struct {
 //
 // @Produce json
 //
-// @Success 200 {object} models.Pokemons
+// @Success 200 {object} models.Varieties
 //
 // @Router /pokemon [get]
 func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	var pokemon []models.PokemonSpecies
-	var queryParams ListPokemonParams
+	var queryParams models.ListPokemonParams
 
 	hostPath := c.Request.Host + c.Request.URL.Path
 
@@ -142,23 +137,12 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 
 	if queryParams.PokemonTypeId != 0 {
 		tx = tx.InnerJoins("JOIN pokemons p ON p.pokemon_species_id = pokemon_species.id").
-			Where("p.primary_type_id = ?", queryParams.PokemonTypeId).
-			Or("p.secondary_type_id = ?", queryParams.PokemonTypeId).
-			Group("pokemon_species.id").
-			Order(clause.OrderByColumn{
-				Column: clause.Column{Name: "pokemon_species.id"},
-				Desc:   false,
-			})
-	} else {
-		tx = tx.Preload("Varieties", func(db *gorm.DB) *gorm.DB {
-			return db.Order("id ASC")
-		}).Order(clause.OrderByColumn{
-			Column: clause.Column{Name: "id"},
-			Desc:   false,
-		})
+			Where(
+				"p.primary_type_id = ? or p.secondary_type_id = ?",
+				queryParams.PokemonTypeId,
+				queryParams.PokemonTypeId,
+			)
 	}
-
-	tx = tx.Preload("Varieties.PrimaryType").Preload("Varieties.SecondaryType")
 
 	tx = tx.Count(&count)
 
@@ -167,7 +151,13 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 		return
 	}
 
-	tx = tx.Scopes(models.Paginate(page, pageSize)).Find(&pokemon)
+	tx = tx.Debug().Scopes(models.Paginate(page, pageSize)).
+		Preload("Varieties").
+		Preload("Varieties.PrimaryType").
+		Preload("Varieties.SecondaryType").
+		Order(clause.OrderByColumn{
+			Column: clause.Column{Name: "pokemon_species.id"},
+		}).Find(&pokemon)
 
 	if tx.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch Pokemon"})
@@ -186,14 +176,14 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 		prevPage = fmt.Sprintf("https://%s?page=%d&pageSize=%d", hostPath, page-1, pageSize)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"pokemon":  pokemon,
-		"page":     page,
-		"pageSize": pageSize,
-		"total":    count,
-		"params":   queryParams,
-		"nextPage": nextPage,
-		"prevPage": prevPage,
+	c.JSON(http.StatusOK, models.ListPokemonResponse{
+		Pokemon:  pokemon,
+		Page:     page,
+		PageSize: pageSize,
+		Total:    int(count),
+		Params:   queryParams,
+		NextPage: nextPage,
+		PrevPage: prevPage,
 	})
 }
 
@@ -220,23 +210,23 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 // @Success 200 {object} models.Pokemon
 //
 // @Router /pokemon/{id} [put]
-func (h *PokemonHandler) UpdatePokemon(c *gin.Context) {
-	id := c.Param("id")
-	var pokemon models.PokemonSpecies
-	if err := h.db.Model(&pokemon).Where("id = ?", id).First(&pokemon).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
-		return
-	}
-
-	var updatedPokemon models.PokemonSpecies
-	if err := c.ShouldBindJSON(&updatedPokemon); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	h.db.Model(&pokemon).Updates(updatedPokemon)
-	c.JSON(http.StatusOK, updatedPokemon)
-}
+//func (h *PokemonHandler) UpdatePokemon(c *gin.Context) {
+//	id := c.Param("id")
+//	var pokemon models.PokemonSpecies
+//	if err := h.db.Model(&pokemon).Where("id = ?", id).First(&pokemon).Error; err != nil {
+//		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
+//		return
+//	}
+//
+//	var updatedPokemon models.PokemonSpecies
+//	if err := c.ShouldBindJSON(&updatedPokemon); err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//
+//	h.db.Model(&pokemon).Updates(updatedPokemon)
+//	c.JSON(http.StatusOK, updatedPokemon)
+//}
 
 // DeletePokemon deletes a Pokemon from the database based on the provided ID.
 // It first retrieves the Pokemon from the database using the provided ID.
@@ -259,18 +249,18 @@ func (h *PokemonHandler) UpdatePokemon(c *gin.Context) {
 // @Success 200 {string} string "deleted"
 //
 // @Router /pokemon/{id} [delete]
-func (h *PokemonHandler) DeletePokemon(c *gin.Context) {
-	id := c.Param("id")
-	var pokemon models.PokemonSpecies
-	if err := h.db.First(&pokemon, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
-		return
-	}
-
-	if err := h.db.Delete(&pokemon).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete Pokemon"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": "Pokemon deleted successfully"})
-}
+//func (h *PokemonHandler) DeletePokemon(c *gin.Context) {
+//	id := c.Param("id")
+//	var pokemon models.PokemonSpecies
+//	if err := h.db.First(&pokemon, id).Error; err != nil {
+//		c.JSON(http.StatusNotFound, gin.H{"error": "Pokemon not found"})
+//		return
+//	}
+//
+//	if err := h.db.Delete(&pokemon).Error; err != nil {
+//		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete Pokemon"})
+//		return
+//	}
+//
+//	c.JSON(http.StatusOK, gin.H{"data": "Pokemon deleted successfully"})
+//}
