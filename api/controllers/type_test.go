@@ -25,7 +25,7 @@ func (s *TypeTestSuite) SetupTest() {
 	initJobs := os.Getenv("INIT_JOBS")
 
 	if initJobs == "true" {
-		jobs.RefreshDB{DB: models.DB}.Run()
+		jobs.RefreshDB{DB: models.DB, Test: true}.Run()
 	}
 
 }

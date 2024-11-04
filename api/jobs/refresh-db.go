@@ -12,7 +12,8 @@ import (
 )
 
 type RefreshDB struct {
-	DB *gorm.DB
+	DB   *gorm.DB
+	Test bool
 }
 
 type DamageLink struct {
@@ -113,7 +114,16 @@ func (r RefreshDB) refreshTypes() {
 }
 
 func (r RefreshDB) refreshPokemon() {
-	pokemonResource, err := pokeapi.Resource("pokemon-species", 0, 1500)
+
+	var count int
+
+	if r.Test {
+		count = 50
+	} else {
+		count = 1500
+	}
+
+	pokemonResource, err := pokeapi.Resource("pokemon-species", 0, count)
 
 	if err != nil {
 		log.Printf("Failed to get pokemon: %s", err)
