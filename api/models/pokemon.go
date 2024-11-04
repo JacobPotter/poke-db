@@ -1,5 +1,15 @@
 package models
 
+type ListPokemonResponse struct {
+	Pokemon  []PokemonSpecies  `json:"pokemon"`
+	Page     int               `json:"page"`
+	PageSize int               `json:"pageSize"`
+	Total    int               `json:"total"`
+	Params   ListPokemonParams `json:"params"`
+	NextPage string            `json:"nextPage,omitempty"`
+	PrevPage string            `json:"prevPage,omitempty"`
+}
+
 type Pokemon struct {
 	ID               uint            `gorm:"primary_key" json:"id"`
 	Name             string          `gorm:"unique" json:"name"`
@@ -38,4 +48,9 @@ type PokemonSpecies struct {
 	IsMythical           bool      `json:"is_mythical"`
 	Name                 string    `json:"name"`
 	Varieties            []Pokemon `json:"varieties"`
+}
+
+type ListPokemonParams struct {
+	PokemonName   string `form:"pokemonName" json:"pokemonName,omitempty"`
+	PokemonTypeId int64  `form:"pokemonTypeId" json:"pokemonTypeId,omitempty"`
 }
