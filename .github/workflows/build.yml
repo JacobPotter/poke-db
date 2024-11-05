@@ -35,17 +35,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+
+      - name: Postgres Backup Restore
+        uses: tj-actions/pg-restore@v6
+        with:
+          database_url: "postgres://postgres:postgres@postgres:5432/postgres"
+          backup_file: "api/seed/mock-dump.sql"
+
       - name: Build
         run: go build -v -buildvcs=false ./...
 
-      - name: Test
+      - name: Test Jobs
         env:
           DB_HOST: postgres
           DB_NAME: postgres
           DB_USER: postgres
           DB_PASSWORD: postgres
-          INIT_JOBS: true
-        run: go test -v ./...
+        run: go test github.com/WebWizardsDev/poke-db/api/jobs -v ./...
+
+      - name: Test Controllers
+        env:
+          DB_HOST: postgres
+          DB_NAME: postgres
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+        run: go test github.com/WebWizardsDev/poke-db/api/controllers -v ./...
 
   build-frontend:
     runs-on: ubuntu-latest

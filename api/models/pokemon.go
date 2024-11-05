@@ -24,6 +24,7 @@ type Pokemon struct {
 	Weight           int             `json:"weight"`
 	Height           int             `json:"height"`
 	IsDefault        bool            `json:"is_default"`
+	LearnableMoves   []Move          `gorm:"many2many:pokemon_move_sets;" json:"learnable_moves"`
 }
 
 //TODO: add species JSONb column to table

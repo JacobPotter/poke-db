@@ -1,4 +1,4 @@
-package typeroutes
+package evolutionroutes
 
 import (
 	"github.com/WebWizardsDev/poke-db/api/controllers"
@@ -7,8 +7,8 @@ import (
 )
 
 func RegisterRoutes(router *gin.RouterGroup, db *gorm.DB) {
-	handler := controllers.NewTypeHandler(db)
+	handler := controllers.NewEvolutionHandler(db)
 	// Define routes
-	router.GET("/type/:id", handler.GetType)
-	router.GET("/type", handler.ListType)
+	router.GET("/evolution/:id", handler.GetEvolutionChain)
+	router.GET("/evolution", handler.ListEvolutionChains)
 }

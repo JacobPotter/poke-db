@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/WebWizardsDev/poke-db/api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"log"
@@ -79,20 +79,20 @@ func NewTypeHandler(db *gorm.DB) *TypeHandler {
 //	c.JSON(http.StatusCreated, gin.H{"data": pokeType})
 //}
 
-// GetType retrieves a type from the database based on the given ID.
-// It expects the ID to be passed as a URL parameter.
+// GetType retrieves a type from the database based on the given GenericId.
+// It expects the GenericId to be passed as a URL parameter.
 // If the type is found, it will return the type data in the response body with a status code of 200.
 // If the type is not found, it will return a JSON error message with a status code of 404.
 //
 // @Summary Get MoveType
 //
-// @Description Get type by ID
+// @Description Get type by GenericId
 //
 // @Tags type
 //
 // @Accept json
 //
-// @Param id  path int true "MoveType ID"
+// @Param id  path int true "MoveType GenericId"
 //
 // @Produce json
 //
@@ -125,7 +125,7 @@ func (h *TypeHandler) GetType(c *gin.Context) {
 //
 // @Produce json
 //
-// @Success 200 {object} models.Types
+// @Success 200 {object}
 //
 // @Router /type [get]
 func (h *TypeHandler) ListType(c *gin.Context) {
@@ -140,8 +140,8 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": types, "page": page, "pageSize": pageSize, "total": tx.RowsAffected})
 }
 
-// UpdateType updates a type in the application with the specified ID.
-// It retrieves the type from the database based on the ID provided in the URL parameter.
+// UpdateType updates a type in the application with the specified GenericId.
+// It retrieves the type from the database based on the GenericId provided in the URL parameter.
 // If the type is not found, it returns a JSON error message with a status code of 404.
 // It then binds the JSON data from the request body to an updatedType object.
 // If there is an error in binding the JSON data, it returns a bad request error.
@@ -150,7 +150,7 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 //
 // @Summary Update MoveType
 //
-// @Description Update type by ID
+// @Description Update type by GenericId
 //
 // @Tags type
 //
@@ -158,7 +158,7 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 //
 // @Produce json
 //
-// @Param id  path int true "MoveType ID"
+// @Param id  path int true "MoveType GenericId"
 //
 // @Param data body models.MoveType true "The updated type"
 //
@@ -184,13 +184,13 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 //}
 
 // DeleteType deletes a type from the application.
-// It expects the type ID to be passed as a URL parameter.
+// It expects the type GenericId to be passed as a URL parameter.
 // If the type is found, it will be deleted from the database.
 // If the type is not found, it will return a JSON error message with a status code of 404.
 // If there is an error in deleting the type, it will return an internal server error.
 // @Summary Delete MoveType
 //
-// @Description Delete type by ID
+// @Description Delete type by GenericId
 //
 // @Tags type
 //
@@ -198,7 +198,7 @@ func (h *TypeHandler) ListType(c *gin.Context) {
 //
 // @Produce json
 //
-// @Param id  path int true "MoveType ID"
+// @Param id  path int true "MoveType GenericId"
 //
 // @Success 200 {string} string "deleted"
 //
