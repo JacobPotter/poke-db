@@ -1,4 +1,4 @@
-module github.com/JacobPotter/poke-db/api
+module github.com/WebWizardsDev/poke-db/api
 
 go 1.23.0
 
@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/JacobPotter/pokeapi-go v1.5.5
+	github.com/JacobPotter/pokeapi-go v1.5.7
 	github.com/rs/cors/wrapper/gin v0.0.0-20240830163046-1084d89a1692
 )
 

@@ -1,7 +1,7 @@
 package pokemonroutes
 
 import (
-	"github.com/JacobPotter/poke-db/api/controllers"
+	"github.com/WebWizardsDev/poke-db/api/controllers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

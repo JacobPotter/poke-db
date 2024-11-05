@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/WebWizardsDev/poke-db/api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -66,20 +66,20 @@ func NewPokemonHandler(db *gorm.DB) *PokemonHandler {
 //	c.JSON(http.StatusCreated, pokemon)
 //}
 
-// GetPokemon retrieves the details of a Pokemon based on the given ID.
-// It first retrieves the Pokemon from the database using the provided ID.
+// GetPokemon retrieves the details of a Pokemon based on the given GenericId.
+// It first retrieves the Pokemon from the database using the provided GenericId.
 // If the Pokemon is not found, it returns a 404 Not Found response.
 // If the Pokemon is found, it returns a 200 OK response with the Pokemon data.
 //
 // @Summary Get Pokemon
 //
-// @Description Get pokemon by ID
+// @Description Get pokemon by GenericId
 //
 // @Tags pokemon
 //
 // @Accept json
 //
-// @Param id  path int true "Pokemon ID"
+// @Param id  path int true "Pokemon GenericId"
 //
 // @Produce json
 //
@@ -187,15 +187,15 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	})
 }
 
-// UpdatePokemon updates the details of a Pokemon based on the provided ID.
-// It first retrieves the Pokemon from the database using the provided ID.
+// UpdatePokemon updates the details of a Pokemon based on the provided GenericId.
+// It first retrieves the Pokemon from the database using the provided GenericId.
 // If the Pokemon is not found, it returns a 404 Not Found response with an error message.
 // If the JSON payload is invalid, it returns a 400 Bad Request response with the error details.
 // If the update is successful, it updates the Pokemon in the database and returns a 200 OK response with the updated Pokemon data.
 //
 // @Summary Update Pokemon
 //
-// @Description Update pokemon by ID
+// @Description Update pokemon by GenericId
 //
 // @Tags pokemon
 //
@@ -203,7 +203,7 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 //
 // @Produce json
 //
-// @Param id  path int true "Pokemon ID"
+// @Param id  path int true "Pokemon GenericId"
 //
 // @Param data body models.Pokemon true "The updated pokemon"
 //
@@ -228,15 +228,15 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 //	c.JSON(http.StatusOK, updatedPokemon)
 //}
 
-// DeletePokemon deletes a Pokemon from the database based on the provided ID.
-// It first retrieves the Pokemon from the database using the provided ID.
+// DeletePokemon deletes a Pokemon from the database based on the provided GenericId.
+// It first retrieves the Pokemon from the database using the provided GenericId.
 // If the Pokemon is not found, it returns a 404 Not Found response with an error message.
 // If the delete operation encounters an error, it returns a 500 Internal Server Error response with an error message.
 // If the delete operation is successful, it returns a 200 OK response with a success message.
 //
 // @Summary Delete Pokemon
 //
-// @Description Delete pokemon by ID
+// @Description Delete pokemon by GenericId
 //
 // @Tags pokemon
 //
@@ -244,7 +244,7 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 //
 // @Produce json
 //
-// @Param id  path int true "Pokemon ID"
+// @Param id  path int true "Pokemon GenericId"
 //
 // @Success 200 {string} string "deleted"
 //

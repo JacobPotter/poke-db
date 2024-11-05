@@ -1,6 +1,6 @@
 package mocks
 
-import "github.com/JacobPotter/poke-db/api/models"
+import "github.com/WebWizardsDev/poke-db/api/models"
 
 var MockPokemonSpeciesBulbasaur = models.PokemonSpecies{
 	ID:                   1,

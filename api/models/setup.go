@@ -30,7 +30,19 @@ func ConnectDatabase() {
 		log.Fatalf("failed to connect database: %v", err.Error())
 	}
 
-	err = database.AutoMigrate(&PokemonSpecies{}, &Pokemon{}, &MoveType{})
+	err = database.AutoMigrate(
+		&PokemonSpecies{},
+		&Pokemon{},
+		&MoveType{},
+		&Item{},
+		&Move{},
+		&Location{},
+		&Region{},
+		&EvolutionTrigger{},
+		//&EvolutionDetails{},
+		//&EvolutionChainLink{},
+		//&EvolutionChain{},
+	)
 
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err.Error())

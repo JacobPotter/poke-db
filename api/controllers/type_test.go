@@ -1,14 +1,12 @@
 package controllers_test
 
 import (
-	"github.com/JacobPotter/poke-db/api/jobs"
-	"github.com/JacobPotter/poke-db/api/models"
-	"github.com/JacobPotter/poke-db/api/routes"
+	"github.com/WebWizardsDev/poke-db/api/models"
+	"github.com/WebWizardsDev/poke-db/api/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 )
 
@@ -21,12 +19,6 @@ func (s *TypeTestSuite) SetupTest() {
 	// Setup code before each test
 	models.ConnectDatabase()
 	s.router = routes.SetupRouter(models.DB.Debug())
-
-	initJobs := os.Getenv("INIT_JOBS")
-
-	if initJobs == "true" {
-		jobs.RefreshDB{DB: models.DB, Test: true}.Run()
-	}
 
 }
 

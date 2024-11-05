@@ -79,7 +79,7 @@ const docTemplate = `{
         },
         "/evolution/{id}": {
             "get": {
-                "description": "Get evolution by ID",
+                "description": "Get evolution by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -93,7 +93,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution ID",
+                        "description": "Evolution GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -109,7 +109,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update evolution by ID",
+                "description": "Update evolution by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -123,7 +123,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution ID",
+                        "description": "Evolution GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -148,7 +148,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete evolution by ID",
+                "description": "Delete evolution by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -162,7 +162,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution ID",
+                        "description": "Evolution GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -235,7 +235,7 @@ const docTemplate = `{
         },
         "/evolution_requirements/{id}": {
             "get": {
-                "description": "Get evolution requirement by ID",
+                "description": "Get evolution requirement by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -249,7 +249,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution Requirement ID",
+                        "description": "Evolution Requirement GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -265,7 +265,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update evolution requirement by ID",
+                "description": "Update evolution requirement by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -279,7 +279,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution Requirement ID",
+                        "description": "Evolution Requirement GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -304,7 +304,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete evolution requirement by ID",
+                "description": "Delete evolution requirement by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -318,7 +318,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Evolution Requirement ID",
+                        "description": "Evolution Requirement GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -391,7 +391,7 @@ const docTemplate = `{
         },
         "/moves/{id}": {
             "get": {
-                "description": "Get move by ID",
+                "description": "Get move by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -405,7 +405,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Move ID",
+                        "description": "Move GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -421,7 +421,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update move by ID",
+                "description": "Update move by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -435,7 +435,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Move ID",
+                        "description": "Move GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -460,7 +460,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete move by ID",
+                "description": "Delete move by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -474,7 +474,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Move ID",
+                        "description": "Move GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -547,7 +547,7 @@ const docTemplate = `{
         },
         "/pokemon/{id}": {
             "get": {
-                "description": "Get pokemon by ID",
+                "description": "Get pokemon by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -561,7 +561,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Pokemon ID",
+                        "description": "Pokemon GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -577,7 +577,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update pokemon by ID",
+                "description": "Update pokemon by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -591,7 +591,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Pokemon ID",
+                        "description": "Pokemon GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -616,7 +616,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete pokemon by ID",
+                "description": "Delete pokemon by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -630,7 +630,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Pokemon ID",
+                        "description": "Pokemon GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -703,7 +703,7 @@ const docTemplate = `{
         },
         "/type/{id}": {
             "get": {
-                "description": "Get type by ID",
+                "description": "Get type by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -717,7 +717,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Type ID",
+                        "description": "Type GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -733,7 +733,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update type by ID",
+                "description": "Update type by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -747,7 +747,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Type ID",
+                        "description": "Type GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -772,7 +772,7 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete type by ID",
+                "description": "Delete type by GenericId",
                 "consumes": [
                     "application/json"
                 ],
@@ -786,7 +786,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Type ID",
+                        "description": "Type GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true

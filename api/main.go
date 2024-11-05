@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/JacobPotter/poke-db/api/docs"
-	"github.com/JacobPotter/poke-db/api/jobs"
-	"github.com/JacobPotter/poke-db/api/models"
-	"github.com/JacobPotter/poke-db/api/routes"
+	"github.com/WebWizardsDev/poke-db/api/docs"
+	"github.com/WebWizardsDev/poke-db/api/jobs"
+	"github.com/WebWizardsDev/poke-db/api/models"
+	"github.com/WebWizardsDev/poke-db/api/routes"
 	"github.com/bamzi/jobrunner"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
