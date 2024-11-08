@@ -47,6 +47,7 @@ func (s *PokmemonTestSuite) TestPokemonHandler_ListPokemon_Basic() {
 
 	s.Equal(http.StatusOK, w.Code)
 	s.NotEmpty(response.Pokemon)
+	s.NotEmpty(response.Pokemon[0].Varieties)
 }
 
 func (s *PokmemonTestSuite) TestPokemonHandler_ListPokemon_Pagination() {

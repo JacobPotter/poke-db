@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.4 (Debian 16.4-1.pgdg120+1)
--- Dumped by pg_dump version 16.4 (Debian 16.4-1.pgdg120+1)
+-- Dumped from database version 17.0 (Debian 17.0-1.pgdg120+1)
+-- Dumped by pg_dump version 17.0 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -40,15 +41,17 @@ SET default_table_access_method = heap;
 -- Name: evolution_chain_links; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.evolution_chain_links (
-    id bigint NOT NULL,
-    is_baby boolean,
+CREATE TABLE public.evolution_chain_links
+(
+    id                 bigint NOT NULL,
+    is_baby            boolean,
     pokemon_species_id bigint,
-    evolves_from_id bigint
+    evolves_from_id    bigint
 );
 
 
-ALTER TABLE public.evolution_chain_links OWNER TO postgres;
+ALTER TABLE public.evolution_chain_links
+    OWNER TO postgres;
 
 --
 -- Name: evolution_chain_links_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -75,15 +78,16 @@ ALTER SEQUENCE public.evolution_chain_links_id_seq OWNED BY public.evolution_cha
 -- Name: evolution_chains; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.evolution_chains (
-    id bigint NOT NULL,
+CREATE TABLE public.evolution_chains
+(
+    id                   bigint NOT NULL,
     baby_trigger_item_id bigint,
-    chain_link_id bigint,
-    pokemon_species_id bigint
+    chain_link_id        bigint
 );
 
 
-ALTER TABLE public.evolution_chains OWNER TO postgres;
+ALTER TABLE public.evolution_chains
+    OWNER TO postgres;
 
 --
 -- Name: evolution_chains_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -110,34 +114,33 @@ ALTER SEQUENCE public.evolution_chains_id_seq OWNED BY public.evolution_chains.i
 -- Name: evolution_details; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.evolution_details (
-    id bigint NOT NULL,
-    created_at timestamp with time zone,
-    updated_at timestamp with time zone,
-    deleted_at timestamp with time zone,
-    item_id bigint,
-    evolution_trigger_id bigint,
-    gender_id bigint,
-    held_item_id bigint,
-    known_move_id bigint,
-    known_move_type_id bigint,
-    location_id bigint,
-    min_level bigint,
-    min_happiness bigint,
-    min_beauty bigint,
-    min_affection bigint,
-    needs_overworld_rain boolean,
-    party_species_id bigint,
-    party_type_id bigint,
+CREATE TABLE public.evolution_details
+(
+    id                      bigint NOT NULL,
+    item_id                 bigint,
+    evolution_trigger_id    bigint,
+    gender_id               bigint,
+    held_item_id            bigint,
+    known_move_id           bigint,
+    known_move_type_id      bigint,
+    location_id             bigint,
+    min_level               bigint,
+    min_happiness           bigint,
+    min_beauty              bigint,
+    min_affection           bigint,
+    needs_overworld_rain    boolean,
+    party_species_id        bigint,
+    party_type_id           bigint,
     relative_physical_stats bigint,
-    time_of_day text,
-    trade_species_id bigint,
-    turn_upside_down boolean,
+    time_of_day             text,
+    trade_species_id        bigint,
+    turn_upside_down        boolean,
     evolution_chain_link_id bigint
 );
 
 
-ALTER TABLE public.evolution_details OWNER TO postgres;
+ALTER TABLE public.evolution_details
+    OWNER TO postgres;
 
 --
 -- Name: evolution_details_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -164,13 +167,15 @@ ALTER SEQUENCE public.evolution_details_id_seq OWNED BY public.evolution_details
 -- Name: evolution_triggers; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.evolution_triggers (
-    id bigint NOT NULL,
+CREATE TABLE public.evolution_triggers
+(
+    id   bigint NOT NULL,
     name text
 );
 
 
-ALTER TABLE public.evolution_triggers OWNER TO postgres;
+ALTER TABLE public.evolution_triggers
+    OWNER TO postgres;
 
 --
 -- Name: evolution_triggers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -197,14 +202,16 @@ ALTER SEQUENCE public.evolution_triggers_id_seq OWNED BY public.evolution_trigge
 -- Name: items; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.items (
-    id bigint NOT NULL,
-    name text,
+CREATE TABLE public.items
+(
+    id         bigint NOT NULL,
+    name       text,
     sprite_url text
 );
 
 
-ALTER TABLE public.items OWNER TO postgres;
+ALTER TABLE public.items
+    OWNER TO postgres;
 
 --
 -- Name: items_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -231,14 +238,16 @@ ALTER SEQUENCE public.items_id_seq OWNED BY public.items.id;
 -- Name: locations; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.locations (
-    id bigint NOT NULL,
-    name text,
+CREATE TABLE public.locations
+(
+    id        bigint NOT NULL,
+    name      text,
     region_id bigint
 );
 
 
-ALTER TABLE public.locations OWNER TO postgres;
+ALTER TABLE public.locations
+    OWNER TO postgres;
 
 --
 -- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -265,20 +274,22 @@ ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
 -- Name: move_types; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.move_types (
-    id bigint NOT NULL,
-    name text NOT NULL,
-    double_damage_to integer[],
-    half_damage_to integer[],
-    no_damage_to integer[],
+CREATE TABLE public.move_types
+(
+    id                 bigint NOT NULL,
+    name               text   NOT NULL,
+    double_damage_to   integer[],
+    half_damage_to     integer[],
+    no_damage_to       integer[],
     double_damage_from integer[],
-    half_damage_from integer[],
-    no_damage_from integer[],
-    img_url text
+    half_damage_from   integer[],
+    no_damage_from     integer[],
+    img_url            text
 );
 
 
-ALTER TABLE public.move_types OWNER TO postgres;
+ALTER TABLE public.move_types
+    OWNER TO postgres;
 
 --
 -- Name: move_types_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -305,18 +316,20 @@ ALTER SEQUENCE public.move_types_id_seq OWNED BY public.move_types.id;
 -- Name: moves; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.moves (
-    id bigint NOT NULL,
-    name text,
-    accuracy bigint,
-    pp bigint,
-    priority bigint,
-    power bigint,
+CREATE TABLE public.moves
+(
+    id           bigint NOT NULL,
+    name         text,
+    accuracy     bigint,
+    pp           bigint,
+    priority     bigint,
+    power        bigint,
     move_type_id bigint
 );
 
 
-ALTER TABLE public.moves OWNER TO postgres;
+ALTER TABLE public.moves
+    OWNER TO postgres;
 
 --
 -- Name: moves_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -343,30 +356,34 @@ ALTER SEQUENCE public.moves_id_seq OWNED BY public.moves.id;
 -- Name: pokemon_move_sets; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.pokemon_move_sets (
-    move_id bigint NOT NULL,
+CREATE TABLE public.pokemon_move_sets
+(
+    move_id    bigint NOT NULL,
     pokemon_id bigint NOT NULL
 );
 
 
-ALTER TABLE public.pokemon_move_sets OWNER TO postgres;
+ALTER TABLE public.pokemon_move_sets
+    OWNER TO postgres;
 
 --
 -- Name: pokemon_species; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.pokemon_species (
-    id bigint NOT NULL,
+CREATE TABLE public.pokemon_species
+(
+    id                     bigint NOT NULL,
     has_gender_differences boolean,
-    hatch_counter bigint,
-    is_baby boolean,
-    is_legendary boolean,
-    is_mythical boolean,
-    name text
+    hatch_counter          bigint,
+    is_baby                boolean,
+    is_legendary           boolean,
+    is_mythical            boolean,
+    name                   text
 );
 
 
-ALTER TABLE public.pokemon_species OWNER TO postgres;
+ALTER TABLE public.pokemon_species
+    OWNER TO postgres;
 
 --
 -- Name: pokemon_species_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -393,21 +410,23 @@ ALTER SEQUENCE public.pokemon_species_id_seq OWNED BY public.pokemon_species.id;
 -- Name: pokemons; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.pokemons (
-    id bigint NOT NULL,
-    name text,
-    primary_type_id bigint,
-    secondary_type_id bigint,
+CREATE TABLE public.pokemons
+(
+    id                 bigint NOT NULL,
+    name               text,
+    primary_type_id    bigint,
+    secondary_type_id  bigint,
     pokemon_species_id bigint,
-    sprite_url text,
-    cry text,
-    weight bigint,
-    height bigint,
-    is_default boolean
+    sprite_url         text,
+    cry                text,
+    weight             bigint,
+    height             bigint,
+    is_default         boolean
 );
 
 
-ALTER TABLE public.pokemons OWNER TO postgres;
+ALTER TABLE public.pokemons
+    OWNER TO postgres;
 
 --
 -- Name: pokemons_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -434,13 +453,15 @@ ALTER SEQUENCE public.pokemons_id_seq OWNED BY public.pokemons.id;
 -- Name: regions; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.regions (
-    id bigint NOT NULL,
+CREATE TABLE public.regions
+(
+    id   bigint NOT NULL,
     name text
 );
 
 
-ALTER TABLE public.regions OWNER TO postgres;
+ALTER TABLE public.regions
+    OWNER TO postgres;
 
 --
 -- Name: regions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -467,77 +488,88 @@ ALTER SEQUENCE public.regions_id_seq OWNED BY public.regions.id;
 -- Name: evolution_chain_links id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.evolution_chain_links ALTER COLUMN id SET DEFAULT nextval('public.evolution_chain_links_id_seq'::regclass);
+ALTER TABLE ONLY public.evolution_chain_links
+    ALTER COLUMN id SET DEFAULT nextval('public.evolution_chain_links_id_seq'::regclass);
 
 
 --
 -- Name: evolution_chains id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.evolution_chains ALTER COLUMN id SET DEFAULT nextval('public.evolution_chains_id_seq'::regclass);
+ALTER TABLE ONLY public.evolution_chains
+    ALTER COLUMN id SET DEFAULT nextval('public.evolution_chains_id_seq'::regclass);
 
 
 --
 -- Name: evolution_details id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.evolution_details ALTER COLUMN id SET DEFAULT nextval('public.evolution_details_id_seq'::regclass);
+ALTER TABLE ONLY public.evolution_details
+    ALTER COLUMN id SET DEFAULT nextval('public.evolution_details_id_seq'::regclass);
 
 
 --
 -- Name: evolution_triggers id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.evolution_triggers ALTER COLUMN id SET DEFAULT nextval('public.evolution_triggers_id_seq'::regclass);
+ALTER TABLE ONLY public.evolution_triggers
+    ALTER COLUMN id SET DEFAULT nextval('public.evolution_triggers_id_seq'::regclass);
 
 
 --
 -- Name: items id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.items ALTER COLUMN id SET DEFAULT nextval('public.items_id_seq'::regclass);
+ALTER TABLE ONLY public.items
+    ALTER COLUMN id SET DEFAULT nextval('public.items_id_seq'::regclass);
 
 
 --
 -- Name: locations id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+ALTER TABLE ONLY public.locations
+    ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
 
 
 --
 -- Name: move_types id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.move_types ALTER COLUMN id SET DEFAULT nextval('public.move_types_id_seq'::regclass);
+ALTER TABLE ONLY public.move_types
+    ALTER COLUMN id SET DEFAULT nextval('public.move_types_id_seq'::regclass);
 
 
 --
 -- Name: moves id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.moves ALTER COLUMN id SET DEFAULT nextval('public.moves_id_seq'::regclass);
+ALTER TABLE ONLY public.moves
+    ALTER COLUMN id SET DEFAULT nextval('public.moves_id_seq'::regclass);
 
 
 --
 -- Name: pokemon_species id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.pokemon_species ALTER COLUMN id SET DEFAULT nextval('public.pokemon_species_id_seq'::regclass);
+ALTER TABLE ONLY public.pokemon_species
+    ALTER COLUMN id SET DEFAULT nextval('public.pokemon_species_id_seq'::regclass);
 
 
 --
 -- Name: pokemons id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.pokemons ALTER COLUMN id SET DEFAULT nextval('public.pokemons_id_seq'::regclass);
+ALTER TABLE ONLY public.pokemons
+    ALTER COLUMN id SET DEFAULT nextval('public.pokemons_id_seq'::regclass);
 
 
 --
 -- Name: regions id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.regions ALTER COLUMN id SET DEFAULT nextval('public.regions_id_seq'::regclass);
+ALTER TABLE ONLY public.regions
+    ALTER COLUMN id SET DEFAULT nextval('public.regions_id_seq'::regclass);
 
 
 --
@@ -1577,548 +1609,548 @@ COPY public.evolution_chain_links (id, is_baby, pokemon_species_id, evolves_from
 -- Data for Name: evolution_chains; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.evolution_chains (id, baby_trigger_item_id, chain_link_id, pokemon_species_id) FROM stdin;
-1	\N	1	1
-2	\N	4	4
-3	\N	7	7
-4	\N	10	10
-5	\N	13	13
-6	\N	16	16
-7	\N	19	19
-8	\N	21	21
-9	\N	23	23
-10	\N	172	172
-11	\N	27	27
-12	\N	29	29
-13	\N	32	32
-14	\N	173	173
-15	\N	37	37
-16	\N	174	174
-17	\N	41	41
-18	\N	43	43
-19	\N	46	46
-20	\N	48	48
-21	\N	50	50
-22	\N	52	52
-23	\N	54	54
-24	\N	56	56
-25	\N	58	58
-26	\N	60	60
-27	\N	63	63
-28	\N	66	66
-29	\N	69	69
-30	\N	72	72
-31	\N	74	74
-32	\N	77	77
-33	\N	79	79
-34	\N	81	81
-35	\N	83	83
-36	\N	84	84
-37	\N	86	86
-38	\N	88	88
-39	\N	90	90
-40	\N	92	92
-41	\N	95	95
-42	\N	96	96
-43	\N	98	98
-44	\N	100	100
-45	\N	102	102
-46	\N	104	104
-47	\N	236	236
-48	\N	108	108
-49	\N	109	109
-50	\N	111	111
-51	\N	440	440
-52	\N	114	114
-53	\N	115	115
-54	\N	116	116
-55	\N	118	118
-56	\N	120	120
-57	\N	439	439
-58	\N	123	123
-59	\N	238	238
-60	\N	239	239
-61	\N	240	240
-62	\N	127	127
-63	\N	128	128
-64	\N	129	129
-65	\N	131	131
-66	\N	132	132
-67	\N	133	133
-68	\N	137	137
-69	\N	138	138
-70	\N	140	140
-71	\N	142	142
-72	\N	446	446
-73	\N	144	144
-74	\N	145	145
-75	\N	146	146
-76	\N	147	147
-77	\N	150	150
-78	\N	151	151
-79	\N	152	152
-80	\N	155	155
-81	\N	158	158
-82	\N	161	161
-83	\N	163	163
-84	\N	165	165
-85	\N	167	167
-86	\N	170	170
-87	\N	175	175
-88	\N	177	177
-89	\N	179	179
-90	\N	298	298
-91	\N	438	438
-92	\N	187	187
-93	\N	190	190
-94	\N	191	191
-95	\N	193	193
-96	\N	194	194
-97	\N	198	198
-98	\N	200	200
-99	\N	201	201
-100	\N	360	360
-101	\N	203	203
-102	\N	204	204
-103	\N	206	206
-104	\N	207	207
-105	\N	209	209
-106	\N	211	211
-107	\N	213	213
-108	\N	214	214
-109	\N	215	215
-110	\N	216	216
-111	\N	218	218
-112	\N	220	220
-113	\N	222	222
-114	\N	223	223
-115	\N	225	225
-116	\N	458	458
-117	\N	227	227
-118	\N	228	228
-119	\N	231	231
-120	\N	234	234
-121	\N	235	235
-122	\N	241	241
-123	\N	243	243
-124	\N	244	244
-125	\N	245	245
-126	\N	246	246
-127	\N	249	249
-128	\N	250	250
-129	\N	251	251
-130	\N	252	252
-131	\N	255	255
-132	\N	258	258
-133	\N	261	261
-134	\N	263	263
-135	\N	265	265
-136	\N	270	270
-137	\N	273	273
-138	\N	276	276
-139	\N	278	278
-140	\N	280	280
-141	\N	283	283
-142	\N	285	285
-143	\N	287	287
-144	\N	290	290
-145	\N	293	293
-146	\N	296	296
-147	\N	299	299
-148	\N	300	300
-149	\N	302	302
-150	\N	303	303
-151	\N	304	304
-152	\N	307	307
-153	\N	309	309
-154	\N	311	311
-155	\N	312	312
-156	\N	313	313
-157	\N	314	314
-158	\N	406	406
-159	\N	316	316
-160	\N	318	318
-161	\N	320	320
-162	\N	322	322
-163	\N	324	324
-164	\N	325	325
-165	\N	327	327
-166	\N	328	328
-167	\N	331	331
-168	\N	333	333
-169	\N	335	335
-170	\N	336	336
-171	\N	337	337
-172	\N	338	338
-173	\N	339	339
-174	\N	341	341
-175	\N	343	343
-176	\N	345	345
-177	\N	347	347
-178	\N	349	349
-179	\N	351	351
-180	\N	352	352
-181	\N	353	353
-182	\N	355	355
-183	\N	357	357
-184	\N	433	433
-185	\N	359	359
-186	\N	361	361
-187	\N	363	363
-188	\N	366	366
-189	\N	369	369
-190	\N	370	370
-191	\N	371	371
-192	\N	374	374
-193	\N	377	377
-194	\N	378	378
-195	\N	379	379
-196	\N	380	380
-197	\N	381	381
-198	\N	382	382
-199	\N	383	383
-200	\N	384	384
-201	\N	385	385
-202	\N	386	386
-203	\N	387	387
-204	\N	390	390
-205	\N	393	393
-206	\N	396	396
-207	\N	399	399
-208	\N	401	401
-209	\N	403	403
-211	\N	408	408
-212	\N	410	410
-213	\N	412	412
-214	\N	415	415
-215	\N	417	417
-216	\N	418	418
-217	\N	420	420
-218	\N	422	422
-219	\N	425	425
-220	\N	427	427
-221	\N	431	431
-223	\N	434	434
-224	\N	436	436
-228	\N	441	441
-229	\N	442	442
-230	\N	443	443
-232	\N	447	447
-233	\N	449	449
-234	\N	451	451
-235	\N	453	453
-236	\N	455	455
-237	\N	456	456
-239	\N	459	459
-240	\N	479	479
-241	\N	480	480
-242	\N	481	481
-243	\N	482	482
-244	\N	483	483
-245	\N	484	484
-246	\N	485	485
-247	\N	486	486
-248	\N	487	487
-249	\N	488	488
-250	\N	489	489
-252	\N	491	491
-253	\N	492	492
-254	\N	493	493
-255	\N	494	494
-256	\N	495	495
-257	\N	498	498
-258	\N	501	501
-259	\N	504	504
-260	\N	506	506
-261	\N	509	509
-262	\N	511	511
-263	\N	513	513
-264	\N	515	515
-265	\N	517	517
-266	\N	519	519
-267	\N	522	522
-268	\N	524	524
-269	\N	527	527
-270	\N	529	529
-271	\N	531	531
-272	\N	532	532
-273	\N	535	535
-274	\N	538	538
-275	\N	539	539
-276	\N	540	540
-277	\N	543	543
-278	\N	546	546
-279	\N	548	548
-280	\N	550	550
-281	\N	551	551
-282	\N	554	554
-283	\N	556	556
-284	\N	557	557
-285	\N	559	559
-286	\N	561	561
-287	\N	562	562
-288	\N	564	564
-289	\N	566	566
-290	\N	568	568
-291	\N	570	570
-292	\N	572	572
-293	\N	574	574
-294	\N	577	577
-295	\N	580	580
-296	\N	582	582
-297	\N	585	585
-298	\N	587	587
-299	\N	588	588
-300	\N	590	590
-301	\N	592	592
-302	\N	594	594
-303	\N	595	595
-304	\N	597	597
-305	\N	599	599
-306	\N	602	602
-307	\N	605	605
-308	\N	607	607
-309	\N	610	610
-310	\N	613	613
-311	\N	615	615
-312	\N	616	616
-313	\N	618	618
-314	\N	619	619
-315	\N	621	621
-316	\N	622	622
-317	\N	624	624
-318	\N	626	626
-319	\N	627	627
-320	\N	629	629
-321	\N	631	631
-322	\N	632	632
-323	\N	633	633
-324	\N	636	636
-325	\N	638	638
-326	\N	639	639
-327	\N	640	640
-328	\N	641	641
-329	\N	642	642
-330	\N	643	643
-331	\N	644	644
-332	\N	645	645
-333	\N	646	646
-334	\N	647	647
-335	\N	648	648
-336	\N	649	649
-337	\N	650	650
-338	\N	653	653
-339	\N	656	656
-340	\N	659	659
-341	\N	661	661
-342	\N	664	664
-343	\N	667	667
-344	\N	669	669
-345	\N	672	672
-346	\N	674	674
-347	\N	676	676
-348	\N	677	677
-349	\N	679	679
-350	\N	682	682
-351	\N	684	684
-352	\N	686	686
-353	\N	688	688
-354	\N	690	690
-355	\N	692	692
-356	\N	694	694
-357	\N	696	696
-358	\N	698	698
-359	\N	701	701
-360	\N	702	702
-361	\N	703	703
-362	\N	704	704
-363	\N	707	707
-364	\N	708	708
-365	\N	710	710
-366	\N	712	712
-367	\N	714	714
-368	\N	716	716
-369	\N	717	717
-370	\N	718	718
-371	\N	719	719
-372	\N	720	720
-373	\N	721	721
-374	\N	722	722
-375	\N	725	725
-376	\N	728	728
-377	\N	731	731
-378	\N	734	734
-379	\N	736	736
-380	\N	739	739
-381	\N	741	741
-382	\N	742	742
-383	\N	744	744
-384	\N	746	746
-385	\N	747	747
-386	\N	749	749
-387	\N	751	751
-388	\N	753	753
-389	\N	755	755
-390	\N	757	757
-391	\N	759	759
-392	\N	761	761
-393	\N	764	764
-394	\N	765	765
-395	\N	766	766
-396	\N	767	767
-397	\N	769	769
-398	\N	771	771
-399	\N	772	772
-400	\N	774	774
-401	\N	775	775
-402	\N	776	776
-403	\N	777	777
-404	\N	778	778
-405	\N	779	779
-406	\N	780	780
-407	\N	781	781
-408	\N	782	782
-409	\N	785	785
-410	\N	786	786
-411	\N	787	787
-412	\N	788	788
-413	\N	789	789
-414	\N	793	793
-415	\N	794	794
-416	\N	795	795
-417	\N	796	796
-418	\N	797	797
-419	\N	798	798
-420	\N	799	799
-421	\N	800	800
-422	\N	801	801
-423	\N	802	802
-424	\N	803	803
-425	\N	805	805
-426	\N	806	806
-427	\N	807	807
-428	\N	808	808
-429	\N	809	809
-430	\N	810	810
-431	\N	813	813
-432	\N	816	816
-433	\N	819	819
-434	\N	821	821
-435	\N	824	824
-436	\N	827	827
-437	\N	829	829
-438	\N	831	831
-439	\N	833	833
-440	\N	835	835
-441	\N	837	837
-442	\N	840	840
-443	\N	843	843
-444	\N	845	845
-445	\N	846	846
-446	\N	848	848
-447	\N	850	850
-448	\N	852	852
-449	\N	854	854
-450	\N	856	856
-451	\N	859	859
-452	\N	868	868
-453	\N	870	870
-454	\N	871	871
-455	\N	872	872
-456	\N	874	874
-457	\N	875	875
-458	\N	876	876
-459	\N	877	877
-460	\N	878	878
-461	\N	880	880
-462	\N	881	881
-463	\N	882	882
-464	\N	883	883
-465	\N	884	884
-466	\N	885	885
-467	\N	888	888
-468	\N	889	889
-469	\N	890	890
-470	\N	891	891
-471	\N	893	893
-472	\N	894	894
-473	\N	895	895
-474	\N	896	896
-475	\N	897	897
-476	\N	898	898
-477	\N	905	905
-478	\N	906	906
-479	\N	909	909
-480	\N	912	912
-481	\N	915	915
-482	\N	917	917
-483	\N	919	919
-484	\N	921	921
-485	\N	924	924
-486	\N	926	926
-487	\N	928	928
-488	\N	931	931
-489	\N	932	932
-490	\N	935	935
-491	\N	938	938
-492	\N	940	940
-493	\N	942	942
-494	\N	944	944
-495	\N	946	946
-496	\N	948	948
-497	\N	950	950
-498	\N	951	951
-499	\N	953	953
-500	\N	955	955
-501	\N	957	957
-502	\N	960	960
-503	\N	962	962
-504	\N	963	963
-505	\N	965	965
-506	\N	967	967
-507	\N	968	968
-508	\N	969	969
-509	\N	971	971
-510	\N	973	973
-511	\N	974	974
-512	\N	976	976
-513	\N	977	977
-514	\N	978	978
-515	\N	984	984
-516	\N	985	985
-517	\N	986	986
-518	\N	987	987
-519	\N	988	988
-520	\N	989	989
-521	\N	990	990
-522	\N	991	991
-523	\N	992	992
-524	\N	993	993
-525	\N	994	994
-526	\N	995	995
-527	\N	996	996
-528	\N	999	999
-529	\N	1001	1001
-530	\N	1002	1002
-531	\N	1003	1003
-532	\N	1004	1004
-533	\N	1005	1005
-534	\N	1006	1006
-535	\N	1007	1007
-536	\N	1008	1008
-537	\N	1009	1009
-538	\N	1010	1010
-539	\N	1012	1012
-540	\N	1014	1014
-541	\N	1015	1015
-542	\N	1016	1016
-543	\N	1017	1017
-544	\N	1020	1020
-545	\N	1021	1021
-546	\N	1023	1023
-547	\N	1022	1022
-548	\N	1024	1024
-549	\N	1025	1025
+COPY public.evolution_chains (id, baby_trigger_item_id, chain_link_id) FROM stdin;
+1	\N	1
+2	\N	4
+3	\N	7
+4	\N	10
+5	\N	13
+6	\N	16
+7	\N	19
+8	\N	21
+9	\N	23
+10	\N	172
+11	\N	27
+12	\N	29
+13	\N	32
+14	\N	173
+15	\N	37
+16	\N	174
+17	\N	41
+18	\N	43
+19	\N	46
+20	\N	48
+21	\N	50
+22	\N	52
+23	\N	54
+24	\N	56
+25	\N	58
+26	\N	60
+27	\N	63
+28	\N	66
+29	\N	69
+30	\N	72
+31	\N	74
+32	\N	77
+33	\N	79
+34	\N	81
+35	\N	83
+36	\N	84
+37	\N	86
+38	\N	88
+39	\N	90
+40	\N	92
+41	\N	95
+42	\N	96
+43	\N	98
+44	\N	100
+45	\N	102
+46	\N	104
+47	\N	236
+48	\N	108
+49	\N	109
+50	\N	111
+51	\N	440
+52	\N	114
+53	\N	115
+54	\N	116
+55	\N	118
+56	\N	120
+57	\N	439
+58	\N	123
+59	\N	238
+60	\N	239
+61	\N	240
+62	\N	127
+63	\N	128
+64	\N	129
+65	\N	131
+66	\N	132
+67	\N	133
+68	\N	137
+69	\N	138
+70	\N	140
+71	\N	142
+72	\N	446
+73	\N	144
+74	\N	145
+75	\N	146
+76	\N	147
+77	\N	150
+78	\N	151
+79	\N	152
+80	\N	155
+81	\N	158
+82	\N	161
+83	\N	163
+84	\N	165
+85	\N	167
+86	\N	170
+87	\N	175
+88	\N	177
+89	\N	179
+90	\N	298
+91	\N	438
+92	\N	187
+93	\N	190
+94	\N	191
+95	\N	193
+96	\N	194
+97	\N	198
+98	\N	200
+99	\N	201
+100	\N	360
+101	\N	203
+102	\N	204
+103	\N	206
+104	\N	207
+105	\N	209
+106	\N	211
+107	\N	213
+108	\N	214
+109	\N	215
+110	\N	216
+111	\N	218
+112	\N	220
+113	\N	222
+114	\N	223
+115	\N	225
+116	\N	458
+117	\N	227
+118	\N	228
+119	\N	231
+120	\N	234
+121	\N	235
+122	\N	241
+123	\N	243
+124	\N	244
+125	\N	245
+126	\N	246
+127	\N	249
+128	\N	250
+129	\N	251
+130	\N	252
+131	\N	255
+132	\N	258
+133	\N	261
+134	\N	263
+135	\N	265
+136	\N	270
+137	\N	273
+138	\N	276
+139	\N	278
+140	\N	280
+141	\N	283
+142	\N	285
+143	\N	287
+144	\N	290
+145	\N	293
+146	\N	296
+147	\N	299
+148	\N	300
+149	\N	302
+150	\N	303
+151	\N	304
+152	\N	307
+153	\N	309
+154	\N	311
+155	\N	312
+156	\N	313
+157	\N	314
+158	\N	406
+159	\N	316
+160	\N	318
+161	\N	320
+162	\N	322
+163	\N	324
+164	\N	325
+165	\N	327
+166	\N	328
+167	\N	331
+168	\N	333
+169	\N	335
+170	\N	336
+171	\N	337
+172	\N	338
+173	\N	339
+174	\N	341
+175	\N	343
+176	\N	345
+177	\N	347
+178	\N	349
+179	\N	351
+180	\N	352
+181	\N	353
+182	\N	355
+183	\N	357
+184	\N	433
+185	\N	359
+186	\N	361
+187	\N	363
+188	\N	366
+189	\N	369
+190	\N	370
+191	\N	371
+192	\N	374
+193	\N	377
+194	\N	378
+195	\N	379
+196	\N	380
+197	\N	381
+198	\N	382
+199	\N	383
+200	\N	384
+201	\N	385
+202	\N	386
+203	\N	387
+204	\N	390
+205	\N	393
+206	\N	396
+207	\N	399
+208	\N	401
+209	\N	403
+211	\N	408
+212	\N	410
+213	\N	412
+214	\N	415
+215	\N	417
+216	\N	418
+217	\N	420
+218	\N	422
+219	\N	425
+220	\N	427
+221	\N	431
+223	\N	434
+224	\N	436
+228	\N	441
+229	\N	442
+230	\N	443
+232	\N	447
+233	\N	449
+234	\N	451
+235	\N	453
+236	\N	455
+237	\N	456
+239	\N	459
+240	\N	479
+241	\N	480
+242	\N	481
+243	\N	482
+244	\N	483
+245	\N	484
+246	\N	485
+247	\N	486
+248	\N	487
+249	\N	488
+250	\N	489
+252	\N	491
+253	\N	492
+254	\N	493
+255	\N	494
+256	\N	495
+257	\N	498
+258	\N	501
+259	\N	504
+260	\N	506
+261	\N	509
+262	\N	511
+263	\N	513
+264	\N	515
+265	\N	517
+266	\N	519
+267	\N	522
+268	\N	524
+269	\N	527
+270	\N	529
+271	\N	531
+272	\N	532
+273	\N	535
+274	\N	538
+275	\N	539
+276	\N	540
+277	\N	543
+278	\N	546
+279	\N	548
+280	\N	550
+281	\N	551
+282	\N	554
+283	\N	556
+284	\N	557
+285	\N	559
+286	\N	561
+287	\N	562
+288	\N	564
+289	\N	566
+290	\N	568
+291	\N	570
+292	\N	572
+293	\N	574
+294	\N	577
+295	\N	580
+296	\N	582
+297	\N	585
+298	\N	587
+299	\N	588
+300	\N	590
+301	\N	592
+302	\N	594
+303	\N	595
+304	\N	597
+305	\N	599
+306	\N	602
+307	\N	605
+308	\N	607
+309	\N	610
+310	\N	613
+311	\N	615
+312	\N	616
+313	\N	618
+314	\N	619
+315	\N	621
+316	\N	622
+317	\N	624
+318	\N	626
+319	\N	627
+320	\N	629
+321	\N	631
+322	\N	632
+323	\N	633
+324	\N	636
+325	\N	638
+326	\N	639
+327	\N	640
+328	\N	641
+329	\N	642
+330	\N	643
+331	\N	644
+332	\N	645
+333	\N	646
+334	\N	647
+335	\N	648
+336	\N	649
+337	\N	650
+338	\N	653
+339	\N	656
+340	\N	659
+341	\N	661
+342	\N	664
+343	\N	667
+344	\N	669
+345	\N	672
+346	\N	674
+347	\N	676
+348	\N	677
+349	\N	679
+350	\N	682
+351	\N	684
+352	\N	686
+353	\N	688
+354	\N	690
+355	\N	692
+356	\N	694
+357	\N	696
+358	\N	698
+359	\N	701
+360	\N	702
+361	\N	703
+362	\N	704
+363	\N	707
+364	\N	708
+365	\N	710
+366	\N	712
+367	\N	714
+368	\N	716
+369	\N	717
+370	\N	718
+371	\N	719
+372	\N	720
+373	\N	721
+374	\N	722
+375	\N	725
+376	\N	728
+377	\N	731
+378	\N	734
+379	\N	736
+380	\N	739
+381	\N	741
+382	\N	742
+383	\N	744
+384	\N	746
+385	\N	747
+386	\N	749
+387	\N	751
+388	\N	753
+389	\N	755
+390	\N	757
+391	\N	759
+392	\N	761
+393	\N	764
+394	\N	765
+395	\N	766
+396	\N	767
+397	\N	769
+398	\N	771
+399	\N	772
+400	\N	774
+401	\N	775
+402	\N	776
+403	\N	777
+404	\N	778
+405	\N	779
+406	\N	780
+407	\N	781
+408	\N	782
+409	\N	785
+410	\N	786
+411	\N	787
+412	\N	788
+413	\N	789
+414	\N	793
+415	\N	794
+416	\N	795
+417	\N	796
+418	\N	797
+419	\N	798
+420	\N	799
+421	\N	800
+422	\N	801
+423	\N	802
+424	\N	803
+425	\N	805
+426	\N	806
+427	\N	807
+428	\N	808
+429	\N	809
+430	\N	810
+431	\N	813
+432	\N	816
+433	\N	819
+434	\N	821
+435	\N	824
+436	\N	827
+437	\N	829
+438	\N	831
+439	\N	833
+440	\N	835
+441	\N	837
+442	\N	840
+443	\N	843
+444	\N	845
+445	\N	846
+446	\N	848
+447	\N	850
+448	\N	852
+449	\N	854
+450	\N	856
+451	\N	859
+452	\N	868
+453	\N	870
+454	\N	871
+455	\N	872
+456	\N	874
+457	\N	875
+458	\N	876
+459	\N	877
+460	\N	878
+461	\N	880
+462	\N	881
+463	\N	882
+464	\N	883
+465	\N	884
+466	\N	885
+467	\N	888
+468	\N	889
+469	\N	890
+470	\N	891
+471	\N	893
+472	\N	894
+473	\N	895
+474	\N	896
+475	\N	897
+476	\N	898
+477	\N	905
+478	\N	906
+479	\N	909
+480	\N	912
+481	\N	915
+482	\N	917
+483	\N	919
+484	\N	921
+485	\N	924
+486	\N	926
+487	\N	928
+488	\N	931
+489	\N	932
+490	\N	935
+491	\N	938
+492	\N	940
+493	\N	942
+494	\N	944
+495	\N	946
+496	\N	948
+497	\N	950
+498	\N	951
+499	\N	953
+500	\N	955
+501	\N	957
+502	\N	960
+503	\N	962
+504	\N	963
+505	\N	965
+506	\N	967
+507	\N	968
+508	\N	969
+509	\N	971
+510	\N	973
+511	\N	974
+512	\N	976
+513	\N	977
+514	\N	978
+515	\N	984
+516	\N	985
+517	\N	986
+518	\N	987
+519	\N	988
+520	\N	989
+521	\N	990
+522	\N	991
+523	\N	992
+524	\N	993
+525	\N	994
+526	\N	995
+527	\N	996
+528	\N	999
+529	\N	1001
+530	\N	1002
+531	\N	1003
+532	\N	1004
+533	\N	1005
+534	\N	1006
+535	\N	1007
+536	\N	1008
+537	\N	1009
+538	\N	1010
+539	\N	1012
+540	\N	1014
+541	\N	1015
+542	\N	1016
+543	\N	1017
+544	\N	1020
+545	\N	1021
+546	\N	1023
+547	\N	1022
+548	\N	1024
+549	\N	1025
 \.
 
 
@@ -2126,514 +2158,506 @@ COPY public.evolution_chains (id, baby_trigger_item_id, chain_link_id, pokemon_s
 -- Data for Name: evolution_details; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.evolution_details (id, created_at, updated_at, deleted_at, item_id, evolution_trigger_id, gender_id, held_item_id, known_move_id, known_move_type_id, location_id, min_level, min_happiness, min_beauty, min_affection, needs_overworld_rain, party_species_id, party_type_id, relative_physical_stats, time_of_day, trade_species_id, turn_upside_down, evolution_chain_link_id) FROM stdin;
-1	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	2
-2	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	5
-3	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	8
-4	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	11
-5	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	14
-6	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	17
-7	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	20
-8	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N	night	\N	f	20
-9	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	22
-10	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	24
-11	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N		\N	f	25
-12	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	28
-13	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	28
-14	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	30
-15	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	33
-16	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	35
-17	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	38
-18	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	38
-19	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	39
-20	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	42
-21	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	44
-22	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	47
-23	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	49
-24	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	51
-25	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	53
-26	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	53
-27	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	863
-28	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	55
-29	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	57
-30	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	59
-31	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	61
-32	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	64
-33	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	67
-34	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	70
-35	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	73
-36	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	75
-37	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	78
-38	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	80
-39	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	80
-40	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	199
-41	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	199
-42	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	82
-43	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	8	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	865
-44	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	85
-45	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	87
-46	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	89
-47	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	91
-48	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	93
-49	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	208
-50	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	97
-51	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	99
-52	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	101
-53	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	103
-54	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	105
-55	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N	night	\N	f	105
-56	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	1		\N	f	106
-57	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	-1		\N	f	107
-58	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	0		\N	f	237
-59	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	463
-60	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	110
-61	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	112
-62	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	day	\N	f	113
-63	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	465
-64	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	117
-65	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	119
-66	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	121
-67	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	122
-68	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	212
-69	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	900
-70	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	124
-71	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	125
-72	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	126
-73	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	130
-74	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	134
-75	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	135
-76	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	136
-77	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	196
-78	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	night	\N	f	197
-79	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
-80	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
-81	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
-82	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
-83	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
-84	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
-85	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
-86	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
-87	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	2	f	\N	\N	\N		\N	f	700
-88	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	700
-89	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	233
-90	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	139
-91	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	141
-92	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	143
-93	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	148
-94	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	153
-95	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	156
-96	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	159
-97	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	162
-98	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	164
-99	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	166
-100	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	168
-101	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	171
-102	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	176
-103	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	178
-104	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	180
-105	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	183
-106	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	185
-107	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	188
-108	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	424
-109	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	192
-110	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	469
-111	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	195
-112	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	980
-113	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	430
-114	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	429
-115	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	202
-116	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	981
-117	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	205
-118	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	982
-119	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	night	\N	f	472
-120	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	23	\N	\N	\N	f	\N	\N	\N		\N	f	210
-121	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	12	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	904
-122	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	night	\N	f	461
-123	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	day	\N	f	903
-124	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	217
-125	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	219
-126	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	221
-127	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	864
-128	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	224
-129	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	223	\N	\N		\N	f	226
-130	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	229
-131	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	232
-132	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	11	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	899
-133	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	247
-134	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	253
-135	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	256
-136	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	259
-137	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	262
-138	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	264
-139	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	266
-140	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	268
-141	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	271
-142	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	274
-143	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	277
-144	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	279
-145	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	281
-146	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	284
-147	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	23	\N	\N	\N	f	\N	\N	\N		\N	f	286
-148	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	288
-149	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	291
-150	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	4	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	292
-151	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	294
-152	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	297
-153	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	476
-154	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	476
-155	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	476
-156	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	476
-157	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	301
-158	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	305
-159	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	308
-160	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	310
-161	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	315
-162	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	317
-163	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	319
-164	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	321
-165	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	323
-166	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	326
-167	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	329
-168	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	332
-169	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	334
-170	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	340
-171	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	342
-172	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	344
-173	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	346
-174	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	348
-175	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	171	\N	f	\N	\N	\N		\N	f	350
-176	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	350
-177	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	170	\N	f	\N	\N	\N		\N	f	350
-178	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	354
-179	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	356
-180	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N	night	\N	f	358
-181	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	362
-182	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	1	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	478
-183	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	364
-184	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	367
-185	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	368
-186	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	372
-187	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	375
-188	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	388
-189	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	391
-190	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	394
-191	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	397
-192	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	400
-193	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	402
-194	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	404
-195	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	409
-196	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	411
-197	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	1	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	413
-198	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	2	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	414
-199	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	1	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	416
-200	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	419
-201	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	421
-202	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	423
-203	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	426
-204	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	428
-205	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	432
-206	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	435
-207	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	437
-208	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	444
-209	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	448
-210	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	450
-211	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	452
-212	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	454
-213	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	457
-214	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	460
-215	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	496
-216	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	499
-217	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	502
-218	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	505
-219	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	507
-220	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	510
-221	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	512
-222	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	514
-223	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	516
-224	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	518
-225	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	520
-226	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	523
-227	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	525
-228	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	528
-229	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	530
-230	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	533
-231	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	536
-232	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	541
-233	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	544
-234	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	547
-235	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	549
-236	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	13	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	902
-237	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	29	\N	\N	\N	f	\N	\N	\N		\N	f	552
-238	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	555
-239	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	555
-240	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	558
-241	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	560
-242	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	563
-243	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	9	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	867
-244	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	565
-245	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	567
-246	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	569
-247	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	571
-248	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	573
-249	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	575
-250	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	578
-251	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	581
-252	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	583
-253	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	586
-254	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	616	\N	\N		\N	f	589
-255	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	591
-256	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	593
-257	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	596
-258	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	598
-259	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	600
-260	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	603
-261	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	606
-262	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	608
-263	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	611
-264	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	614
-265	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	588	\N	\N		\N	f	617
-266	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	620
-267	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	43	\N	\N	\N	f	\N	\N	\N		\N	f	623
-268	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	52	\N	\N	\N	f	\N	\N	\N		\N	f	625
-269	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	628
-270	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	630
-271	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	634
-272	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	59	\N	\N	\N	f	\N	\N	\N		\N	f	637
-273	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	651
-274	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	654
-275	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	657
-276	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	660
-277	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	662
-278	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	9	\N	\N	\N	f	\N	\N	\N		\N	f	665
-279	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	668
-280	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	19	\N	\N	\N	f	\N	\N	\N		\N	f	670
-281	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	673
-282	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	675
-283	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	678
-284	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	680
-285	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	683
-286	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	685
-287	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	t	687
-288	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	689
-289	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	691
-290	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	693
-291	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	695
-292	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N	day	\N	f	697
-293	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N	night	\N	f	699
-294	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	705
-295	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	709
-296	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	711
-297	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	713
-298	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	715
-299	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	723
-300	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	726
-301	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	729
-302	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	732
-303	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N	day	\N	f	735
-304	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	737
-305	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	740
-306	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	743
-307	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	day	\N	f	745
-308	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	night	\N	f	745
-309	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	dusk	\N	f	745
-310	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	748
-311	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	750
-312	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	752
-313	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N	day	\N	f	754
-314	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	756
-315	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	1	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	758
-316	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	760
-317	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	762
-318	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	768
-319	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	770
-320	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	773
-321	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	783
-322	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	43	\N	\N	\N	f	\N	\N	\N		\N	f	790
-323	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	804
-324	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	811
-325	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	814
-326	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	817
-327	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	820
-328	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	822
-329	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	825
-330	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	828
-331	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	830
-332	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	832
-333	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	834
-334	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	836
-335	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	838
-336	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	841
-337	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	842
-338	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	844
-339	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	847
-340	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	849
-341	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	851
-342	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	853
-343	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	855
-344	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	857
-345	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	860
-346	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	5	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	869
-347	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	night	\N	f	873
-348	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	879
-349	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	886
-350	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	6	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	892
-351	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	7	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	892
-352	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	907
-353	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	910
-354	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	913
-355	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	916
-356	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	918
-357	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	920
-358	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	922
-359	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	10	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	925
-360	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	927
-361	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	929
-362	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	933
-363	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	936
-364	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	937
-365	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	939
-366	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	941
-367	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	943
-368	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	945
-369	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	947
-370	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	949
-371	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	952
-372	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	954
-373	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	956
-374	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	958
-375	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	961
-376	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	10	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	964
-377	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	966
-378	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	970
-379	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N	night	\N	f	972
-380	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	975
-381	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	997
-382	2024-11-06 05:32:33.379835+00	2024-11-06 05:32:33.379835+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	1000
-383	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	3
-384	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	6
-385	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	9
-386	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	12
-387	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	15
-388	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	18
-389	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	26
-390	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	31
-391	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	34
-392	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	36
-393	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	40
-394	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	169
-395	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	45
-396	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	182
-397	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	979
-398	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	62
-399	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	186
-400	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	65
-401	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	68
-402	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	71
-403	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	76
-404	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
-405	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
-406	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
-407	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
-408	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
-409	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	94
-410	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	464
-411	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	242
-412	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	230
-413	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	866
-414	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	466
-415	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	467
-416	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	474
-417	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	55	\N	\N	\N	f	\N	\N	\N		\N	f	149
-418	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	154
-419	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	157
-420	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	160
-421	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	468
-422	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	181
-423	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	184
-424	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	189
-425	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	full-moon	\N	f	901
-426	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	473
-427	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	55	\N	\N	\N	f	\N	\N	\N		\N	f	248
-428	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	254
-429	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	257
-430	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	260
-431	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N	night	\N	f	862
-432	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	267
-433	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	269
-434	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	272
-435	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	275
-436	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	282
-437	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	2	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	475
-438	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	289
-439	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	295
-440	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	306
-441	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	407
-442	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	330
-443	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	477
-444	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	44	\N	\N	\N	f	\N	\N	\N		\N	f	365
-445	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	373
-446	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	376
-447	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	389
-448	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	392
-449	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	395
-450	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	398
-451	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	405
-452	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	445
-453	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	497
-454	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	500
-455	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	503
-456	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	508
-457	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	521
-458	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	526
-459	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	534
-460	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	537
-461	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N		\N	f	542
-462	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	545
-463	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	553
-464	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	576
-465	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	579
-466	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	47	\N	\N	\N	f	\N	\N	\N		\N	f	584
-467	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	49	\N	\N	\N	f	\N	\N	\N		\N	f	601
-468	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	604
-469	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	609
-470	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	612
-471	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	983
-472	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	64	\N	\N	\N	f	\N	\N	\N		\N	f	635
-473	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	652
-474	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	655
-475	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	658
-476	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	663
-477	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	12	\N	\N	\N	f	\N	\N	\N		\N	f	666
-478	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	671
-479	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	681
-480	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	t	\N	\N	\N		\N	f	706
-481	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	724
-482	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	727
-483	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	730
-484	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	733
-485	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	738
-486	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	738
-487	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	763
-488	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	784
-489	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	53	\N	\N	\N	f	\N	\N	\N		\N	f	791
-490	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	53	\N	\N	\N	f	\N	\N	\N		\N	f	792
-491	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	812
-492	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	815
-493	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	818
-494	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	823
-495	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	826
-496	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	839
-497	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	858
-498	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	861
-499	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	60	\N	\N	\N	f	\N	\N	\N		\N	f	887
-500	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	908
-501	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	911
-502	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	914
-503	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	923
-504	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	930
-505	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	934
-506	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	959
-507	2024-11-06 05:32:33.409248+00	2024-11-06 05:32:33.409248+00	\N	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	998
+COPY public.evolution_details (id, item_id, evolution_trigger_id, gender_id, held_item_id, known_move_id,
+                               known_move_type_id, location_id, min_level, min_happiness, min_beauty, min_affection,
+                               needs_overworld_rain, party_species_id, party_type_id, relative_physical_stats,
+                               time_of_day, trade_species_id, turn_upside_down, evolution_chain_link_id) FROM stdin;
+37	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	2
+38	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	5
+39	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	8
+40	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	11
+41	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	14
+42	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	17
+43	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	20
+44	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N	night	\N	f	20
+45	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	22
+46	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	24
+47	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N		\N	f	25
+48	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	3
+49	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	6
+50	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	9
+51	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	12
+52	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	15
+53	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	18
+54	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	26
+71	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	28
+72	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	28
+73	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	30
+74	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	33
+75	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	35
+76	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	38
+78	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	39
+79	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	42
+80	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	44
+81	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	47
+82	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	49
+83	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	51
+84	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	53
+85	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	53
+86	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	863
+87	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	55
+88	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	57
+89	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	59
+90	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	61
+91	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	64
+92	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	67
+93	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	70
+94	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	73
+95	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	75
+96	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	78
+97	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	80
+98	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	80
+99	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	199
+100	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	199
+101	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	82
+102	\N	8	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	865
+103	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	85
+104	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	87
+105	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	89
+106	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	91
+107	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	93
+108	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	208
+109	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	97
+110	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	99
+111	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	101
+112	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	103
+113	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	105
+114	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N	night	\N	f	105
+115	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	1		\N	f	106
+116	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	-1		\N	f	107
+117	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	0		\N	f	237
+118	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	463
+119	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	110
+120	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	112
+121	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	day	\N	f	113
+122	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	465
+123	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	117
+124	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	119
+125	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	121
+126	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	122
+127	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	212
+128	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	900
+129	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	124
+130	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	125
+131	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	126
+132	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	130
+133	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	134
+134	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	135
+135	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	136
+136	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	196
+137	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	night	\N	f	197
+138	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
+141	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	470
+142	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
+145	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	471
+146	\N	1	\N	\N	\N	\N	\N	0	\N	\N	2	f	\N	\N	\N		\N	f	700
+147	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	700
+148	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	233
+149	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	139
+150	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	141
+151	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	143
+152	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	148
+153	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	153
+154	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	156
+155	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	159
+156	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	162
+157	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	164
+158	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	166
+159	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	168
+160	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	171
+161	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	176
+162	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	178
+163	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	180
+164	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	183
+165	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	185
+166	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	188
+167	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	424
+168	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	192
+169	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	469
+170	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	195
+171	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	980
+172	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	430
+173	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	429
+174	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	202
+175	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	981
+176	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	205
+177	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	982
+178	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	night	\N	f	472
+179	\N	1	\N	\N	\N	\N	\N	23	\N	\N	\N	f	\N	\N	\N		\N	f	210
+180	\N	12	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	904
+181	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	night	\N	f	461
+182	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	day	\N	f	903
+183	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	217
+184	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	219
+185	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	221
+186	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	864
+187	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	224
+188	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	223	\N	\N		\N	f	226
+189	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	229
+190	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	232
+191	\N	11	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	899
+192	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	247
+193	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	253
+194	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	256
+195	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	259
+196	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	262
+197	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	264
+198	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	266
+199	\N	1	\N	\N	\N	\N	\N	7	\N	\N	\N	f	\N	\N	\N		\N	f	268
+200	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	271
+201	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	274
+202	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	277
+203	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	279
+204	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	281
+205	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	284
+206	\N	1	\N	\N	\N	\N	\N	23	\N	\N	\N	f	\N	\N	\N		\N	f	286
+207	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	288
+208	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	291
+209	\N	4	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	292
+210	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	294
+211	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	297
+212	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	476
+216	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	301
+217	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	305
+218	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	308
+219	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	310
+220	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	315
+221	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	317
+222	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	319
+223	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	321
+224	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	323
+225	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	326
+226	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	329
+227	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	332
+228	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	334
+229	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	340
+230	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	342
+231	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	344
+232	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	346
+233	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	348
+234	\N	1	\N	\N	\N	\N	\N	0	\N	171	\N	f	\N	\N	\N		\N	f	350
+235	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	350
+236	\N	1	\N	\N	\N	\N	\N	0	\N	170	\N	f	\N	\N	\N		\N	f	350
+237	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	354
+238	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	356
+239	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N	night	\N	f	358
+240	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	362
+241	\N	3	1	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	478
+242	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	364
+243	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	367
+244	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	368
+245	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	372
+246	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	375
+247	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	388
+248	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	391
+249	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	394
+250	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	397
+251	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	400
+252	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	402
+253	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	404
+254	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	409
+255	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	411
+256	\N	1	1	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	413
+257	\N	1	2	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	414
+258	\N	1	1	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	416
+259	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	419
+260	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	421
+261	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	423
+262	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	426
+263	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	428
+264	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	432
+265	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	435
+266	\N	1	\N	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	437
+267	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	444
+268	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	day	\N	f	448
+269	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	450
+270	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	452
+271	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	454
+272	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	457
+273	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	460
+274	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	496
+275	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	499
+276	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	502
+277	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	505
+278	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	507
+279	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	510
+280	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	512
+281	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	514
+282	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	516
+283	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	518
+284	\N	1	\N	\N	\N	\N	\N	21	\N	\N	\N	f	\N	\N	\N		\N	f	520
+285	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	523
+286	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	525
+287	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	528
+288	\N	1	\N	\N	\N	\N	\N	31	\N	\N	\N	f	\N	\N	\N		\N	f	530
+289	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	533
+290	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	536
+291	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	541
+292	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	544
+293	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	547
+294	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	549
+295	\N	13	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	902
+296	\N	1	\N	\N	\N	\N	\N	29	\N	\N	\N	f	\N	\N	\N		\N	f	552
+297	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	555
+298	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	555
+299	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	558
+300	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	560
+301	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	563
+302	\N	9	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	867
+303	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	565
+304	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	567
+305	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	569
+306	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	571
+307	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	573
+308	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	575
+309	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	578
+310	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	581
+311	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	583
+312	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	586
+313	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	616	\N	\N		\N	f	589
+314	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	591
+315	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	593
+316	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	596
+317	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	598
+318	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	600
+319	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	603
+320	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	606
+321	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	608
+322	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	611
+323	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	614
+324	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	588	\N	\N		\N	f	617
+325	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	620
+326	\N	1	\N	\N	\N	\N	\N	43	\N	\N	\N	f	\N	\N	\N		\N	f	623
+327	\N	1	\N	\N	\N	\N	\N	52	\N	\N	\N	f	\N	\N	\N		\N	f	625
+328	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	628
+329	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	630
+330	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	634
+331	\N	1	\N	\N	\N	\N	\N	59	\N	\N	\N	f	\N	\N	\N		\N	f	637
+332	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	651
+333	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	654
+334	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	657
+335	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	660
+336	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	662
+337	\N	1	\N	\N	\N	\N	\N	9	\N	\N	\N	f	\N	\N	\N		\N	f	665
+338	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	668
+339	\N	1	\N	\N	\N	\N	\N	19	\N	\N	\N	f	\N	\N	\N		\N	f	670
+340	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	673
+341	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	675
+342	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	678
+343	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	680
+344	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	683
+345	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	685
+346	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	t	687
+347	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N		\N	f	689
+348	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	691
+349	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	693
+350	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	695
+351	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N	day	\N	f	697
+352	\N	1	\N	\N	\N	\N	\N	39	\N	\N	\N	f	\N	\N	\N	night	\N	f	699
+353	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	705
+354	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	709
+355	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	711
+356	\N	1	\N	\N	\N	\N	\N	37	\N	\N	\N	f	\N	\N	\N		\N	f	713
+357	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	715
+358	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	723
+359	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	726
+360	\N	1	\N	\N	\N	\N	\N	17	\N	\N	\N	f	\N	\N	\N		\N	f	729
+361	\N	1	\N	\N	\N	\N	\N	14	\N	\N	\N	f	\N	\N	\N		\N	f	732
+362	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N	day	\N	f	735
+363	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	737
+364	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	740
+365	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	743
+366	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	day	\N	f	745
+367	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	night	\N	f	745
+368	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N	dusk	\N	f	745
+369	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	748
+370	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	750
+371	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	752
+372	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N	day	\N	f	754
+373	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	756
+374	\N	1	1	\N	\N	\N	\N	33	\N	\N	\N	f	\N	\N	\N		\N	f	758
+375	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	760
+376	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	762
+377	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	768
+378	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	770
+379	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	773
+380	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	783
+381	\N	1	\N	\N	\N	\N	\N	43	\N	\N	\N	f	\N	\N	\N		\N	f	790
+382	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	804
+383	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	811
+384	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	814
+385	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	817
+386	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	820
+387	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	822
+388	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	825
+389	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	828
+390	\N	1	\N	\N	\N	\N	\N	20	\N	\N	\N	f	\N	\N	\N		\N	f	830
+391	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	832
+392	\N	1	\N	\N	\N	\N	\N	22	\N	\N	\N	f	\N	\N	\N		\N	f	834
+393	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	836
+394	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	838
+395	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	841
+396	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	842
+397	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	844
+398	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	847
+399	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	849
+400	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	851
+401	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	853
+402	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	855
+403	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	857
+404	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	860
+405	\N	5	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	869
+406	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N	night	\N	f	873
+407	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	879
+408	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	886
+409	\N	6	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	892
+410	\N	7	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	892
+411	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	907
+412	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	910
+413	\N	1	\N	\N	\N	\N	\N	16	\N	\N	\N	f	\N	\N	\N		\N	f	913
+414	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	916
+415	\N	1	\N	\N	\N	\N	\N	15	\N	\N	\N	f	\N	\N	\N		\N	f	918
+416	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	920
+417	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	922
+418	\N	10	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	925
+419	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	927
+420	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	929
+421	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	933
+422	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	936
+423	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	937
+424	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	939
+425	\N	1	\N	\N	\N	\N	\N	25	\N	\N	\N	f	\N	\N	\N		\N	f	941
+426	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	943
+427	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	945
+428	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	947
+429	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	949
+430	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	952
+431	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	954
+432	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	956
+433	\N	1	\N	\N	\N	\N	\N	24	\N	\N	\N	f	\N	\N	\N		\N	f	958
+434	\N	1	\N	\N	\N	\N	\N	26	\N	\N	\N	f	\N	\N	\N		\N	f	961
+435	\N	10	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	964
+436	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	966
+437	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	970
+438	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N	night	\N	f	972
+439	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	975
+440	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	997
+441	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	1000
+449	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	31
+450	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	34
+451	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	36
+452	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	40
+453	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	169
+454	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	45
+455	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	182
+456	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	979
+457	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	62
+458	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	186
+459	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	65
+460	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	68
+461	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	71
+462	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	76
+463	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
+467	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	462
+468	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	94
+469	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	464
+470	\N	1	\N	\N	\N	\N	\N	0	160	\N	\N	f	\N	\N	\N		\N	f	242
+471	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	230
+472	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	866
+473	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	466
+474	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	467
+475	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	474
+476	\N	1	\N	\N	\N	\N	\N	55	\N	\N	\N	f	\N	\N	\N		\N	f	149
+477	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	154
+478	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	157
+479	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	160
+480	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	468
+481	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	181
+482	\N	1	\N	\N	\N	\N	\N	18	\N	\N	\N	f	\N	\N	\N		\N	f	184
+483	\N	1	\N	\N	\N	\N	\N	27	\N	\N	\N	f	\N	\N	\N		\N	f	189
+484	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N	full-moon	\N	f	901
+485	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	473
+486	\N	1	\N	\N	\N	\N	\N	55	\N	\N	\N	f	\N	\N	\N		\N	f	248
+487	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	254
+488	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	257
+489	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	260
+490	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N	night	\N	f	862
+491	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	267
+492	\N	1	\N	\N	\N	\N	\N	10	\N	\N	\N	f	\N	\N	\N		\N	f	269
+493	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	272
+494	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	275
+495	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	282
+496	\N	3	2	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	475
+497	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	289
+498	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	295
+499	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	306
+500	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	407
+501	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	330
+502	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	477
+503	\N	1	\N	\N	\N	\N	\N	44	\N	\N	\N	f	\N	\N	\N		\N	f	365
+504	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	f	\N	\N	\N		\N	f	373
+505	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	376
+506	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	389
+507	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	392
+508	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	395
+509	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	398
+510	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	405
+511	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	445
+512	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	497
+513	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	500
+514	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	503
+515	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	508
+516	\N	1	\N	\N	\N	\N	\N	32	\N	\N	\N	f	\N	\N	\N		\N	f	521
+517	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	526
+518	\N	2	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	534
+519	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	537
+520	\N	1	\N	\N	\N	\N	\N	0	220	\N	\N	f	\N	\N	\N		\N	f	542
+521	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	545
+522	\N	1	\N	\N	\N	\N	\N	40	\N	\N	\N	f	\N	\N	\N		\N	f	553
+523	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	576
+524	\N	1	\N	\N	\N	\N	\N	41	\N	\N	\N	f	\N	\N	\N		\N	f	579
+525	\N	1	\N	\N	\N	\N	\N	47	\N	\N	\N	f	\N	\N	\N		\N	f	584
+526	\N	1	\N	\N	\N	\N	\N	49	\N	\N	\N	f	\N	\N	\N		\N	f	601
+527	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	604
+528	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	609
+529	\N	1	\N	\N	\N	\N	\N	48	\N	\N	\N	f	\N	\N	\N		\N	f	612
+530	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	983
+531	\N	1	\N	\N	\N	\N	\N	64	\N	\N	\N	f	\N	\N	\N		\N	f	635
+532	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	652
+533	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	655
+534	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	658
+535	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	663
+536	\N	1	\N	\N	\N	\N	\N	12	\N	\N	\N	f	\N	\N	\N		\N	f	666
+537	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	671
+538	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	681
+539	\N	1	\N	\N	\N	\N	\N	50	\N	\N	\N	t	\N	\N	\N		\N	f	706
+540	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	724
+541	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	727
+542	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	730
+543	\N	1	\N	\N	\N	\N	\N	28	\N	\N	\N	f	\N	\N	\N		\N	f	733
+544	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	738
+545	\N	3	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	738
+546	\N	1	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	763
+547	\N	1	\N	\N	\N	\N	\N	45	\N	\N	\N	f	\N	\N	\N		\N	f	784
+548	\N	1	\N	\N	\N	\N	\N	53	\N	\N	\N	f	\N	\N	\N		\N	f	791
+549	\N	1	\N	\N	\N	\N	\N	53	\N	\N	\N	f	\N	\N	\N		\N	f	792
+550	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	812
+551	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	815
+552	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	818
+553	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	823
+554	\N	1	\N	\N	\N	\N	\N	30	\N	\N	\N	f	\N	\N	\N		\N	f	826
+555	\N	1	\N	\N	\N	\N	\N	34	\N	\N	\N	f	\N	\N	\N		\N	f	839
+556	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	858
+557	\N	1	\N	\N	\N	\N	\N	42	\N	\N	\N	f	\N	\N	\N		\N	f	861
+558	\N	1	\N	\N	\N	\N	\N	60	\N	\N	\N	f	\N	\N	\N		\N	f	887
+559	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	908
+560	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	911
+561	\N	1	\N	\N	\N	\N	\N	36	\N	\N	\N	f	\N	\N	\N		\N	f	914
+562	\N	10	\N	\N	\N	\N	\N	0	\N	\N	\N	f	\N	\N	\N		\N	f	923
+563	\N	1	\N	\N	\N	\N	\N	35	\N	\N	\N	f	\N	\N	\N		\N	f	930
+564	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	934
+565	\N	1	\N	\N	\N	\N	\N	38	\N	\N	\N	f	\N	\N	\N		\N	f	959
+566	\N	1	\N	\N	\N	\N	\N	54	\N	\N	\N	f	\N	\N	\N		\N	f	998
 \.
 
 
@@ -2663,8 +2687,6 @@ COPY public.evolution_triggers (id, name) FROM stdin;
 --
 
 COPY public.items (id, name, sprite_url) FROM stdin;
-1110	tangela-candy	
-922	xtransceiver--red	
 1	master-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png
 2	ultra-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ultra-ball.png
 3	great-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/great-ball.png
@@ -2675,63 +2697,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 8	nest-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/nest-ball.png
 9	repeat-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/repeat-ball.png
 10	timer-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/timer-ball.png
-11	luxury-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png
-12	premier-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png
-13	dusk-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-ball.png
-14	heal-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png
-15	quick-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png
-16	cherish-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png
-17	potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png
-18	antidote	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/antidote.png
-19	burn-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/burn-heal.png
-20	ice-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ice-heal.png
-21	awakening	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/awakening.png
-22	paralyze-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/paralyze-heal.png
-23	full-restore	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png
-24	max-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-potion.png
-25	hyper-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/hyper-potion.png
-26	super-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/super-potion.png
-27	full-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-heal.png
-28	revive	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revive.png
-29	max-revive	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png
-30	fresh-water	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fresh-water.png
-31	soda-pop	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soda-pop.png
-32	lemonade	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lemonade.png
-33	moomoo-milk	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/moomoo-milk.png
-34	energy-powder	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/energy-powder.png
-35	energy-root	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/energy-root.png
-36	heal-powder	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-powder.png
-37	revival-herb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revival-herb.png
-38	ether	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ether.png
-39	max-ether	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-ether.png
-40	elixir	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/elixir.png
-41	max-elixir	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-elixir.png
-42	lava-cookie	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lava-cookie.png
-43	berry-juice	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/berry-juice.png
-44	sacred-ash	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sacred-ash.png
-45	hp-up	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/hp-up.png
-46	protein	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/protein.png
-47	iron	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron.png
-48	carbos	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/carbos.png
-49	calcium	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/calcium.png
-50	rare-candy	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png
-51	pp-up	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pp-up.png
-52	zinc	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/zinc.png
-53	pp-max	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pp-max.png
-54	old-gateau	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/old-gateau.png
-55	guard-spec	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/guard-spec.png
-56	dire-hit	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dire-hit.png
-57	x-attack	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-attack.png
-58	x-defense	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-defense.png
-59	x-speed	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-speed.png
-60	x-accuracy	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-accuracy.png
-61	x-sp-atk	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-sp-atk.png
-62	x-sp-def	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-sp-def.png
-63	poke-doll	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-doll.png
-64	fluffy-tail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fluffy-tail.png
-65	blue-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-flute.png
-66	yellow-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/yellow-flute.png
-67	red-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/red-flute.png
 68	black-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/black-flute.png
 69	white-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/white-flute.png
 70	shoal-salt	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shoal-salt.png
@@ -2771,6 +2736,26 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 104	armor-fossil	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/armor-fossil.png
 105	skull-fossil	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/skull-fossil.png
 106	rare-bone	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-bone.png
+11	luxury-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/luxury-ball.png
+12	premier-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/premier-ball.png
+13	dusk-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-ball.png
+14	heal-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-ball.png
+15	quick-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/quick-ball.png
+16	cherish-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cherish-ball.png
+17	potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png
+18	antidote	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/antidote.png
+19	burn-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/burn-heal.png
+20	ice-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ice-heal.png
+21	awakening	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/awakening.png
+22	paralyze-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/paralyze-heal.png
+23	full-restore	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png
+24	max-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-potion.png
+25	hyper-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/hyper-potion.png
+26	super-potion	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/super-potion.png
+27	full-heal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-heal.png
+28	revive	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revive.png
+29	max-revive	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png
+30	fresh-water	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fresh-water.png
 107	shiny-stone	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shiny-stone.png
 108	dusk-stone	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dusk-stone.png
 109	dawn-stone	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dawn-stone.png
@@ -2779,7 +2764,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 112	adamant-orb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/adamant-orb.png
 113	lustrous-orb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lustrous-orb.png
 114	grass-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/grass-mail.png
-1096	shellder-candy	
 115	flame-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/flame-mail.png
 116	bubble-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bubble-mail.png
 117	bloom-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bloom-mail.png
@@ -2790,6 +2774,26 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 122	space-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/space-mail.png
 123	air-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/air-mail.png
 124	mosaic-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mosaic-mail.png
+31	soda-pop	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/soda-pop.png
+32	lemonade	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lemonade.png
+33	moomoo-milk	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/moomoo-milk.png
+34	energy-powder	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/energy-powder.png
+35	energy-root	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/energy-root.png
+36	heal-powder	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/heal-powder.png
+37	revival-herb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/revival-herb.png
+38	ether	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ether.png
+39	max-ether	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-ether.png
+40	elixir	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/elixir.png
+41	max-elixir	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-elixir.png
+42	lava-cookie	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lava-cookie.png
+43	berry-juice	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/berry-juice.png
+44	sacred-ash	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sacred-ash.png
+45	hp-up	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/hp-up.png
+46	protein	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/protein.png
+47	iron	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron.png
+48	carbos	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/carbos.png
+49	calcium	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/calcium.png
+54	old-gateau	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/old-gateau.png
 125	brick-mail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/brick-mail.png
 126	cheri-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cheri-berry.png
 127	chesto-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/chesto-berry.png
@@ -2838,7 +2842,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 170	payapa-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/payapa-berry.png
 171	tanga-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tanga-berry.png
 172	charti-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/charti-berry.png
-1097	gastly-candy	
 173	kasib-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/kasib-berry.png
 174	haban-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/haban-berry.png
 175	colbur-berry	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/colbur-berry.png
@@ -2897,14 +2900,11 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 228	silk-scarf	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/silk-scarf.png
 229	up-grade	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/up-grade.png
 230	shell-bell	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/shell-bell.png
-1098	onix-candy	
-1099	drowzee-candy	
 231	sea-incense	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sea-incense.png
 232	lax-incense	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lax-incense.png
 233	lucky-punch	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lucky-punch.png
 234	metal-powder	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/metal-powder.png
 235	thick-club	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/thick-club.png
-236	stick	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/stick.png
 237	red-scarf	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/red-scarf.png
 238	blue-scarf	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-scarf.png
 239	pink-scarf	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pink-scarf.png
@@ -3080,7 +3080,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 409	point-card	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/point-card.png
 410	journal	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/journal.png
 411	seal-case	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/seal-case.png
-1100	krabby-candy	
 412	fashion-case	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fashion-case.png
 413	seal-bag	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/seal-bag.png
 414	pal-pad	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pal-pad.png
@@ -3140,7 +3139,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 468	blue-orb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-orb.png
 469	jade-orb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/jade-orb.png
 470	enigma-stone	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/enigma-stone.png
-1101	voltorb-candy	
 471	unown-report	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/unown-report.png
 472	blue-card	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-card.png
 473	slowpoke-tail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/slowpoke-tail.png
@@ -3259,7 +3257,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 586	ring-target	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/ring-target.png
 587	binding-band	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/binding-band.png
 588	absorb-bulb	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/absorb-bulb.png
-1102	exeggcute-candy	
 589	cell-battery	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/cell-battery.png
 590	eject-button	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/eject-button.png
 591	fire-gem	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fire-gem.png
@@ -3377,8 +3374,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 706	aggronite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aggronite.png
 707	banettite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/banettite.png
 708	tyranitarite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tyranitarite.png
-1103	cubone-candy	
-1104	hitmonlee-candy	
 709	scizorite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/scizorite.png
 710	pinsirite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pinsirite.png
 711	aerodactylite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aerodactylite.png
@@ -3437,7 +3432,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 779	devon-scuba-gear	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/devon-scuba-gear.png
 780	contest-costume--jacket	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/contest-costume--jacket.png
 782	magma-suit	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/magma-suit.png
-1105	hitmonchan-candy	
 783	aqua-suit	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aqua-suit.png
 784	pair-of-tickets	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pair-of-tickets.png
 785	mega-bracelet	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-bracelet.png
@@ -3449,7 +3443,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 791	mega-anklet	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/mega-anklet.png
 793	swampertite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/swampertite.png
 794	sceptilite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sceptilite.png
-795	sablenite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sablenite.png
 796	altarianite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/altarianite.png
 797	galladite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/galladite.png
 798	audinite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/audinite.png
@@ -3495,7 +3488,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 840	incinium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/incinium-z--held.png
 841	primarium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/primarium-z--held.png
 842	tapunium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tapunium-z--held.png
-1106	lickitung-candy	
 843	marshadium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/marshadium-z--held.png
 844	aloraichium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/aloraichium-z--held.png
 845	snorlium-z--held	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/snorlium-z--held.png
@@ -3546,14 +3538,13 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 919	bike--green	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bike--green.png
 920	storage-key--galactic-warehouse	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/storage-key--galactic-warehouse.png
 921	basement-key--goldenrod	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/basement-key--goldenrod.png
+922	xtransceiver--red	
 923	xtransceiver--yellow	
 924	dna-splicers--merge	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dna-splicers--merge.png
 925	dna-splicers--split	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dna-splicers--split.png
 926	dropped-item--red	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dropped-item--red.png
 927	dropped-item--yellow	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dropped-item--yellow.png
 928	holo-caster--green	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/holo-caster--green.png
-1107	koffing-candy	
-1108	rhyhorn-candy	
 929	bike--yellow	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bike--yellow.png
 930	holo-caster--red	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/holo-caster--red.png
 931	basement-key--new-mauville	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/basement-key--new-mauville.png
@@ -3631,7 +3622,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1003	roto-pp-restore	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/roto-pp-restore.png
 1004	roto-boost	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/roto-boost.png
 1005	roto-catch	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/roto-catch.png
-1006	autograph	
 1007	pokemon-box	
 1008	medicine-pocket	
 1009	candy-jar	
@@ -3646,6 +3636,7 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1018	silver-pinap-berry	
 1019	golden-pinap-berry	
 1020	secret-key--letsgo	
+1006	autograph	
 1021	ss-ticket--letsgo	
 1022	parcel--letsgo	
 1023	card-key--letsgo	
@@ -3721,7 +3712,21 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1093	doduo-candy	
 1094	seel-candy	
 1095	grimer-candy	
+1096	shellder-candy	
+1097	gastly-candy	
+1098	onix-candy	
+1099	drowzee-candy	
+1100	krabby-candy	
+1101	voltorb-candy	
+1102	exeggcute-candy	
+1103	cubone-candy	
+1104	hitmonlee-candy	
+1105	hitmonchan-candy	
+1106	lickitung-candy	
+1107	koffing-candy	
+1108	rhyhorn-candy	
 1109	chansey-candy	
+1110	tangela-candy	
 1111	kangaskhan-candy	
 1112	horsea-candy	
 1113	goldeen-candy	
@@ -3897,7 +3902,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1283	tr95	
 1284	tr96	
 1285	tr97	
-1286	tr98	
 1287	tr99	
 1288	tm00	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 1289	lonely-mint	
@@ -4323,12 +4327,12 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1709	chili-sauce	
 1710	salt	
 1711	pepper	
-1712	yogurt	
 1713	whipped-cream	
 1714	cream-cheese	
 1715	jam	
 1716	marmalade	
 1717	olive-oil	
+1712	yogurt	
 1718	vinegar	
 1719	sweet-herba-mystica	
 1720	salty-herba-mystica	
@@ -4429,7 +4433,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1815	zangoose-claw	
 1816	seviper-fang	
 1817	barboach-slime	
-1818	shuppet-scrap	
 1819	tropius-leaf	
 1820	snorunt-fur	
 1821	luvdisc-scales	
@@ -4445,7 +4448,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1831	stunky-fur	
 1832	bronzor-fragment	
 1833	bonsly-tears	
-1834	happiny-dust	
 1835	spiritomb-fragment	
 1836	gible-scales	
 1837	riolu-fur	
@@ -4478,12 +4480,12 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 1864	skrelp-kelp	
 1865	clauncher-claw	
 1866	hawlucha-down	
-1867	dedenne-fur	
 1868	goomy-goo	
 1869	klefki-key	
 1870	bergmite-ice	
 1871	noibat-fur	
 1872	yungoos-fur	
+1867	dedenne-fur	
 1873	crabrawler-shell	
 1874	oricorio-feather	
 1875	rockruff-rock	
@@ -4627,8 +4629,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2014	tm171	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2015	picnic-set	
 2017	academy-bottle	
-2018	polka-dot-bottle	
-2019	striped-bottle	
 2020	diamond-bottle	
 2022	academy-cup	
 2023	striped-cup	
@@ -4643,7 +4643,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2034	yarn-ball	
 2035	cyber-ball	
 2036	gold-pick	
-2037	silver-pick	
 2038	red-flag-pick	
 2039	blue-flag-pick	
 2040	pika-pika-pick	
@@ -4682,6 +4681,7 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2073	polka-dot-tablecloth	
 2074	lilac-tablecloth	
 2075	mint-tablecloth	
+63	poke-doll	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-doll.png
 2076	peach-tablecloth	
 2077	yellow-tablecloth	
 2078	blue-tablecloth	
@@ -4762,7 +4762,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2153	phantump-twig	
 2154	grubbin-thread	
 2155	cutiefly-powder	
-2156	jangmo-o-scales	
 2157	cramorant-down	
 2158	morpeko-snack	
 2159	poltchageist-powder	
@@ -4770,21 +4769,11 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2161	tm172	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2162	tm173	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2163	tm174	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2164	tm175	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2165	tm176	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2166	tm177	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2167	tm178	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2168	tm179	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2169	tm180	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2170	tm181	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2171	tm182	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2172	tm183	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2173	tm184	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2174	tm185	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2175	tm186	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2176	tm187	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2177	tm188	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2178	tm189	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2179	tm190	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2180	tm191	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2181	tm192	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
@@ -4794,7 +4783,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2185	tm196	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2186	tm197	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2187	tm198	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
-2188	tm199	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2189	tm200	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2190	tm201	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2191	tm202	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
@@ -4802,6 +4790,23 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2193	tm204	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2194	tm205	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2195	tm206	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+50	rare-candy	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png
+51	pp-up	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pp-up.png
+52	zinc	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/zinc.png
+53	pp-max	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pp-max.png
+55	guard-spec	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/guard-spec.png
+56	dire-hit	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/dire-hit.png
+57	x-attack	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-attack.png
+58	x-defense	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-defense.png
+59	x-speed	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-speed.png
+60	x-accuracy	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-accuracy.png
+61	x-sp-atk	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-sp-atk.png
+62	x-sp-def	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/x-sp-def.png
+64	fluffy-tail	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fluffy-tail.png
+65	blue-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-flute.png
+66	yellow-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/yellow-flute.png
+67	red-flute	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/red-flute.png
+2188	tm199	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2196	tm207	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2197	tm208	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2198	tm209	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
@@ -4826,6 +4831,25 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 2217	tm228	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2218	tm229	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2219	lastrange-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lastrange-ball.png
+236	stick	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/stick.png
+795	sablenite	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/sablenite.png
+1286	tr98	
+1818	shuppet-scrap	
+1834	happiny-dust	
+2018	polka-dot-bottle	
+2019	striped-bottle	
+2037	silver-pick	
+2156	jangmo-o-scales	
+2164	tm175	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2165	tm176	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2166	tm177	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2167	tm178	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2173	tm184	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2174	tm185	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2175	tm186	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2176	tm187	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2177	tm188	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
+2178	tm189	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-normal.png
 2220	lapoke-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lapoke-ball.png
 2221	lagreat-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/lagreat-ball.png
 2222	laultra-ball	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/laultra-ball.png
@@ -4847,32 +4871,6 @@ COPY public.items (id, name, sprite_url) FROM stdin;
 
 COPY public.locations (id, name, region_id) FROM stdin;
 80	mt-moon	1
-242	ss-aqua	2
-67	celadon-city	1
-68	cerulean-city	1
-71	cinnabar-island	1
-73	digletts-cave	1
-76	fuchsia-city	1
-86	pallet-town	1
-87	rock-tunnel	1
-88	kanto-route-1	1
-89	kanto-route-10	1
-90	kanto-route-11	1
-91	kanto-route-12	1
-92	kanto-route-13	1
-93	kanto-route-14	1
-94	kanto-route-15	1
-95	kanto-route-16	1
-96	kanto-route-17	1
-97	kanto-route-18	1
-98	kanto-sea-route-19	1
-99	kanto-route-2	1
-100	kanto-sea-route-20	1
-101	kanto-sea-route-21	1
-102	kanto-route-22	1
-103	kanto-route-24	1
-104	kanto-route-25	1
-105	kanto-route-26	1
 106	kanto-route-27	1
 107	kanto-route-28	1
 109	kanto-route-3	1
@@ -4903,201 +4901,7 @@ COPY public.locations (id, name, region_id) FROM stdin;
 493	weepth-chamber	1
 494	dilford-chamber	1
 495	scufib-chamber	1
-496	rixy-chamber	1
-497	viapos-chamber	1
 498	ss-anne	1
-500	mt-ember	1
-501	berry-forest	1
-502	icefall-cave	1
-503	pattern-bush	1
-504	lost-cave	1
-505	kindle-road	1
-506	treasure-beach	1
-507	cape-brink	1
-508	bond-bridge	1
-509	three-isle-port	1
-510	resort-gorgeous	1
-511	water-labyrinth	1
-512	five-isle-meadow	1
-513	memorial-pillar	1
-514	outcast-island	1
-515	green-path	1
-516	water-path	1
-517	ruin-valley	1
-518	trainer-tower	1
-519	canyon-entrance	1
-520	sevault-canyon	1
-521	tanoby-ruins	1
-526	one-island	1
-527	four-island	1
-528	five-island	1
-529	kanto-altering-cave	1
-799	roaming-kanto	1
-805	two-island	1
-806	three-island	1
-807	three-isle-path	1
-808	six-island	1
-809	seven-island	1
-810	birth-island	1
-811	navel-rock	1
-65	blackthorn-city	2
-66	burned-tower	2
-69	cherrygrove-city	2
-70	cianwood-city	2
-72	dark-cave	2
-74	dragons-den	2
-75	ecruteak-city	2
-77	ice-path	2
-78	ilex-forest	2
-79	lake-of-rage	2
-81	mt-mortar	2
-82	mt-silver	2
-83	national-park	2
-84	new-bark-town	2
-85	olivine-city	2
-108	johto-route-29	2
-110	johto-route-30	2
-111	johto-route-31	2
-112	johto-route-32	2
-113	johto-route-33	2
-114	johto-route-34	2
-115	johto-route-35	2
-116	johto-route-36	2
-117	johto-route-37	2
-118	johto-route-38	2
-119	johto-route-39	2
-121	johto-sea-route-40	2
-122	johto-sea-route-41	2
-123	johto-route-42	2
-124	johto-route-43	2
-125	johto-route-44	2
-126	johto-route-45	2
-127	johto-route-46	2
-128	johto-route-47	2
-129	johto-route-48	2
-135	ruins-of-alph	2
-137	slowpoke-well	2
-138	sprout-tower	2
-139	bell-tower	2
-140	tohjo-falls	2
-141	union-cave	2
-148	unknown-all-poliwag	2
-149	unknown-all-rattata	2
-150	unknown-all-bugs	2
-153	violet-city	2
-156	whirl-islands	2
-228	azalea-town	2
-229	goldenrod-city	2
-230	mahogany-town	2
-236	johto-lighthouse	2
-237	team-rocket-hq	2
-238	goldenrod-tunnel	2
-239	mt-silver-cave	2
-241	pokeathlon-dome	2
-243	safari-zone-gate	2
-244	cliff-cave	2
-245	frontier-access	2
-246	bellchime-trail	2
-247	sinjoh-ruins	2
-248	embedded-tower	2
-249	pokewalker	2
-250	cliff-edge-gate	2
-252	radio-tower	2
-800	roaming-johto	2
-814	johto-safari-zone	2
-429	petalburg-city	3
-430	slateport-city	3
-431	lilycove-city	3
-432	mossdeep-city	3
-433	sootopolis-city	3
-434	ever-grande-city	3
-435	meteor-falls	3
-436	rusturf-tunnel	3
-437	granite-cave	3
-438	petalburg-woods	3
-439	jagged-pass	3
-440	fiery-path	3
-441	mt-pyre	3
-442	seafloor-cavern	3
-443	cave-of-origin	3
-444	hoenn-victory-road	3
-445	shoal-cave	3
-446	new-mauville	3
-447	abandoned-ship	3
-448	sky-pillar	3
-449	hoenn-route-101	3
-450	hoenn-route-102	3
-451	hoenn-route-103	3
-452	hoenn-route-104	3
-453	hoenn-route-105	3
-454	hoenn-route-106	3
-455	hoenn-route-107	3
-456	hoenn-route-108	3
-457	hoenn-route-109	3
-458	hoenn-route-110	3
-459	hoenn-route-111	3
-460	hoenn-route-112	3
-461	hoenn-route-113	3
-462	hoenn-route-114	3
-463	hoenn-route-115	3
-464	hoenn-route-116	3
-465	hoenn-route-117	3
-466	hoenn-route-118	3
-467	hoenn-route-119	3
-468	hoenn-route-120	3
-469	hoenn-route-121	3
-470	hoenn-route-122	3
-471	hoenn-route-123	3
-472	hoenn-route-124	3
-473	hoenn-route-125	3
-474	hoenn-route-126	3
-475	hoenn-route-127	3
-476	hoenn-route-128	3
-477	hoenn-route-129	3
-478	hoenn-route-130	3
-479	hoenn-route-131	3
-480	hoenn-route-132	3
-481	hoenn-route-133	3
-482	hoenn-route-134	3
-483	hoenn-safari-zone	3
-484	dewford-town	3
-485	pacifidlog-town	3
-486	magma-hideout	3
-487	mirage-tower	3
-488	desert-underpass	3
-489	artisan-cave	3
-490	hoenn-altering-cave	3
-567	littleroot-town	3
-568	oldale-town	3
-569	lavaridge-town	3
-570	fallarbor-town	3
-571	verdanturf-town	3
-572	mauville-city	3
-573	rustboro-city	3
-574	fortree-city	3
-575	underwater	3
-576	mt-chimney	3
-577	mirage-island	3
-578	southern-island	3
-579	sealed-chamber	3
-580	scorched-slab	3
-581	island-cave	3
-582	desert-ruins	3
-583	ancient-tomb	3
-584	inside-of-truck	3
-585	secret-base	3
-586	hoenn-battle-tower	3
-691	hoenn-pokemon-league	3
-692	team-aqua-hideout	3
-693	sea-mauville	3
-694	team-magma-hideout	3
-695	battle-resort	3
-696	ss-tidal	3
-697	mirage-forest	3
-698	mirage-cave	3
-699	mirage-mountain	3
-700	trackless-forest	3
-701	pathless-plain	3
 702	nameless-cavern	3
 703	fabled-cave	3
 704	gnarled-den	3
@@ -5109,47 +4913,8 @@ COPY public.locations (id, name, region_id) FROM stdin;
 801	roaming-hoenn	3
 803	terra-cave	3
 804	marine-cave	3
-812	faraway-island	3
 813	hoenn-battle-frontier	3
-1	canalave-city	4
-2	eterna-city	4
-3	pastoria-city	4
-4	sunyshore-city	4
-5	sinnoh-pokemon-league	4
-6	oreburgh-mine	4
-7	valley-windworks	4
-8	eterna-forest	4
-9	fuego-ironworks	4
-10	mt-coronet	4
-11	great-marsh	4
-12	solaceon-ruins	4
-13	sinnoh-victory-road	4
-14	ravaged-path	4
-15	oreburgh-gate	4
-16	stark-mountain	4
-17	spring-path	4
-18	turnback-cave	4
-19	snowpoint-temple	4
-20	wayward-cave	4
-22	ruin-maniac-cave	4
-23	trophy-garden	4
-24	iron-island	4
-25	old-chateau	4
-26	lake-verity	4
-27	lake-valor	4
-28	lake-acuity	4
-29	valor-lakefront	4
-30	acuity-lakefront	4
-31	sinnoh-route-201	4
-32	sinnoh-route-202	4
-33	sinnoh-route-203	4
-34	sinnoh-route-204	4
-35	sinnoh-route-205	4
-36	sinnoh-route-206	4
-37	sinnoh-route-207	4
-38	sinnoh-route-208	4
 39	sinnoh-route-209	4
-40	lost-tower	4
 41	sinnoh-route-210	4
 42	sinnoh-route-211	4
 43	sinnoh-route-212	4
@@ -5203,6 +4968,64 @@ COPY public.locations (id, name, region_id) FROM stdin;
 191	valor-cavern	4
 192	acuity-cavern	4
 193	jubilife-tv	4
+67	celadon-city	1
+68	cerulean-city	1
+71	cinnabar-island	1
+73	digletts-cave	1
+76	fuchsia-city	1
+86	pallet-town	1
+87	rock-tunnel	1
+88	kanto-route-1	1
+89	kanto-route-10	1
+90	kanto-route-11	1
+91	kanto-route-12	1
+92	kanto-route-13	1
+93	kanto-route-14	1
+94	kanto-route-15	1
+95	kanto-route-16	1
+96	kanto-route-17	1
+97	kanto-route-18	1
+98	kanto-sea-route-19	1
+99	kanto-route-2	1
+100	kanto-sea-route-20	1
+101	kanto-sea-route-21	1
+102	kanto-route-22	1
+103	kanto-route-24	1
+104	kanto-route-25	1
+105	kanto-route-26	1
+800	roaming-johto	2
+814	johto-safari-zone	2
+429	petalburg-city	3
+430	slateport-city	3
+431	lilycove-city	3
+432	mossdeep-city	3
+433	sootopolis-city	3
+434	ever-grande-city	3
+435	meteor-falls	3
+436	rusturf-tunnel	3
+437	granite-cave	3
+438	petalburg-woods	3
+439	jagged-pass	3
+440	fiery-path	3
+441	mt-pyre	3
+442	seafloor-cavern	3
+443	cave-of-origin	3
+444	hoenn-victory-road	3
+445	shoal-cave	3
+446	new-mauville	3
+447	abandoned-ship	3
+448	sky-pillar	3
+449	hoenn-route-101	3
+450	hoenn-route-102	3
+451	hoenn-route-103	3
+452	hoenn-route-104	3
+453	hoenn-route-105	3
+454	hoenn-route-106	3
+455	hoenn-route-107	3
+456	hoenn-route-108	3
+457	hoenn-route-109	3
+458	hoenn-route-110	3
+459	hoenn-route-111	3
 194	poketch-co	4
 195	gts	4
 196	trainers-school	4
@@ -5217,6 +5040,56 @@ COPY public.locations (id, name, region_id) FROM stdin;
 205	sinnoh-game-corner	4
 206	canalave-library	4
 207	vista-lighthouse	4
+85	olivine-city	2
+108	johto-route-29	2
+110	johto-route-30	2
+111	johto-route-31	2
+112	johto-route-32	2
+113	johto-route-33	2
+114	johto-route-34	2
+115	johto-route-35	2
+116	johto-route-36	2
+117	johto-route-37	2
+118	johto-route-38	2
+119	johto-route-39	2
+121	johto-sea-route-40	2
+122	johto-sea-route-41	2
+123	johto-route-42	2
+124	johto-route-43	2
+125	johto-route-44	2
+126	johto-route-45	2
+127	johto-route-46	2
+128	johto-route-47	2
+129	johto-route-48	2
+135	ruins-of-alph	2
+137	slowpoke-well	2
+138	sprout-tower	2
+139	bell-tower	2
+140	tohjo-falls	2
+141	union-cave	2
+148	unknown-all-poliwag	2
+149	unknown-all-rattata	2
+150	unknown-all-bugs	2
+153	violet-city	2
+156	whirl-islands	2
+228	azalea-town	2
+229	goldenrod-city	2
+230	mahogany-town	2
+236	johto-lighthouse	2
+237	team-rocket-hq	2
+238	goldenrod-tunnel	2
+239	mt-silver-cave	2
+241	pokeathlon-dome	2
+242	ss-aqua	2
+243	safari-zone-gate	2
+244	cliff-cave	2
+245	frontier-access	2
+246	bellchime-trail	2
+247	sinjoh-ruins	2
+248	embedded-tower	2
+249	pokewalker	2
+250	cliff-edge-gate	2
+460	hoenn-route-112	3
 208	sunyshore-market	4
 209	footstep-house	4
 210	sinnoh-cafe	4
@@ -5511,6 +5384,7 @@ COPY public.locations (id, name, region_id) FROM stdin;
 755	alola-route-10	7
 756	alola-route-11	7
 757	secluded-shore	7
+461	hoenn-route-113	3
 758	alola-route-13	7
 759	tapu-village	7
 760	alola-route-15	7
@@ -5613,17 +5487,6 @@ COPY public.locations (id, name, region_id) FROM stdin;
 914	lakeside-cave	8
 915	loop-lagoon	8
 916	master-dojo	8
-917	max-lair	8
-918	motostoke	8
-919	motostoke-outskirts	8
-920	motostoke-riverbank	8
-921	north-lake-miloch	8
-922	old-cemetary	8
-923	path-to-the-peak	8
-924	postwick	8
-925	potbottom-desert	8
-926	roaring-sea-caves	8
-927	galar-rock-peak-ruins	8
 928	rolling-fields	8
 929	slippery-slope	8
 930	slumbering-weald	8
@@ -5731,6 +5594,167 @@ COPY public.locations (id, name, region_id) FROM stdin;
 1031	tranquility-cove	9
 1032	hisui-turnback-cave	9
 1033	ursas-ring	9
+462	hoenn-route-114	3
+463	hoenn-route-115	3
+464	hoenn-route-116	3
+465	hoenn-route-117	3
+466	hoenn-route-118	3
+467	hoenn-route-119	3
+468	hoenn-route-120	3
+469	hoenn-route-121	3
+470	hoenn-route-122	3
+471	hoenn-route-123	3
+472	hoenn-route-124	3
+473	hoenn-route-125	3
+474	hoenn-route-126	3
+475	hoenn-route-127	3
+476	hoenn-route-128	3
+477	hoenn-route-129	3
+478	hoenn-route-130	3
+479	hoenn-route-131	3
+480	hoenn-route-132	3
+481	hoenn-route-133	3
+482	hoenn-route-134	3
+483	hoenn-safari-zone	3
+484	dewford-town	3
+485	pacifidlog-town	3
+486	magma-hideout	3
+487	mirage-tower	3
+488	desert-underpass	3
+489	artisan-cave	3
+490	hoenn-altering-cave	3
+567	littleroot-town	3
+568	oldale-town	3
+569	lavaridge-town	3
+570	fallarbor-town	3
+571	verdanturf-town	3
+572	mauville-city	3
+573	rustboro-city	3
+574	fortree-city	3
+575	underwater	3
+576	mt-chimney	3
+577	mirage-island	3
+578	southern-island	3
+579	sealed-chamber	3
+580	scorched-slab	3
+581	island-cave	3
+582	desert-ruins	3
+583	ancient-tomb	3
+584	inside-of-truck	3
+585	secret-base	3
+586	hoenn-battle-tower	3
+691	hoenn-pokemon-league	3
+692	team-aqua-hideout	3
+693	sea-mauville	3
+694	team-magma-hideout	3
+695	battle-resort	3
+696	ss-tidal	3
+697	mirage-forest	3
+698	mirage-cave	3
+699	mirage-mountain	3
+700	trackless-forest	3
+701	pathless-plain	3
+496	rixy-chamber	1
+497	viapos-chamber	1
+500	mt-ember	1
+501	berry-forest	1
+502	icefall-cave	1
+503	pattern-bush	1
+504	lost-cave	1
+505	kindle-road	1
+506	treasure-beach	1
+507	cape-brink	1
+508	bond-bridge	1
+509	three-isle-port	1
+510	resort-gorgeous	1
+511	water-labyrinth	1
+512	five-isle-meadow	1
+513	memorial-pillar	1
+514	outcast-island	1
+515	green-path	1
+516	water-path	1
+517	ruin-valley	1
+518	trainer-tower	1
+519	canyon-entrance	1
+520	sevault-canyon	1
+521	tanoby-ruins	1
+526	one-island	1
+527	four-island	1
+528	five-island	1
+529	kanto-altering-cave	1
+799	roaming-kanto	1
+805	two-island	1
+806	three-island	1
+807	three-isle-path	1
+808	six-island	1
+809	seven-island	1
+810	birth-island	1
+811	navel-rock	1
+1	canalave-city	4
+2	eterna-city	4
+3	pastoria-city	4
+4	sunyshore-city	4
+5	sinnoh-pokemon-league	4
+6	oreburgh-mine	4
+7	valley-windworks	4
+8	eterna-forest	4
+9	fuego-ironworks	4
+10	mt-coronet	4
+11	great-marsh	4
+12	solaceon-ruins	4
+13	sinnoh-victory-road	4
+14	ravaged-path	4
+15	oreburgh-gate	4
+16	stark-mountain	4
+17	spring-path	4
+18	turnback-cave	4
+19	snowpoint-temple	4
+20	wayward-cave	4
+22	ruin-maniac-cave	4
+23	trophy-garden	4
+24	iron-island	4
+25	old-chateau	4
+65	blackthorn-city	2
+66	burned-tower	2
+69	cherrygrove-city	2
+70	cianwood-city	2
+72	dark-cave	2
+74	dragons-den	2
+75	ecruteak-city	2
+77	ice-path	2
+78	ilex-forest	2
+79	lake-of-rage	2
+81	mt-mortar	2
+82	mt-silver	2
+83	national-park	2
+84	new-bark-town	2
+252	radio-tower	2
+812	faraway-island	3
+26	lake-verity	4
+27	lake-valor	4
+28	lake-acuity	4
+29	valor-lakefront	4
+30	acuity-lakefront	4
+31	sinnoh-route-201	4
+32	sinnoh-route-202	4
+33	sinnoh-route-203	4
+34	sinnoh-route-204	4
+35	sinnoh-route-205	4
+36	sinnoh-route-206	4
+37	sinnoh-route-207	4
+38	sinnoh-route-208	4
+40	lost-tower	4
+917	max-lair	8
+918	motostoke	8
+919	motostoke-outskirts	8
+920	motostoke-riverbank	8
+921	north-lake-miloch	8
+922	old-cemetary	8
+923	path-to-the-peak	8
+924	postwick	8
+925	potbottom-desert	8
+926	roaring-sea-caves	8
+927	galar-rock-peak-ruins	8
 1034	veilstone-cape	9
 1035	hisui-wayward-cave	9
 1036	wayward-wood	9
@@ -5798,28 +5822,29 @@ COPY public.locations (id, name, region_id) FROM stdin;
 -- Data for Name: move_types; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.move_types (id, name, double_damage_to, half_damage_to, no_damage_to, double_damage_from, half_damage_from, no_damage_from, img_url) FROM stdin;
-5	ground	{4,6,9,10,13}	{7,12}	{3}	{11,12,15}	{4,6}	{13}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/5.png
-9	steel	{6,15,18}	{9,10,11,13}	\N	{2,5,10}	{1,3,6,7,9,12,14,15,16,18}	{4}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/9.png
-1	normal	\N	{6,9}	{8}	{2}	\N	{8}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png
-6	rock	{3,7,10,15}	{2,5,9}	\N	{2,5,9,11,12}	{1,3,4,10}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/6.png
-10	fire	{7,9,12,15}	{6,10,11,16}	\N	{5,6,11}	{7,9,10,12,15,18}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/10.png
-2	fighting	{1,6,9,15,17}	{3,4,7,14,18}	{8}	{3,14,18}	{6,7,17}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/2.png
-7	bug	{12,14,17}	{2,3,4,8,9,10,18}	\N	{3,6,10}	{2,5,12}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png
-3	flying	{2,7,12}	{6,9,13}	\N	{6,13,15}	{2,7,12}	{5}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png
-8	ghost	{8,14}	{17}	{1}	{8,17}	{4,7}	{1,2}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/8.png
+COPY public.move_types (id, name, double_damage_to, half_damage_to, no_damage_to, double_damage_from, half_damage_from,
+                        no_damage_from, img_url) FROM stdin;
 4	poison	{12,18}	{4,5,6,8}	{9}	{5,14}	{2,4,7,12,18}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png
+5	ground	{4,6,9,10,13}	{7,12}	{3}	{11,12,15}	{4,6}	{13}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/5.png
 19	stellar	\N	\N	\N	\N	\N	\N	
+1	normal	\N	{6,9}	{8}	{2}	\N	{8}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png
+2	fighting	{1,6,9,15,17}	{3,4,7,14,18}	{8}	{3,14,18}	{6,7,17}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/2.png
+3	flying	{2,7,12}	{6,9,13}	\N	{6,13,15}	{2,7,12}	{5}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png
+17	dark	{8,14}	{2,17,18}	\N	{2,7,18}	{8,17}	{14}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png
+10	fire	{7,9,12,15}	{6,10,11,16}	\N	{5,6,11}	{7,9,10,12,15,18}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/10.png
+6	rock	{3,7,10,15}	{2,5,9}	\N	{2,5,9,11,12}	{1,3,4,10}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/6.png
+14	psychic	{2,4}	{9,14}	{17}	{7,8,17}	{2,14}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/14.png
+7	bug	{12,14,17}	{2,3,4,8,9,10,18}	\N	{3,6,10}	{2,5,12}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png
+11	water	{5,6,10}	{11,12,16}	\N	{12,13}	{9,10,11,15}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/11.png
+15	ice	{3,5,12,16}	{9,10,11,15}	\N	{2,6,9,10}	{15}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/15.png
+12	grass	{5,6,11}	{3,4,7,9,10,12,16}	\N	{3,4,7,10,15}	{5,11,12,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/12.png
+18	fairy	{2,16,17}	{4,9,10}	\N	{4,9}	{2,7,17}	{16}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/18.png
+16	dragon	{16}	{9}	{18}	{15,16,18}	{10,11,12,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/16.png
+8	ghost	{8,14}	{17}	{1}	{8,17}	{4,7}	{1,2}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/8.png
+13	electric	{3,11}	{12,13,16}	{5}	{5}	{3,9,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/13.png
+9	steel	{6,15,18}	{9,10,11,13}	\N	{2,5,10}	{1,3,6,7,9,12,14,15,16,18}	{4}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/9.png
 10001	unknown	\N	\N	\N	\N	\N	\N	
 10002	shadow	\N	\N	\N	\N	\N	\N	
-16	dragon	{16}	{9}	{18}	{15,16,18}	{10,11,12,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/16.png
-11	water	{5,6,10}	{11,12,16}	\N	{12,13}	{9,10,11,15}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/11.png
-12	grass	{5,6,11}	{3,4,7,9,10,12,16}	\N	{3,4,7,10,15}	{5,11,12,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/12.png
-17	dark	{8,14}	{2,17,18}	\N	{2,7,18}	{8,17}	{14}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png
-13	electric	{3,11}	{12,13,16}	{5}	{5}	{3,9,13}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/13.png
-18	fairy	{2,16,17}	{4,9,10}	\N	{4,9}	{2,7,17}	{16}	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/18.png
-14	psychic	{2,4}	{9,14}	{17}	{7,8,17}	{2,14}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/14.png
-15	ice	{3,5,12,16}	{9,10,11,15}	\N	{2,6,9,10}	{15}	\N	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/15.png
 \.
 
 
@@ -5869,6 +5894,13 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 39	tail-whip	100	30	0	0	1
 40	poison-sting	100	35	0	15	4
 41	twineedle	100	20	0	25	7
+123	smog	70	20	0	30	4
+124	sludge	100	20	0	65	4
+125	bone-club	85	20	0	65	5
+126	fire-blast	85	5	0	110	10
+127	waterfall	100	15	0	80	11
+128	clamp	85	15	0	35	11
+129	swift	0	20	0	60	1
 42	pin-missile	95	20	0	25	7
 43	leer	100	30	0	0	1
 44	bite	100	25	0	60	17
@@ -5886,77 +5918,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 56	hydro-pump	80	5	0	110	11
 57	surf	100	15	0	90	11
 58	ice-beam	100	10	0	90	15
-59	blizzard	70	5	0	110	15
-60	psybeam	100	20	0	65	14
-61	bubble-beam	100	20	0	65	11
-62	aurora-beam	100	20	0	65	15
-63	hyper-beam	90	5	0	150	1
-64	peck	100	35	0	35	3
-65	drill-peck	100	20	0	80	3
-66	submission	80	20	0	80	2
-67	low-kick	100	20	0	0	2
-68	counter	100	20	-5	0	2
-69	seismic-toss	100	20	0	0	2
-70	strength	100	15	0	80	1
-71	absorb	100	25	0	20	12
-72	mega-drain	100	15	0	40	12
-73	leech-seed	90	10	0	0	12
-74	growth	0	20	0	0	1
-75	razor-leaf	95	25	0	55	12
-76	solar-beam	100	10	0	120	12
-77	poison-powder	75	35	0	0	4
-78	stun-spore	75	30	0	0	12
-79	sleep-powder	75	15	0	0	12
-80	petal-dance	100	10	0	120	12
-81	string-shot	95	40	0	0	7
-82	dragon-rage	100	10	0	0	16
-83	fire-spin	85	15	0	35	10
-84	thunder-shock	100	30	0	40	13
-85	thunderbolt	100	15	0	90	13
-86	thunder-wave	90	20	0	0	13
-87	thunder	70	10	0	110	13
-88	rock-throw	90	15	0	50	6
-89	earthquake	100	10	0	100	5
-90	fissure	30	5	0	0	5
-91	dig	100	10	0	80	5
-92	toxic	90	10	0	0	4
-93	confusion	100	25	0	50	14
-94	psychic	100	10	0	90	14
-95	hypnosis	60	20	0	0	14
-96	meditate	0	40	0	0	14
-97	agility	0	30	0	0	14
-98	quick-attack	100	30	1	40	1
-99	rage	100	20	0	20	1
-100	teleport	0	20	-6	0	14
-101	night-shade	100	15	0	0	8
-102	mimic	0	10	0	0	1
-103	screech	85	40	0	0	1
-104	double-team	0	15	0	0	1
-105	recover	0	5	0	0	1
-106	harden	0	30	0	0	1
-107	minimize	0	10	0	0	1
-108	smokescreen	100	20	0	0	1
-109	confuse-ray	100	10	0	0	8
-110	withdraw	0	40	0	0	11
-111	defense-curl	0	40	0	0	1
-112	barrier	0	20	0	0	14
-113	light-screen	0	30	0	0	14
-114	haze	0	30	0	0	15
-115	reflect	0	20	0	0	14
-116	focus-energy	0	30	0	0	1
-117	bide	0	10	1	0	1
-118	metronome	0	10	0	0	1
-119	mirror-move	0	20	0	0	3
-120	self-destruct	100	5	0	200	1
-121	egg-bomb	75	10	0	100	1
-122	lick	100	30	0	30	8
-123	smog	70	20	0	30	4
-124	sludge	100	20	0	65	4
-125	bone-club	85	20	0	65	5
-126	fire-blast	85	5	0	110	10
-127	waterfall	100	15	0	80	11
-128	clamp	85	15	0	35	11
-129	swift	0	20	0	60	1
 130	skull-bash	100	10	0	130	1
 131	spike-cannon	100	15	0	20	1
 132	constrict	100	35	0	10	1
@@ -6284,6 +6245,7 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 454	attack-order	100	15	0	90	7
 455	defend-order	0	10	0	0	7
 456	heal-order	0	10	0	0	7
+88	rock-throw	90	15	0	50	6
 457	head-smash	80	5	0	150	6
 458	double-hit	90	10	0	35	1
 459	roar-of-time	90	5	0	150	16
@@ -6366,7 +6328,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 536	leaf-tornado	90	10	0	65	12
 537	steamroller	100	20	0	65	7
 538	cotton-guard	0	10	0	0	12
-539	night-daze	95	10	0	85	17
 540	psystrike	100	10	0	100	14
 541	tail-slap	85	10	0	25	1
 542	hurricane	70	10	0	110	3
@@ -6398,7 +6359,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 568	noble-roar	100	30	0	0	1
 569	ion-deluge	0	25	1	0	13
 570	parabolic-charge	100	20	0	65	13
-571	forests-curse	100	20	0	0	12
 572	petal-blizzard	100	15	0	90	12
 573	freeze-dry	100	20	0	70	15
 574	disarming-voice	0	15	0	40	18
@@ -6512,7 +6472,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 682	burn-up	100	5	0	130	10
 683	speed-swap	0	10	0	0	14
 684	smart-strike	0	10	0	70	9
-685	purify	0	20	0	0	4
 686	revelation-dance	100	15	0	90	1
 687	core-enforcer	100	10	0	100	16
 688	trop-kick	100	15	0	70	12
@@ -6545,6 +6504,7 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 715	tearful-look	0	20	0	0	1
 716	zing-zap	100	10	0	80	13
 717	natures-madness	90	10	0	0	18
+685	purify	0	20	0	0	4
 718	multi-attack	100	10	0	120	1
 719	10-000-000-volt-thunderbolt	0	1	0	195	13
 720	mind-blown	100	5	0	150	10
@@ -6579,7 +6539,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 749	tar-shot	100	15	0	0	6
 750	magic-powder	100	20	0	0	14
 751	dragon-darts	100	10	0	50	16
-752	teatime	0	10	0	0	1
 753	octolock	100	15	0	0	2
 754	bolt-beak	100	10	0	85	13
 755	fishious-rend	100	10	0	85	11
@@ -6631,6 +6590,8 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 801	shell-side-arm	100	10	0	90	4
 802	misty-explosion	100	5	0	100	18
 803	grassy-glide	100	20	0	55	12
+121	egg-bomb	75	10	0	100	1
+122	lick	100	30	0	30	8
 804	rising-voltage	100	20	0	70	13
 805	terrain-pulse	100	10	0	50	1
 806	skitter-smack	90	10	0	70	7
@@ -6685,6 +6646,96 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 855	lumina-crash	100	10	0	80	14
 856	order-up	100	10	0	80	16
 857	jet-punch	100	15	1	60	11
+888	twin-beam	100	10	0	40	14
+889	rage-fist	100	10	0	50	8
+890	armor-cannon	100	5	0	120	10
+891	bitter-blade	100	10	0	90	10
+892	double-shock	100	5	0	120	13
+893	gigaton-hammer	100	5	0	160	9
+894	comeuppance	100	10	0	1	17
+895	aqua-cutter	100	20	0	70	11
+896	blazing-torque	100	10	0	80	10
+897	wicked-torque	100	10	0	80	17
+898	noxious-torque	100	10	0	100	4
+899	combat-torque	100	10	0	100	2
+900	magical-torque	100	10	0	100	18
+901	blood-moon	100	5	0	140	1
+902	matcha-gotcha	90	15	0	80	12
+903	syrup-bomb	85	10	0	60	12
+904	ivy-cudgel	100	10	0	100	12
+905	electro-shot	100	10	0	130	13
+906	tera-starstorm	100	5	0	120	1
+907	fickle-beam	100	5	0	80	16
+908	burning-bulwark	0	10	4	0	10
+909	thunderclap	100	5	1	70	13
+910	mighty-cleave	100	5	0	95	6
+911	tachyon-cutter	0	10	0	50	9
+912	hard-press	100	10	0	0	9
+913	dragon-cheer	0	15	0	0	16
+89	earthquake	100	10	0	100	5
+90	fissure	30	5	0	0	5
+91	dig	100	10	0	80	5
+92	toxic	90	10	0	0	4
+93	confusion	100	25	0	50	14
+94	psychic	100	10	0	90	14
+95	hypnosis	60	20	0	0	14
+96	meditate	0	40	0	0	14
+97	agility	0	30	0	0	14
+98	quick-attack	100	30	1	40	1
+99	rage	100	20	0	20	1
+100	teleport	0	20	-6	0	14
+101	night-shade	100	15	0	0	8
+102	mimic	0	10	0	0	1
+103	screech	85	40	0	0	1
+104	double-team	0	15	0	0	1
+105	recover	0	5	0	0	1
+106	harden	0	30	0	0	1
+107	minimize	0	10	0	0	1
+108	smokescreen	100	20	0	0	1
+109	confuse-ray	100	10	0	0	8
+110	withdraw	0	40	0	0	11
+111	defense-curl	0	40	0	0	1
+112	barrier	0	20	0	0	14
+113	light-screen	0	30	0	0	14
+114	haze	0	30	0	0	15
+115	reflect	0	20	0	0	14
+116	focus-energy	0	30	0	0	1
+117	bide	0	10	1	0	1
+118	metronome	0	10	0	0	1
+119	mirror-move	0	20	0	0	3
+120	self-destruct	100	5	0	200	1
+59	blizzard	70	5	0	110	15
+60	psybeam	100	20	0	65	14
+61	bubble-beam	100	20	0	65	11
+62	aurora-beam	100	20	0	65	15
+63	hyper-beam	90	5	0	150	1
+64	peck	100	35	0	35	3
+65	drill-peck	100	20	0	80	3
+66	submission	80	20	0	80	2
+67	low-kick	100	20	0	0	2
+68	counter	100	20	-5	0	2
+69	seismic-toss	100	20	0	0	2
+70	strength	100	15	0	80	1
+71	absorb	100	25	0	20	12
+72	mega-drain	100	15	0	40	12
+73	leech-seed	90	10	0	0	12
+74	growth	0	20	0	0	1
+75	razor-leaf	95	25	0	55	12
+76	solar-beam	100	10	0	120	12
+77	poison-powder	75	35	0	0	4
+78	stun-spore	75	30	0	0	12
+79	sleep-powder	75	15	0	0	12
+80	petal-dance	100	10	0	120	12
+81	string-shot	95	40	0	0	7
+82	dragon-rage	100	10	0	0	16
+83	fire-spin	85	15	0	35	10
+84	thunder-shock	100	30	0	40	13
+85	thunderbolt	100	15	0	90	13
+86	thunder-wave	90	20	0	0	13
+87	thunder	70	10	0	110	13
+539	night-daze	95	10	0	85	17
+571	forests-curse	100	20	0	0	12
+752	teatime	0	10	0	0	1
 858	spicy-extract	0	15	0	0	12
 859	spin-out	100	5	0	100	9
 860	population-bomb	90	10	0	20	1
@@ -6715,32 +6766,6 @@ COPY public.moves (id, name, accuracy, pp, priority, power, move_type_id) FROM s
 885	trailblaze	100	20	0	50	12
 886	chilling-water	100	20	0	50	11
 887	hyper-drill	100	5	0	100	1
-888	twin-beam	100	10	0	40	14
-889	rage-fist	100	10	0	50	8
-890	armor-cannon	100	5	0	120	10
-891	bitter-blade	100	10	0	90	10
-892	double-shock	100	5	0	120	13
-893	gigaton-hammer	100	5	0	160	9
-894	comeuppance	100	10	0	1	17
-895	aqua-cutter	100	20	0	70	11
-896	blazing-torque	100	10	0	80	10
-897	wicked-torque	100	10	0	80	17
-898	noxious-torque	100	10	0	100	4
-899	combat-torque	100	10	0	100	2
-900	magical-torque	100	10	0	100	18
-901	blood-moon	100	5	0	140	1
-902	matcha-gotcha	90	15	0	80	12
-903	syrup-bomb	85	10	0	60	12
-904	ivy-cudgel	100	10	0	100	12
-905	electro-shot	100	10	0	130	13
-906	tera-starstorm	100	5	0	120	1
-907	fickle-beam	100	5	0	80	16
-908	burning-bulwark	0	10	4	0	10
-909	thunderclap	100	5	1	70	13
-910	mighty-cleave	100	5	0	95	6
-911	tachyon-cutter	0	10	0	50	9
-912	hard-press	100	10	0	0	9
-913	dragon-cheer	0	15	0	0	16
 914	alluring-voice	100	10	0	80	18
 915	temper-flare	100	10	0	75	10
 916	supercell-slam	95	15	0	100	13
@@ -6777,6 +6802,726 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 1	36
 1	39
 1	40
+3	35
+3	36
+3	39
+3	40
+5	4
+5	5
+5	6
+5	7
+5	8
+5	9
+5	25
+5	26
+5	31
+5	34
+5	35
+5	36
+5	39
+5	40
+5	10094
+5	10095
+5	10096
+5	10097
+5	10098
+5	10099
+5	10100
+5	10148
+5	10160
+6	25
+6	26
+6	31
+6	34
+6	10094
+6	10095
+6	10096
+6	10097
+6	10098
+6	10099
+6	10100
+6	10148
+6	10158
+6	10160
+7	4
+7	5
+7	6
+7	31
+7	34
+7	35
+7	36
+7	39
+7	40
+7	10034
+7	10035
+8	7
+8	8
+8	9
+8	31
+8	34
+8	35
+8	36
+8	39
+8	40
+8	10036
+8	10101
+8	10102
+9	4
+9	5
+9	6
+9	25
+9	26
+9	31
+9	34
+9	35
+9	36
+9	39
+9	40
+9	10034
+9	10035
+9	10080
+9	10081
+9	10082
+9	10083
+9	10084
+9	10085
+9	10094
+9	10095
+9	10096
+9	10097
+9	10098
+9	10099
+9	10100
+9	10148
+9	10158
+9	10160
+10	4
+10	5
+10	6
+10	27
+10	28
+10	29
+10	30
+10	31
+10	46
+10	47
+10	50
+10	10034
+10	10035
+10	10101
+10	10102
+10	10105
+13	1
+13	12
+13	16
+13	17
+13	18
+13	21
+13	22
+13	41
+13	42
+13	49
+13	10073
+14	1
+14	2
+14	3
+14	4
+14	5
+14	6
+14	15
+14	20
+14	27
+14	28
+14	43
+14	44
+14	45
+14	46
+14	47
+14	50
+14	10033
+14	10034
+14	10035
+14	10090
+14	10092
+14	10093
+14	10101
+14	10102
+14	10105
+15	1
+15	2
+15	3
+15	4
+15	5
+15	6
+15	15
+15	19
+15	20
+15	27
+15	28
+15	29
+15	30
+15	31
+15	32
+15	33
+15	34
+15	43
+15	44
+15	45
+15	46
+15	47
+15	50
+15	10033
+15	10034
+15	10035
+15	10090
+16	12
+16	16
+16	17
+16	18
+16	41
+16	42
+16	49
+16	10073
+17	4
+17	6
+17	16
+17	17
+17	18
+17	21
+17	22
+17	41
+17	42
+17	10034
+17	10035
+17	10073
+18	12
+18	16
+18	17
+18	18
+18	21
+18	22
+18	41
+18	42
+18	49
+18	10073
+19	6
+19	16
+19	17
+19	18
+19	21
+19	22
+19	41
+19	42
+19	10034
+19	10035
+19	10073
+20	1
+20	2
+20	3
+20	23
+20	24
+20	10033
+21	23
+21	24
+21	25
+21	26
+21	10080
+21	10081
+21	10082
+21	10083
+21	10084
+21	10085
+21	10094
+21	10095
+21	10096
+21	10097
+21	10098
+21	10099
+21	10100
+21	10148
+21	10158
+21	10160
+22	1
+22	2
+22	3
+22	10033
+24	25
+24	29
+24	30
+24	31
+24	32
+24	33
+24	34
+24	10158
+25	4
+25	5
+25	6
+25	7
+25	8
+25	9
+25	25
+25	26
+25	31
+25	34
+25	35
+25	36
+25	39
+25	40
+25	10094
+25	10095
+25	10096
+25	10097
+25	10098
+25	10099
+25	10100
+25	10148
+25	10160
+28	16
+28	17
+28	18
+28	27
+28	28
+28	50
+28	10073
+28	10105
+29	1
+29	2
+29	3
+29	4
+29	5
+29	6
+29	7
+29	8
+29	9
+29	12
+29	15
+29	16
+29	17
+29	18
+29	19
+29	20
+29	21
+29	22
+29	23
+29	24
+29	25
+29	26
+29	27
+29	28
+29	29
+29	30
+29	31
+29	32
+29	33
+29	34
+29	35
+29	36
+29	37
+29	38
+29	39
+29	40
+29	41
+29	42
+29	43
+29	44
+29	45
+29	46
+29	47
+29	48
+29	49
+29	50
+29	10033
+29	10034
+29	10035
+29	10036
+29	10073
+29	10090
+29	10091
+29	10092
+29	10100
+29	10101
+29	10102
+29	10103
+29	10104
+29	10105
+29	10158
+30	32
+30	33
+30	34
+31	15
+31	21
+31	22
+31	32
+31	33
+31	34
+31	10090
+32	30
+32	31
+32	32
+32	33
+32	34
+33	1
+33	2
+33	3
+33	7
+33	8
+33	9
+33	10
+33	12
+33	16
+33	17
+33	18
+33	19
+33	20
+33	29
+33	30
+33	31
+33	32
+33	33
+33	34
+33	35
+33	36
+33	37
+33	38
+33	48
+33	49
+33	10033
+33	10036
+33	10073
+33	10091
+33	10092
+33	10093
+33	10103
+33	10104
+34	1
+34	2
+34	3
+34	4
+34	5
+34	6
+34	7
+34	8
+34	9
+34	19
+34	20
+34	23
+34	24
+34	25
+34	26
+34	27
+34	28
+34	29
+34	30
+34	31
+34	32
+34	33
+34	34
+34	35
+34	36
+34	37
+34	38
+34	39
+34	40
+34	45
+34	46
+34	47
+34	50
+34	10094
+34	10095
+34	10096
+34	10097
+34	10098
+34	10099
+34	10100
+34	10101
+34	10102
+34	10103
+34	10104
+34	10105
+34	10148
+34	10160
+35	23
+35	24
+36	1
+36	2
+36	3
+36	4
+36	5
+36	6
+36	7
+36	8
+36	9
+36	12
+36	15
+36	16
+36	17
+36	18
+36	19
+36	20
+36	21
+36	22
+36	23
+36	24
+36	25
+36	26
+36	27
+36	28
+36	29
+36	30
+36	31
+36	32
+36	33
+36	34
+36	35
+36	36
+36	37
+36	38
+36	39
+36	40
+36	41
+36	42
+36	43
+36	44
+36	45
+36	46
+36	47
+36	48
+36	49
+36	50
+36	10033
+36	10094
+36	10095
+36	10096
+36	10097
+36	10098
+36	10099
+36	10100
+36	10101
+36	10102
+36	10103
+36	10104
+36	10105
+36	10148
+36	10160
+37	32
+37	34
+37	10105
+38	1
+38	2
+38	3
+38	4
+38	5
+38	6
+38	7
+38	8
+38	9
+38	12
+38	15
+38	16
+38	17
+38	18
+38	19
+38	20
+38	21
+38	22
+38	23
+38	24
+38	25
+38	26
+38	27
+38	28
+38	29
+38	30
+38	31
+38	32
+38	33
+38	34
+38	35
+38	36
+38	37
+38	38
+38	39
+38	40
+38	41
+38	42
+38	43
+38	44
+38	45
+38	46
+38	47
+38	48
+38	49
+38	50
+38	10033
+38	10091
+38	10092
+38	10093
+38	10101
+38	10102
+38	10103
+38	10104
+39	7
+39	8
+39	9
+39	19
+39	20
+39	25
+39	26
+39	29
+39	30
+39	31
+39	37
+39	38
+39	10036
+39	10080
+39	10081
+39	10082
+39	10083
+39	10084
+39	10085
+39	10091
+39	10092
+39	10093
+39	10094
+39	10095
+39	10096
+39	10097
+39	10098
+39	10099
+39	10100
+39	10103
+39	10104
+39	10148
+39	10158
+39	10160
+40	13
+40	15
+40	23
+40	24
+40	27
+40	28
+40	29
+40	30
+40	31
+40	32
+40	33
+40	34
+41	15
+41	10090
+42	15
+42	28
+42	10090
+42	10102
+43	4
+43	5
+43	6
+43	21
+43	22
+43	23
+43	24
+43	32
+43	33
+43	34
+44	4
+44	5
+44	6
+44	7
+44	8
+44	9
+44	19
+44	20
+44	23
+44	24
+44	29
+44	30
+44	31
+44	41
+44	42
+44	10036
+44	10091
+44	10092
+44	10093
+45	1
+45	2
+45	3
+45	4
+45	5
+45	6
+45	21
+45	22
+45	25
+45	26
+45	29
+45	30
+45	31
+45	35
+45	36
+45	50
+45	10033
+45	10034
+45	10035
+45	10080
+45	10081
+45	10082
+45	10083
+45	10084
+45	10085
+45	10094
+45	10095
+45	10096
+45	10097
+45	10098
+45	10099
+45	10100
+45	10105
+45	10148
+45	10158
+45	10160
+46	2
+46	3
+46	4
+46	5
+46	6
+46	9
+46	20
+46	31
+46	34
+46	37
+46	38
+46	10033
+46	10034
+46	10035
+46	10036
+46	10092
+46	10093
+46	10103
+46	10104
+47	35
+47	36
+47	39
+47	40
+48	12
+48	29
+48	31
+48	32
+48	34
+48	41
+48	42
+48	48
+48	49
+48	10098
+50	23
+50	29
+50	32
+50	37
+50	38
+50	39
+50	40
+50	48
+50	49
+50	10098
+50	10103
+50	10104
 1	60
 1	61
 1	62
@@ -6886,10 +7631,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 2	674
 2	675
 2	701
-3	35
-3	36
-3	39
-3	40
 3	60
 3	61
 3	62
@@ -6938,20 +7679,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 4	675
 4	794
 4	10039
-5	4
-5	5
-5	6
-5	7
-5	8
-5	9
-5	25
-5	26
-5	31
-5	34
-5	35
-5	36
-5	39
-5	40
 5	54
 5	55
 5	56
@@ -7148,18 +7875,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 5	10003
 5	10017
 5	10039
-5	10094
-5	10095
-5	10096
-5	10097
-5	10098
-5	10099
-5	10100
 5	10111
 5	10115
 5	10126
-5	10148
-5	10160
 5	10165
 5	10168
 5	10172
@@ -7169,10 +7887,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 5	10184
 5	10191
 5	10192
-6	25
-6	26
-6	31
-6	34
 6	52
 6	53
 6	54
@@ -7216,19 +7930,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 6	10043
 6	10044
 6	10071
-6	10094
-6	10095
-6	10096
-6	10097
-6	10098
-6	10099
-6	10100
 6	10107
 6	10108
-6	10148
-6	10158
 6	10159
-6	10160
 6	10161
 6	10163
 6	10164
@@ -7237,15 +7941,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 6	10186
 6	10193
 6	10194
-7	4
-7	5
-7	6
-7	31
-7	34
-7	35
-7	36
-7	39
-7	40
 7	56
 7	57
 7	63
@@ -7408,8 +8103,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 7	10003
 7	10017
 7	10018
-7	10034
-7	10035
 7	10037
 7	10038
 7	10039
@@ -7446,15 +8139,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 7	10233
 7	10242
 7	10272
-8	7
-8	8
-8	9
-8	31
-8	34
-8	35
-8	36
-8	39
-8	40
 8	54
 8	55
 8	56
@@ -7634,7 +8318,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 8	10002
 8	10003
 8	10018
-8	10036
 8	10037
 8	10038
 8	10039
@@ -7655,8 +8338,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 8	10076
 8	10086
 8	10088
-8	10101
-8	10102
 8	10112
 8	10113
 8	10116
@@ -7673,17 +8354,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 8	10191
 8	10256
 8	10272
-9	4
-9	5
-9	6
-9	25
-9	26
-9	31
-9	34
-9	35
-9	36
-9	39
-9	40
 9	56
 9	57
 9	63
@@ -7881,8 +8551,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 9	10003
 9	10018
 9	10020
-9	10034
-9	10035
 9	10037
 9	10038
 9	10039
@@ -7902,21 +8570,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 9	10069
 9	10076
 9	10078
-9	10080
-9	10081
-9	10082
-9	10083
-9	10084
-9	10085
 9	10086
 9	10088
-9	10094
-9	10095
-9	10096
-9	10097
-9	10098
-9	10099
-9	10100
 9	10109
 9	10110
 9	10111
@@ -7926,10 +8581,7 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 9	10121
 9	10126
 9	10146
-9	10148
 9	10149
-9	10158
-9	10160
 9	10172
 9	10184
 9	10187
@@ -7937,17 +8589,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 9	10233
 9	10242
 9	10272
-10	4
-10	5
-10	6
-10	27
-10	28
-10	29
-10	30
-10	31
-10	46
-10	47
-10	50
 10	51
 10	52
 10	53
@@ -8038,14 +8679,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 10	983
 10	1015
 10	10025
-10	10034
-10	10035
 10	10050
 10	10057
 10	10066
-10	10101
-10	10102
-10	10105
 10	10106
 10	10107
 10	10108
@@ -8096,16 +8732,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 12	983
 12	10040
 12	10122
-13	1
-13	12
-13	16
-13	17
-13	18
-13	21
-13	22
-13	41
-13	42
-13	49
 13	83
 13	116
 13	123
@@ -8146,23 +8772,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 13	780
 13	10046
 13	10057
-13	10073
-14	1
-14	2
-14	3
-14	4
-14	5
-14	6
-14	15
-14	20
-14	27
-14	28
-14	43
-14	44
-14	45
-14	46
-14	47
-14	50
 14	51
 14	69
 14	70
@@ -8430,9 +9039,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 14	10021
 14	10024
 14	10026
-14	10033
-14	10034
-14	10035
 14	10040
 14	10046
 14	10047
@@ -8446,12 +9052,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 14	10068
 14	10078
 14	10079
-14	10090
-14	10092
-14	10093
-14	10101
-14	10102
-14	10105
 14	10106
 14	10114
 14	10115
@@ -8496,29 +9096,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 14	10273
 14	10274
 14	10275
-15	1
-15	2
-15	3
-15	4
-15	5
-15	6
-15	15
-15	19
-15	20
-15	27
-15	28
-15	29
-15	30
-15	31
-15	32
-15	33
-15	34
-15	43
-15	44
-15	45
-15	46
-15	47
-15	50
 15	51
 15	52
 15	53
@@ -8765,9 +9342,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 15	10024
 15	10025
 15	10026
-15	10033
-15	10034
-15	10035
 15	10039
 15	10040
 15	10046
@@ -8787,14 +9361,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 15	10078
 15	10088
 15	10089
-15	10090
-16	12
-16	16
-16	17
-16	18
-16	41
-16	42
-16	49
 16	83
 16	144
 16	146
@@ -8851,19 +9417,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 16	10004
 16	10005
 16	10019
-16	10073
 16	10169
 16	10171
 16	10244
-17	4
-17	6
-17	16
-17	17
-17	18
-17	21
-17	22
-17	41
-17	42
 17	84
 17	85
 17	123
@@ -8906,21 +9462,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 17	962
 17	973
 17	1016
-17	10034
-17	10035
 17	10042
-17	10073
 17	10171
 17	10240
-18	12
-18	16
-18	17
-18	18
-18	21
-18	22
-18	41
-18	42
-18	49
 18	83
 18	84
 18	85
@@ -8972,16 +9516,7 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 18	994
 18	1003
 18	10042
-18	10073
 18	10240
-19	6
-19	16
-19	17
-19	18
-19	21
-19	22
-19	41
-19	42
 19	83
 19	84
 19	85
@@ -9086,13 +9621,10 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 19	10021
 19	10022
 19	10023
-19	10034
-19	10035
 19	10042
 19	10062
 19	10063
 19	10067
-19	10073
 19	10079
 19	10089
 19	10123
@@ -9109,11 +9641,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 19	10260
 19	10261
 19	10262
-20	1
-20	2
-20	3
-20	23
-20	24
 20	69
 20	70
 20	71
@@ -9184,7 +9711,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 20	10001
 20	10002
 20	10003
-20	10033
 20	10040
 20	10041
 20	10072
@@ -9195,10 +9721,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 20	10180
 20	10181
 20	10192
-21	23
-21	24
-21	25
-21	26
 21	69
 21	70
 21	71
@@ -9282,31 +9804,12 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 21	10052
 21	10065
 21	10072
-21	10080
-21	10081
-21	10082
-21	10083
-21	10084
-21	10085
-21	10094
-21	10095
-21	10096
-21	10097
-21	10098
-21	10099
-21	10100
-21	10148
-21	10158
-21	10160
 21	10166
 21	10179
 21	10253
 21	10273
 21	10274
 21	10275
-22	1
-22	2
-22	3
 22	69
 22	70
 22	71
@@ -9330,7 +9833,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 22	764
 22	893
 22	1017
-22	10033
 22	10061
 22	10192
 22	10273
@@ -9407,13 +9909,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 23	10164
 23	10193
 23	10194
-24	25
-24	29
-24	30
-24	31
-24	32
-24	33
-24	34
 24	58
 24	77
 24	78
@@ -9474,7 +9969,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 24	1020
 24	10024
 24	10050
-24	10158
 24	10159
 24	10162
 24	10168
@@ -9488,20 +9982,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 24	10273
 24	10274
 24	10275
-25	4
-25	5
-25	6
-25	7
-25	8
-25	9
-25	25
-25	26
-25	31
-25	34
-25	35
-25	36
-25	39
-25	40
 25	54
 25	55
 25	56
@@ -9702,17 +10182,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 25	10002
 25	10003
 25	10017
-25	10094
-25	10095
-25	10096
-25	10097
-25	10098
-25	10099
-25	10100
 25	10115
 25	10126
-25	10148
-25	10160
 25	10165
 25	10168
 25	10170
@@ -9742,12 +10213,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 27	237
 27	239
 27	802
-28	16
-28	17
-28	18
-28	27
-28	28
-28	50
 28	51
 28	74
 28	75
@@ -9851,8 +10316,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 28	992
 28	10050
 28	10058
-28	10073
-28	10105
 28	10106
 28	10121
 28	10126
@@ -9862,52 +10325,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 28	10166
 28	10174
 28	10175
-29	1
-29	2
-29	3
-29	4
-29	5
-29	6
-29	7
-29	8
-29	9
-29	12
-29	15
-29	16
-29	17
-29	18
-29	19
-29	20
-29	21
-29	22
-29	23
-29	24
-29	25
-29	26
-29	27
-29	28
-29	29
-29	30
-29	31
-29	32
-29	33
-29	34
-29	35
-29	36
-29	37
-29	38
-29	39
-29	40
-29	41
-29	42
-29	43
-29	44
-29	45
-29	46
-29	47
-29	48
-29	49
-29	50
 29	51
 29	52
 29	53
@@ -10334,10 +10751,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 29	10015
 29	10016
 29	10017
-29	10033
-29	10034
-29	10035
-29	10036
 29	10037
 29	10038
 29	10039
@@ -10348,18 +10761,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 29	10044
 29	10053
 29	10071
-29	10073
 29	10074
 29	10089
-29	10090
-29	10091
-29	10092
-29	10100
-29	10101
-29	10102
-29	10103
-29	10104
-29	10105
 29	10106
 29	10107
 29	10108
@@ -10371,7 +10774,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 29	10114
 29	10115
 29	10146
-29	10158
 29	10159
 29	10164
 29	10165
@@ -10391,9 +10793,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 29	10254
 29	10276
 29	10277
-30	32
-30	33
-30	34
 30	111
 30	112
 30	118
@@ -10412,12 +10811,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 30	990
 30	1022
 30	10047
-31	15
-31	21
-31	22
-31	32
-31	33
-31	34
 31	78
 31	83
 31	84
@@ -10466,17 +10859,11 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 31	10040
 31	10047
 31	10067
-31	10090
 31	10182
 31	10183
 31	10260
 31	10261
 31	10262
-32	30
-32	31
-32	32
-32	33
-32	34
 32	77
 32	78
 32	86
@@ -10496,31 +10883,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 32	696
 32	697
 32	10162
-33	1
-33	2
-33	3
-33	7
-33	8
-33	9
-33	10
-33	12
-33	16
-33	17
-33	18
-33	19
-33	20
-33	29
-33	30
-33	31
-33	32
-33	33
-33	34
-33	35
-33	36
-33	37
-33	38
-33	48
-33	49
 33	66
 33	67
 33	68
@@ -10898,8 +11260,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 33	10016
 33	10017
 33	10026
-33	10033
-33	10036
 33	10045
 33	10047
 33	10053
@@ -10909,14 +11269,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 33	10064
 33	10071
 33	10072
-33	10073
 33	10075
 33	10087
-33	10091
-33	10092
-33	10093
-33	10103
-33	10104
 33	10109
 33	10110
 33	10111
@@ -10975,39 +11329,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 33	10253
 33	10254
 33	10263
-34	1
-34	2
-34	3
-34	4
-34	5
-34	6
-34	7
-34	8
-34	9
-34	19
-34	20
-34	23
-34	24
-34	25
-34	26
-34	27
-34	28
-34	29
-34	30
-34	31
-34	32
-34	33
-34	34
-34	35
-34	36
-34	37
-34	38
-34	39
-34	40
-34	45
-34	46
-34	47
-34	50
 34	51
 34	52
 34	53
@@ -11561,18 +11882,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 34	10022
 34	10023
 34	10077
-34	10094
-34	10095
-34	10096
-34	10097
-34	10098
-34	10099
-34	10100
-34	10101
-34	10102
-34	10103
-34	10104
-34	10105
 34	10106
 34	10107
 34	10108
@@ -11588,11 +11897,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 34	10120
 34	10126
 34	10147
-34	10148
 34	10151
 34	10155
 34	10156
-34	10160
 34	10161
 34	10162
 34	10163
@@ -11646,8 +11953,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 34	10272
 34	10276
 34	10277
-35	23
-35	24
 35	69
 35	70
 35	71
@@ -11689,52 +11994,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 35	10001
 35	10002
 35	10003
-36	1
-36	2
-36	3
-36	4
-36	5
-36	6
-36	7
-36	8
-36	9
-36	12
-36	15
-36	16
-36	17
-36	18
-36	19
-36	20
-36	21
-36	22
-36	23
-36	24
-36	25
-36	26
-36	27
-36	28
-36	29
-36	30
-36	31
-36	32
-36	33
-36	34
-36	35
-36	36
-36	37
-36	38
-36	39
-36	40
-36	41
-36	42
-36	43
-36	44
-36	45
-36	46
-36	47
-36	48
-36	49
-36	50
 36	51
 36	52
 36	53
@@ -12405,7 +12664,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 36	10022
 36	10023
 36	10024
-36	10033
 36	10042
 36	10045
 36	10047
@@ -12417,18 +12675,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 36	10076
 36	10086
 36	10087
-36	10094
-36	10095
-36	10096
-36	10097
-36	10098
-36	10099
-36	10100
-36	10101
-36	10102
-36	10103
-36	10104
-36	10105
 36	10106
 36	10107
 36	10108
@@ -12460,11 +12706,9 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 36	10142
 36	10143
 36	10147
-36	10148
 36	10151
 36	10152
 36	10159
-36	10160
 36	10161
 36	10162
 36	10163
@@ -12537,8 +12781,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 36	10275
 36	10276
 36	10277
-37	32
-37	34
 37	56
 37	57
 37	58
@@ -12639,7 +12881,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 37	10040
 37	10041
 37	10049
-37	10105
 37	10115
 37	10121
 37	10149
@@ -12663,52 +12904,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 37	10250
 37	10251
 37	10252
-38	1
-38	2
-38	3
-38	4
-38	5
-38	6
-38	7
-38	8
-38	9
-38	12
-38	15
-38	16
-38	17
-38	18
-38	19
-38	20
-38	21
-38	22
-38	23
-38	24
-38	25
-38	26
-38	27
-38	28
-38	29
-38	30
-38	31
-38	32
-38	33
-38	34
-38	35
-38	36
-38	37
-38	38
-38	39
-38	40
-38	41
-38	42
-38	43
-38	44
-38	45
-38	46
-38	47
-38	48
-38	49
-38	50
 38	51
 38	52
 38	53
@@ -13272,7 +13467,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 38	10015
 38	10016
 38	10024
-38	10033
 38	10039
 38	10047
 38	10053
@@ -13281,13 +13475,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 38	10072
 38	10077
 38	10089
-38	10091
-38	10092
-38	10093
-38	10101
-38	10102
-38	10103
-38	10104
 38	10106
 38	10107
 38	10108
@@ -13349,18 +13536,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 38	10272
 38	10276
 38	10277
-39	7
-39	8
-39	9
-39	19
-39	20
-39	25
-39	26
-39	29
-39	30
-39	31
-39	37
-39	38
 39	52
 39	54
 39	55
@@ -13456,32 +13631,10 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 39	972
 39	980
 39	10016
-39	10036
 39	10039
-39	10080
-39	10081
-39	10082
-39	10083
-39	10084
-39	10085
-39	10091
-39	10092
-39	10093
-39	10094
-39	10095
-39	10096
-39	10097
-39	10098
-39	10099
-39	10100
-39	10103
-39	10104
 39	10115
-39	10148
 39	10149
-39	10158
 39	10159
-39	10160
 39	10162
 39	10163
 39	10187
@@ -13495,18 +13648,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 39	10252
 39	10253
 39	10254
-40	13
-40	15
-40	23
-40	24
-40	27
-40	28
-40	29
-40	30
-40	31
-40	32
-40	33
-40	34
 40	72
 40	73
 40	167
@@ -13541,7 +13682,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 40	904
 40	980
 40	10234
-41	15
 41	90
 41	91
 41	167
@@ -13549,10 +13689,7 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 41	543
 41	589
 41	777
-41	10090
 41	10154
-42	15
-42	28
 42	91
 42	135
 42	139
@@ -13596,22 +13733,10 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 42	904
 42	995
 42	10047
-42	10090
-42	10102
 42	10154
 42	10174
 42	10175
 42	10234
-43	4
-43	5
-43	6
-43	21
-43	22
-43	23
-43	24
-43	32
-43	33
-43	34
 43	56
 43	57
 43	58
@@ -13888,21 +14013,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 43	10239
 43	10240
 43	10272
-44	4
-44	5
-44	6
-44	7
-44	8
-44	9
-44	19
-44	20
-44	23
-44	24
-44	29
-44	30
-44	31
-44	41
-44	42
 44	52
 44	53
 44	58
@@ -14109,7 +14219,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 44	10017
 44	10019
 44	10020
-44	10036
 44	10039
 44	10041
 44	10042
@@ -14121,9 +14230,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 44	10070
 44	10074
 44	10089
-44	10091
-44	10092
-44	10093
 44	10107
 44	10108
 44	10112
@@ -14152,22 +14258,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 44	10243
 44	10247
 44	10248
-45	1
-45	2
-45	3
-45	4
-45	5
-45	6
-45	21
-45	22
-45	25
-45	26
-45	29
-45	30
-45	31
-45	35
-45	36
-45	50
 45	51
 45	52
 45	53
@@ -14349,9 +14439,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 45	974
 45	975
 45	981
-45	10033
-45	10034
-45	10035
 45	10045
 45	10050
 45	10051
@@ -14360,21 +14447,7 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 45	10067
 45	10069
 45	10071
-45	10080
-45	10081
-45	10082
-45	10083
-45	10084
-45	10085
 45	10087
-45	10094
-45	10095
-45	10096
-45	10097
-45	10098
-45	10099
-45	10100
-45	10105
 45	10106
 45	10107
 45	10108
@@ -14385,11 +14458,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 45	10124
 45	10125
 45	10127
-45	10148
 45	10149
-45	10158
 45	10159
-45	10160
 45	10161
 45	10162
 45	10163
@@ -14401,17 +14471,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 45	10260
 45	10261
 45	10262
-46	2
-46	3
-46	4
-46	5
-46	6
-46	9
-46	20
-46	31
-46	34
-46	37
-46	38
 46	53
 46	58
 46	59
@@ -14640,10 +14699,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 46	10022
 46	10023
 46	10024
-46	10033
-46	10034
-46	10035
-46	10036
 46	10039
 46	10041
 46	10042
@@ -14666,10 +14721,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 46	10079
 46	10087
 46	10089
-46	10092
-46	10093
-46	10103
-46	10104
 46	10108
 46	10111
 46	10121
@@ -14691,10 +14742,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 46	10272
 46	10276
 46	10277
-47	35
-47	36
-47	39
-47	40
 47	113
 47	124
 47	131
@@ -14725,15 +14772,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 47	985
 47	10018
 47	10067
-48	12
-48	29
-48	31
-48	32
-48	34
-48	41
-48	42
-48	48
-48	49
 48	72
 48	73
 48	81
@@ -14805,7 +14843,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 48	977
 48	989
 48	10042
-48	10098
 48	10234
 48	10256
 49	81
@@ -14823,15 +14860,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 49	517
 49	801
 49	10147
-50	23
-50	29
-50	32
-50	37
-50	38
-50	39
-50	40
-50	48
-50	49
 50	54
 50	55
 50	64
@@ -14911,9 +14939,6 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 50	10043
 50	10044
 50	10071
-50	10098
-50	10103
-50	10104
 50	10112
 50	10113
 50	10129
@@ -102403,7 +102428,8 @@ COPY public.pokemon_move_sets (move_id, pokemon_id) FROM stdin;
 -- Data for Name: pokemon_species; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby, is_legendary, is_mythical, name) FROM stdin;
+COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby, is_legendary, is_mythical,
+                             name) FROM stdin;
 1	f	20	f	f	f	bulbasaur
 2	f	20	f	f	f	ivysaur
 3	t	20	f	f	f	venusaur
@@ -102424,6 +102450,31 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 18	f	15	f	f	f	pidgeot
 19	t	15	f	f	f	rattata
 20	t	15	f	f	f	raticate
+49	f	20	f	f	f	venomoth
+50	f	20	f	f	f	diglett
+98	f	20	f	f	f	krabby
+99	f	20	f	f	f	kingler
+100	f	20	f	f	f	voltorb
+101	f	20	f	f	f	electrode
+102	f	20	f	f	f	exeggcute
+103	f	20	f	f	f	exeggutor
+104	f	20	f	f	f	cubone
+105	f	20	f	f	f	marowak
+106	f	25	f	f	f	hitmonlee
+107	f	25	f	f	f	hitmonchan
+108	f	20	f	f	f	lickitung
+109	f	20	f	f	f	koffing
+110	f	20	f	f	f	weezing
+111	t	20	f	f	f	rhyhorn
+112	t	20	f	f	f	rhydon
+113	f	40	f	f	f	chansey
+114	f	20	f	f	f	tangela
+115	f	20	f	f	f	kangaskhan
+116	f	20	f	f	f	horsea
+117	f	20	f	f	f	seadra
+118	t	20	f	f	f	goldeen
+119	t	20	f	f	f	seaking
+124	f	25	f	f	f	jynx
 21	f	15	f	f	f	spearow
 22	f	15	f	f	f	fearow
 23	f	20	f	f	f	ekans
@@ -102452,82 +102503,12 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 46	f	20	f	f	f	paras
 47	f	20	f	f	f	parasect
 48	f	20	f	f	f	venonat
-49	f	20	f	f	f	venomoth
-50	f	20	f	f	f	diglett
 51	f	20	f	f	f	dugtrio
 52	f	20	f	f	f	meowth
-53	f	20	f	f	f	persian
-54	f	20	f	f	f	psyduck
-55	f	20	f	f	f	golduck
-56	f	20	f	f	f	mankey
-57	f	20	f	f	f	primeape
-58	f	20	f	f	f	growlithe
-59	f	20	f	f	f	arcanine
-60	f	20	f	f	f	poliwag
-61	f	20	f	f	f	poliwhirl
-62	f	20	f	f	f	poliwrath
-63	f	20	f	f	f	abra
-64	t	20	f	f	f	kadabra
-65	t	20	f	f	f	alakazam
-66	f	20	f	f	f	machop
-67	f	20	f	f	f	machoke
-68	f	20	f	f	f	machamp
-69	f	20	f	f	f	bellsprout
-70	f	20	f	f	f	weepinbell
-71	f	20	f	f	f	victreebel
-72	f	20	f	f	f	tentacool
-73	f	20	f	f	f	tentacruel
-74	f	15	f	f	f	geodude
-75	f	15	f	f	f	graveler
-76	f	15	f	f	f	golem
-77	f	20	f	f	f	ponyta
-78	f	20	f	f	f	rapidash
-79	f	20	f	f	f	slowpoke
-80	f	20	f	f	f	slowbro
-81	f	20	f	f	f	magnemite
-82	f	20	f	f	f	magneton
-83	f	20	f	f	f	farfetchd
-84	t	20	f	f	f	doduo
-85	t	20	f	f	f	dodrio
-86	f	20	f	f	f	seel
-87	f	20	f	f	f	dewgong
-88	f	20	f	f	f	grimer
-89	f	20	f	f	f	muk
-90	f	20	f	f	f	shellder
-91	f	20	f	f	f	cloyster
-92	f	20	f	f	f	gastly
-93	f	20	f	f	f	haunter
-94	f	20	f	f	f	gengar
-95	f	25	f	f	f	onix
-96	f	20	f	f	f	drowzee
-97	t	20	f	f	f	hypno
-98	f	20	f	f	f	krabby
-99	f	20	f	f	f	kingler
-100	f	20	f	f	f	voltorb
-101	f	20	f	f	f	electrode
-102	f	20	f	f	f	exeggcute
-103	f	20	f	f	f	exeggutor
-104	f	20	f	f	f	cubone
-105	f	20	f	f	f	marowak
-106	f	25	f	f	f	hitmonlee
-107	f	25	f	f	f	hitmonchan
-108	f	20	f	f	f	lickitung
-109	f	20	f	f	f	koffing
-110	f	20	f	f	f	weezing
-111	t	20	f	f	f	rhyhorn
-112	t	20	f	f	f	rhydon
-113	f	40	f	f	f	chansey
-114	f	20	f	f	f	tangela
-115	f	20	f	f	f	kangaskhan
-116	f	20	f	f	f	horsea
-117	f	20	f	f	f	seadra
-118	t	20	f	f	f	goldeen
-119	t	20	f	f	f	seaking
 120	f	20	f	f	f	staryu
 121	f	20	f	f	f	starmie
 122	f	25	f	f	f	mr-mime
 123	t	25	f	f	f	scyther
-124	f	25	f	f	f	jynx
 125	f	25	f	f	f	electabuzz
 126	f	25	f	f	f	magmar
 127	f	25	f	f	f	pinsir
@@ -102553,21 +102534,6 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 147	f	40	f	f	f	dratini
 148	f	40	f	f	f	dragonair
 149	f	40	f	f	f	dragonite
-150	f	120	f	t	f	mewtwo
-151	f	120	f	f	t	mew
-152	f	20	f	f	f	chikorita
-153	f	20	f	f	f	bayleef
-154	t	20	f	f	f	meganium
-155	f	20	f	f	f	cyndaquil
-156	f	20	f	f	f	quilava
-157	f	20	f	f	f	typhlosion
-158	f	20	f	f	f	totodile
-159	f	20	f	f	f	croconaw
-160	f	20	f	f	f	feraligatr
-161	f	15	f	f	f	sentret
-162	f	15	f	f	f	furret
-163	f	15	f	f	f	hoothoot
-164	f	15	f	f	f	noctowl
 165	t	15	f	f	f	ledyba
 166	t	15	f	f	f	ledian
 167	f	15	f	f	f	spinarak
@@ -103295,17 +103261,6 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 889	f	120	f	t	f	zamazenta
 890	f	120	f	t	f	eternatus
 891	f	120	f	t	f	kubfu
-892	f	120	f	t	f	urshifu
-893	f	120	f	f	t	zarude
-894	f	120	f	t	f	regieleki
-895	f	120	f	t	f	regidrago
-896	f	120	f	t	f	glastrier
-897	f	120	f	t	f	spectrier
-898	f	120	f	t	f	calyrex
-899	f	0	f	f	f	wyrdeer
-900	f	0	f	f	f	kleavor
-901	f	0	f	f	f	ursaluna
-902	t	0	f	f	f	basculegion
 903	f	0	f	f	f	sneasler
 904	f	0	f	f	f	overqwil
 905	f	0	f	t	f	enamorus
@@ -103328,6 +103283,11 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 922	f	15	f	f	f	pawmo
 923	f	15	f	f	f	pawmot
 924	f	10	f	f	f	tandemaus
+150	f	120	f	t	f	mewtwo
+151	f	120	f	f	t	mew
+152	f	20	f	f	f	chikorita
+153	f	20	f	f	f	bayleef
+154	t	20	f	f	f	meganium
 925	f	10	f	f	f	maushold
 926	f	20	f	f	f	fidough
 927	f	20	f	f	f	dachsbun
@@ -103403,6 +103363,72 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 997	f	40	f	f	f	arctibax
 998	f	40	f	f	f	baxcalibur
 999	f	50	f	f	f	gimmighoul
+53	f	20	f	f	f	persian
+54	f	20	f	f	f	psyduck
+55	f	20	f	f	f	golduck
+56	f	20	f	f	f	mankey
+57	f	20	f	f	f	primeape
+58	f	20	f	f	f	growlithe
+59	f	20	f	f	f	arcanine
+60	f	20	f	f	f	poliwag
+61	f	20	f	f	f	poliwhirl
+62	f	20	f	f	f	poliwrath
+63	f	20	f	f	f	abra
+64	t	20	f	f	f	kadabra
+65	t	20	f	f	f	alakazam
+66	f	20	f	f	f	machop
+67	f	20	f	f	f	machoke
+68	f	20	f	f	f	machamp
+69	f	20	f	f	f	bellsprout
+70	f	20	f	f	f	weepinbell
+71	f	20	f	f	f	victreebel
+72	f	20	f	f	f	tentacool
+73	f	20	f	f	f	tentacruel
+74	f	15	f	f	f	geodude
+75	f	15	f	f	f	graveler
+76	f	15	f	f	f	golem
+77	f	20	f	f	f	ponyta
+78	f	20	f	f	f	rapidash
+79	f	20	f	f	f	slowpoke
+80	f	20	f	f	f	slowbro
+81	f	20	f	f	f	magnemite
+82	f	20	f	f	f	magneton
+83	f	20	f	f	f	farfetchd
+84	t	20	f	f	f	doduo
+85	t	20	f	f	f	dodrio
+86	f	20	f	f	f	seel
+87	f	20	f	f	f	dewgong
+88	f	20	f	f	f	grimer
+89	f	20	f	f	f	muk
+90	f	20	f	f	f	shellder
+91	f	20	f	f	f	cloyster
+92	f	20	f	f	f	gastly
+93	f	20	f	f	f	haunter
+94	f	20	f	f	f	gengar
+95	f	25	f	f	f	onix
+96	f	20	f	f	f	drowzee
+97	t	20	f	f	f	hypno
+155	f	20	f	f	f	cyndaquil
+156	f	20	f	f	f	quilava
+157	f	20	f	f	f	typhlosion
+158	f	20	f	f	f	totodile
+159	f	20	f	f	f	croconaw
+160	f	20	f	f	f	feraligatr
+161	f	15	f	f	f	sentret
+162	f	15	f	f	f	furret
+163	f	15	f	f	f	hoothoot
+164	f	15	f	f	f	noctowl
+892	f	120	f	t	f	urshifu
+893	f	120	f	f	t	zarude
+894	f	120	f	t	f	regieleki
+895	f	120	f	t	f	regidrago
+896	f	120	f	t	f	glastrier
+897	f	120	f	t	f	spectrier
+898	f	120	f	t	f	calyrex
+899	f	0	f	f	f	wyrdeer
+900	f	0	f	f	f	kleavor
+901	f	0	f	f	f	ursaluna
+902	t	0	f	f	f	basculegion
 1000	f	50	f	f	f	gholdengo
 1001	f	50	f	t	f	wo-chien
 1002	f	50	f	t	f	chien-pao
@@ -103436,73 +103462,14 @@ COPY public.pokemon_species (id, has_gender_differences, hatch_counter, is_baby,
 -- Data for Name: pokemons; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_species_id, sprite_url, cry, weight, height, is_default) FROM stdin;
-1	bulbasaur	12	4	1	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1.ogg	69	7	t
-2	ivysaur	12	4	2	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/2.ogg	130	10	t
-3	venusaur	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/3.ogg	1000	20	t
-10033	venusaur-mega	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10033.ogg	1555	24	f
-10195	venusaur-gmax	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10195.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10195.ogg	10000	240	f
-4	charmander	10	\N	4	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/4.ogg	85	6	t
-5	charmeleon	10	\N	5	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/5.ogg	190	11	t
-6	charizard	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/6.ogg	905	17	t
-10034	charizard-mega-x	10	16	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10034.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10034.ogg	1105	17	f
-10035	charizard-mega-y	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10035.ogg	1005	17	f
-10196	charizard-gmax	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10196.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10196.ogg	10000	280	f
-7	squirtle	11	\N	7	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/7.ogg	90	5	t
-8	wartortle	11	\N	8	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/8.ogg	225	10	t
-9	blastoise	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/9.ogg	855	16	t
-10036	blastoise-mega	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10036.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10036.ogg	1011	16	f
-10197	blastoise-gmax	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10197.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10197.ogg	10000	250	f
-10	caterpie	7	\N	10	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10.ogg	29	3	t
-11	metapod	7	\N	11	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/11.ogg	99	7	t
-12	butterfree	7	3	12	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/12.ogg	320	11	t
-10198	butterfree-gmax	7	3	12	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10198.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10198.ogg	10000	170	f
-13	weedle	7	4	13	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/13.ogg	32	3	t
-14	kakuna	7	4	14	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/14.ogg	100	6	t
-15	beedrill	7	4	15	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/15.ogg	295	10	t
-10090	beedrill-mega	7	4	15	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10090.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10090.ogg	405	14	f
-16	pidgey	1	3	16	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/16.ogg	18	3	t
-17	pidgeotto	1	3	17	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/17.ogg	300	11	t
-18	pidgeot	1	3	18	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/18.ogg	395	15	t
-10073	pidgeot-mega	1	3	18	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10073.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10073.ogg	505	22	f
-19	rattata	1	\N	19	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/19.ogg	35	3	t
-10091	rattata-alola	17	1	19	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10091.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10091.ogg	38	3	f
-20	raticate	1	\N	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/20.ogg	185	7	t
-10092	raticate-alola	17	1	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10092.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10092.ogg	255	7	f
-10093	raticate-totem-alola	17	1	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10093.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10093.ogg	1050	14	f
-21	spearow	1	3	21	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/21.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/21.ogg	20	3	t
-22	fearow	1	3	22	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/22.ogg	380	12	t
-23	ekans	4	\N	23	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/23.ogg	69	20	t
-24	arbok	4	\N	24	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/24.ogg	650	35	t
-25	pikachu	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/25.ogg	60	4	t
-10080	pikachu-rock-star	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10080.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10080.ogg	60	4	f
-10081	pikachu-belle	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10081.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10081.ogg	60	4	f
-10082	pikachu-pop-star	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10082.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10082.ogg	60	4	f
+COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_species_id, sprite_url, cry, weight, height,
+                      is_default) FROM stdin;
 10083	pikachu-phd	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10083.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10083.ogg	60	4	f
 10084	pikachu-libre	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10084.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10084.ogg	60	4	f
 10085	pikachu-cosplay	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10085.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10085.ogg	60	4	f
 10094	pikachu-original-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10094.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10094.ogg	60	4	f
 10095	pikachu-hoenn-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10095.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10095.ogg	60	4	f
 10096	pikachu-sinnoh-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10096.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10096.ogg	60	4	f
-10097	pikachu-unova-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10097.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10097.ogg	60	4	f
-10098	pikachu-kalos-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10098.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10098.ogg	60	4	f
-10099	pikachu-alola-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10099.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10099.ogg	60	4	f
-10148	pikachu-partner-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10148.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10148.ogg	60	4	f
-10158	pikachu-starter	13	\N	25		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10158.ogg	60	4	f
-10160	pikachu-world-cap	13	\N	25		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10160.ogg	60	4	f
-10199	pikachu-gmax	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10199.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10199.ogg	10000	210	f
-26	raichu	13	\N	26	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/26.ogg	300	8	t
-10100	raichu-alola	13	14	26	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10100.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10100.ogg	210	7	f
-27	sandshrew	5	\N	27	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/27.ogg	120	6	t
-10101	sandshrew-alola	15	9	27	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10101.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10101.ogg	400	7	f
-28	sandslash	5	\N	28	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/28.ogg	295	10	t
-10102	sandslash-alola	15	9	28	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10102.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10102.ogg	550	12	f
-29	nidoran-f	4	\N	29	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/29.ogg	70	4	t
-30	nidorina	4	\N	30	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/30.ogg	200	8	t
-31	nidoqueen	4	5	31	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/31.ogg	600	13	t
-32	nidoran-m	4	\N	32	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/32.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/32.ogg	90	5	t
-33	nidorino	4	\N	33	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/33.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/33.ogg	195	9	t
-34	nidoking	4	5	34	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/34.ogg	620	14	t
 35	clefairy	18	\N	35	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/35.ogg	75	6	t
 36	clefable	18	\N	36	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/36.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/36.ogg	400	13	t
 37	vulpix	10	\N	37	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/37.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/37.ogg	99	6	t
@@ -103516,12 +103483,10 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 43	oddish	12	4	43	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/43.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/43.ogg	54	5	t
 44	gloom	12	4	44	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/44.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/44.ogg	86	8	t
 45	vileplume	12	4	45	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/45.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/45.ogg	186	12	t
+10092	raticate-alola	17	1	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10092.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10092.ogg	255	7	f
+10158	pikachu-starter	13	\N	25		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10158.ogg	60	4	f
 46	paras	7	12	46	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/46.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/46.ogg	54	3	t
 47	parasect	7	12	47	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/47.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/47.ogg	295	10	t
-48	venonat	7	4	48	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/48.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/48.ogg	300	10	t
-49	venomoth	7	4	49	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/49.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/49.ogg	125	15	t
-50	diglett	5	\N	50	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/50.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/50.ogg	8	2	t
-10105	diglett-alola	5	9	50	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10105.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10105.ogg	10	2	f
 51	dugtrio	5	\N	51	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/51.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/51.ogg	333	7	t
 10106	dugtrio-alola	5	9	51	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10106.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10106.ogg	666	7	f
 52	meowth	1	\N	52	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/52.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/52.ogg	42	4	t
@@ -103542,15 +103507,25 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 61	poliwhirl	11	\N	61	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/61.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/61.ogg	200	10	t
 62	poliwrath	11	2	62	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/62.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/62.ogg	540	13	t
 63	abra	14	\N	63	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/63.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/63.ogg	195	9	t
-64	kadabra	14	\N	64	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/64.ogg	565	13	t
-65	alakazam	14	\N	65	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/65.ogg	480	15	t
-10037	alakazam-mega	14	\N	65	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10037.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10037.ogg	480	12	f
-66	machop	2	\N	66	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/66.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/66.ogg	195	8	t
 67	machoke	2	\N	67	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/67.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/67.ogg	705	15	t
 68	machamp	2	\N	68	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/68.ogg	1300	16	t
 10201	machamp-gmax	2	\N	68	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10201.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10201.ogg	10000	250	f
 69	bellsprout	12	4	69	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/69.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/69.ogg	40	7	t
 70	weepinbell	12	4	70	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/70.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/70.ogg	64	10	t
+1	bulbasaur	12	4	1	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1.ogg	69	7	t
+2	ivysaur	12	4	2	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/2.ogg	130	10	t
+3	venusaur	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/3.ogg	1000	20	t
+10033	venusaur-mega	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10033.ogg	1555	24	f
+10195	venusaur-gmax	12	4	3	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10195.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10195.ogg	10000	240	f
+4	charmander	10	\N	4	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/4.ogg	85	6	t
+5	charmeleon	10	\N	5	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/5.ogg	190	11	t
+6	charizard	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/6.ogg	905	17	t
+10034	charizard-mega-x	10	16	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10034.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10034.ogg	1105	17	f
+10035	charizard-mega-y	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10035.ogg	1005	17	f
+10196	charizard-gmax	10	3	6	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10196.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10196.ogg	10000	280	f
+7	squirtle	11	\N	7	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/7.ogg	90	5	t
+8	wartortle	11	\N	8	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/8.ogg	225	10	t
+9	blastoise	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/9.ogg	855	16	t
 71	victreebel	12	4	71	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/71.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/71.ogg	155	17	t
 72	tentacool	11	4	72	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/72.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/72.ogg	455	9	t
 73	tentacruel	11	4	73	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/73.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/73.ogg	550	16	t
@@ -103583,6 +103558,10 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10113	muk-alola	4	17	89	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10113.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10113.ogg	520	10	f
 90	shellder	11	\N	90	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/90.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/90.ogg	40	3	t
 91	cloyster	11	15	91	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/91.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/91.ogg	1325	15	t
+10160	pikachu-world-cap	13	\N	25		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10160.ogg	60	4	f
+10100	raichu-alola	13	14	26	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10100.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10100.ogg	210	7	f
+27	sandshrew	5	\N	27	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/27.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/27.ogg	120	6	t
+10101	sandshrew-alola	15	9	27	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10101.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10101.ogg	400	7	f
 92	gastly	8	4	92	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/92.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/92.ogg	1	13	t
 93	haunter	8	4	93	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/93.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/93.ogg	1	16	t
 94	gengar	8	4	94	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/94.ogg	405	15	t
@@ -103598,10 +103577,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10231	voltorb-hisui	13	12	100	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10231.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10231.ogg	130	5	f
 101	electrode	13	\N	101	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/101.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/101.ogg	666	12	t
 10232	electrode-hisui	13	12	101	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10232.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10232.ogg	710	12	f
-102	exeggcute	12	14	102	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/102.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/102.ogg	25	4	t
-103	exeggutor	12	14	103	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/103.ogg	1200	20	t
-10114	exeggutor-alola	12	16	103	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10114.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10114.ogg	4156	109	f
-104	cubone	5	\N	104	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/104.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/104.ogg	65	4	t
 105	marowak	5	\N	105	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/105.ogg	450	10	t
 10115	marowak-alola	10	8	105	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10115.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10115.ogg	340	10	f
 10149	marowak-totem	10	8	105	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10149.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10149.ogg	980	17	f
@@ -103610,6 +103585,17 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 108	lickitung	1	\N	108	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/108.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/108.ogg	655	12	t
 109	koffing	4	\N	109	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/109.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/109.ogg	10	6	t
 110	weezing	4	\N	110	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/110.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/110.ogg	95	12	t
+10	caterpie	7	\N	10	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10.ogg	29	3	t
+11	metapod	7	\N	11	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/11.ogg	99	7	t
+12	butterfree	7	3	12	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/12.ogg	320	11	t
+10198	butterfree-gmax	7	3	12	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10198.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10198.ogg	10000	170	f
+13	weedle	7	4	13	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/13.ogg	32	3	t
+14	kakuna	7	4	14	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/14.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/14.ogg	100	6	t
+15	beedrill	7	4	15	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/15.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/15.ogg	295	10	t
+10090	beedrill-mega	7	4	15	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10090.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10090.ogg	405	14	f
+16	pidgey	1	3	16	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/16.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/16.ogg	18	3	t
+17	pidgeotto	1	3	17	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/17.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/17.ogg	300	11	t
+18	pidgeot	1	3	18	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/18.ogg	395	15	t
 10167	weezing-galar	4	18	110	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10167.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10167.ogg	160	30	f
 111	rhyhorn	5	6	111	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/111.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/111.ogg	1150	10	t
 112	rhydon	5	6	112	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/112.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/112.ogg	1200	19	t
@@ -103662,12 +103648,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10170	zapdos-galar	2	3	145	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10170.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10170.ogg	582	16	f
 146	moltres	10	3	146	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/146.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/146.ogg	600	20	t
 10171	moltres-galar	17	3	146	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10171.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10171.ogg	660	20	f
-147	dratini	16	\N	147	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/147.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/147.ogg	33	18	t
-148	dragonair	16	\N	148	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/148.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/148.ogg	165	40	t
-149	dragonite	16	3	149	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/149.ogg	2100	22	t
-150	mewtwo	14	\N	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/150.ogg	1220	20	t
-10043	mewtwo-mega-x	14	2	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10043.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10043.ogg	1270	23	f
-10044	mewtwo-mega-y	14	\N	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10044.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10044.ogg	330	15	f
 151	mew	14	\N	151	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/151.ogg	40	4	t
 152	chikorita	12	\N	152	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/152.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/152.ogg	64	9	t
 153	bayleef	12	\N	153	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/153.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/153.ogg	158	12	t
@@ -103855,7 +103835,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 312	minun	13	\N	312	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/312.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/312.ogg	42	4	t
 313	volbeat	7	\N	313	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/313.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/313.ogg	177	7	t
 314	illumise	7	\N	314	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/314.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/314.ogg	177	6	t
-315	roselia	12	4	315	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/315.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/315.ogg	20	3	t
 316	gulpin	4	\N	316	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/316.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/316.ogg	103	4	t
 317	swalot	4	\N	317	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/317.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/317.ogg	800	17	t
 318	carvanha	11	17	318	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/318.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/318.ogg	208	8	t
@@ -104012,7 +103991,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 446	munchlax	1	\N	446	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/446.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/446.ogg	1050	6	t
 447	riolu	2	\N	447	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/447.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/447.ogg	202	7	t
 448	lucario	2	9	448	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/448.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/448.ogg	540	12	t
-574	gothita	14	\N	574	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/574.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/574.ogg	58	4	t
 10059	lucario-mega	2	9	448	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10059.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10059.ogg	575	13	f
 449	hippopotas	5	\N	449	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/449.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/449.ogg	495	8	t
 450	hippowdon	5	\N	450	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/450.ogg	3000	20	t
@@ -104069,7 +104047,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 491	darkrai	17	\N	491	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/491.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/491.ogg	505	15	t
 492	shaymin-land	12	\N	492	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/492.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/492.ogg	21	2	t
 10006	shaymin-sky	12	3	492	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10006.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10006.ogg	52	4	f
-493	arceus	1	\N	493	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/493.ogg	3200	32	t
 494	victini	14	10	494	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/494.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/494.ogg	40	4	t
 495	snivy	12	\N	495	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/495.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/495.ogg	81	6	t
 496	servine	12	\N	496	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/496.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/496.ogg	160	8	t
@@ -104163,6 +104140,7 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10239	zoroark-hisui	1	8	571	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10239.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10239.ogg	730	16	f
 572	minccino	1	\N	572	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/572.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/572.ogg	58	4	t
 573	cinccino	1	\N	573	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/573.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/573.ogg	75	5	t
+574	gothita	14	\N	574	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/574.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/574.ogg	58	4	t
 575	gothorita	14	\N	575	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/575.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/575.ogg	180	7	t
 576	gothitelle	14	\N	576	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/576.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/576.ogg	440	15	t
 577	solosis	14	\N	577	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/577.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/577.ogg	10	3	t
@@ -104187,7 +104165,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 596	galvantula	7	13	596	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/596.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/596.ogg	143	8	t
 597	ferroseed	12	9	597	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/597.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/597.ogg	188	6	t
 598	ferrothorn	12	9	598	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/598.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/598.ogg	1100	10	t
-599	klink	9	\N	599	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/599.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/599.ogg	210	3	t
 600	klang	9	\N	600	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/600.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/600.ogg	510	6	t
 601	klinklang	9	\N	601	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/601.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/601.ogg	810	6	t
 602	tynamo	13	\N	602	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/602.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/602.ogg	3	2	t
@@ -104333,7 +104310,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10118	zygarde-10-power-construct	16	5	718	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10118.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10118.ogg	335	12	f
 10119	zygarde-50-power-construct	16	5	718	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10119.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10119.ogg	3050	50	f
 10120	zygarde-complete	16	5	718	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10120.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10120.ogg	6100	45	f
-10181	zygarde-10	16	5	718		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10181.ogg	335	12	f
 719	diancie	6	18	719	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/719.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/719.ogg	88	7	t
 10075	diancie-mega	6	18	719	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10075.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10075.ogg	278	11	f
 720	hoopa	14	8	720	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/720.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/720.ogg	90	5	t
@@ -104368,7 +104344,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 742	cutiefly	7	18	742	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/742.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/742.ogg	2	1	t
 743	ribombee	7	18	743	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/743.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/743.ogg	5	2	t
 10150	ribombee-totem	7	18	743	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10150.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10150.ogg	20	4	f
-744	rockruff	6	\N	744	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/744.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/744.ogg	92	5	t
 10151	rockruff-own-tempo	6	\N	744	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10151.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10151.ogg	92	5	f
 745	lycanroc-midday	6	\N	745	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/745.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/745.ogg	250	8	t
 10126	lycanroc-midnight	6	\N	745	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10126.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10126.ogg	250	11	f
@@ -104414,6 +104389,7 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 10135	minior-violet-meteor	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10135.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10135.ogg	400	3	f
 10136	minior-red	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10136.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10136.ogg	3	3	f
 10137	minior-orange	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10137.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10137.ogg	3	3	f
+10181	zygarde-10	16	5	718		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10181.ogg	335	12	f
 10138	minior-yellow	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10138.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10138.ogg	3	3	f
 10139	minior-green	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10139.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10139.ogg	3	3	f
 10140	minior-blue	6	3	774	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10140.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10140.ogg	3	3	f
@@ -104433,7 +104409,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 782	jangmo-o	16	\N	782	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/782.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/782.ogg	297	6	t
 783	hakamo-o	16	2	783	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/783.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/783.ogg	470	12	t
 784	kommo-o	16	2	784	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/784.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/784.ogg	782	16	t
-10146	kommo-o-totem	16	2	784		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10146.ogg	2075	24	f
 785	tapu-koko	13	18	785	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/785.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/785.ogg	205	18	t
 786	tapu-lele	14	18	786	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/786.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/786.ogg	186	12	t
 787	tapu-bulu	12	18	787	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/787.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/787.ogg	455	19	t
@@ -104444,6 +104419,7 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 792	lunala	14	8	792	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/792.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/792.ogg	1200	40	t
 793	nihilego	6	4	793	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/793.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/793.ogg	555	12	t
 794	buzzwole	7	2	794	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/794.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/794.ogg	3336	24	t
+10146	kommo-o-totem	16	2	784		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10146.ogg	2075	24	f
 795	pheromosa	7	2	795	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/795.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/795.ogg	250	18	t
 796	xurkitree	13	\N	796	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/796.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/796.ogg	1000	38	t
 797	celesteela	9	3	797	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/797.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/797.ogg	9999	92	t
@@ -104510,7 +104486,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 844	sandaconda	5	\N	844	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/844.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/844.ogg	655	38	t
 10218	sandaconda-gmax	5	\N	844	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10218.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10218.ogg	10000	220	f
 845	cramorant	3	11	845	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/845.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/845.ogg	180	8	t
-10182	cramorant-gulping	3	11	845		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10182.ogg	180	8	f
 10183	cramorant-gorging	3	11	845		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10183.ogg	180	8	f
 846	arrokuda	11	\N	846	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/846.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/846.ogg	10	5	t
 847	barraskewda	11	\N	847	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/847.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/847.ogg	300	13	t
@@ -104553,7 +104528,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 876	indeedee-male	14	1	876	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/876.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/876.ogg	280	9	t
 10186	indeedee-female	14	1	876	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10186.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10186.ogg	280	9	f
 877	morpeko-full-belly	13	17	877	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/877.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/877.ogg	30	3	t
-10187	morpeko-hangry	13	17	877		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10187.ogg	30	3	f
 878	cufant	9	\N	878	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/878.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/878.ogg	1000	12	t
 879	copperajah	9	\N	879	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/879.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/879.ogg	6500	30	t
 10224	copperajah-gmax	9	\N	879	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10224.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10224.ogg	10000	230	f
@@ -104670,19 +104644,6 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 971	greavard	8	\N	971	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/971.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/971.ogg	350	6	t
 972	houndstone	8	\N	972	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/972.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/972.ogg	150	20	t
 973	flamigo	3	2	973	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/973.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/973.ogg	370	16	t
-974	cetoddle	15	\N	974	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/974.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/974.ogg	450	12	t
-975	cetitan	15	\N	975	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/975.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/975.ogg	7000	45	t
-976	veluza	11	14	976	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/976.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/976.ogg	900	25	t
-977	dondozo	11	\N	977	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/977.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/977.ogg	2200	120	t
-978	tatsugiri-curly	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/978.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/978.ogg	80	3	t
-10258	tatsugiri-droopy	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10258.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10258.ogg	80	3	f
-10259	tatsugiri-stretchy	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10259.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10259.ogg	80	3	f
-979	annihilape	2	8	979	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/979.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/979.ogg	560	12	t
-980	clodsire	4	5	980	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/980.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/980.ogg	2230	18	t
-981	farigiraf	1	14	981	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/981.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/981.ogg	1600	32	t
-982	dudunsparce-two-segment	1	\N	982	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/982.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/982.ogg	392	36	t
-10255	dudunsparce-three-segment	1	\N	982	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10255.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10255.ogg	474	45	f
-983	kingambit	17	9	983	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/983.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/983.ogg	1200	20	t
 984	great-tusk	5	2	984	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/984.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/984.ogg	3200	22	t
 985	scream-tail	18	14	985	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/985.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/985.ogg	80	12	t
 986	brute-bonnet	12	17	986	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/986.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/986.ogg	210	12	t
@@ -104715,11 +104676,77 @@ COPY public.pokemons (id, name, primary_type_id, secondary_type_id, pokemon_spec
 1008	miraidon	13	16	1008	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1008.ogg	2400	35	t
 10268	miraidon-low-power-mode	13	16	1008		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10268.ogg	2400	28	f
 10269	miraidon-drive-mode	13	16	1008		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10269.ogg	2400	28	f
-10270	miraidon-aquatic-mode	13	16	1008		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10270.ogg	2400	28	f
 10271	miraidon-glide-mode	13	16	1008		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10271.ogg	2400	28	f
 1009	walking-wake	11	16	1009	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1009.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1009.ogg	2800	35	t
 1010	iron-leaves	12	14	1010	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1010.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1010.ogg	1250	15	t
 1011	dipplin	12	16	1011	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1011.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1011.ogg	97	4	t
+28	sandslash	5	\N	28	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/28.ogg	295	10	t
+10102	sandslash-alola	15	9	28	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10102.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10102.ogg	550	12	f
+29	nidoran-f	4	\N	29	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/29.ogg	70	4	t
+30	nidorina	4	\N	30	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/30.ogg	200	8	t
+31	nidoqueen	4	5	31	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/31.ogg	600	13	t
+32	nidoran-m	4	\N	32	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/32.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/32.ogg	90	5	t
+33	nidorino	4	\N	33	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/33.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/33.ogg	195	9	t
+34	nidoking	4	5	34	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/34.ogg	620	14	t
+10270	miraidon-aquatic-mode	13	16	1008		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10270.ogg	2400	28	f
+48	venonat	7	4	48	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/48.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/48.ogg	300	10	t
+49	venomoth	7	4	49	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/49.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/49.ogg	125	15	t
+50	diglett	5	\N	50	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/50.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/50.ogg	8	2	t
+10105	diglett-alola	5	9	50	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10105.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10105.ogg	10	2	f
+64	kadabra	14	\N	64	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/64.ogg	565	13	t
+65	alakazam	14	\N	65	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/65.ogg	480	15	t
+10037	alakazam-mega	14	\N	65	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10037.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10037.ogg	480	12	f
+66	machop	2	\N	66	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/66.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/66.ogg	195	8	t
+10036	blastoise-mega	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10036.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10036.ogg	1011	16	f
+10197	blastoise-gmax	11	\N	9	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10197.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10197.ogg	10000	250	f
+10073	pidgeot-mega	1	3	18	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10073.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10073.ogg	505	22	f
+19	rattata	1	\N	19	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/19.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/19.ogg	35	3	t
+10091	rattata-alola	17	1	19	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10091.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10091.ogg	38	3	f
+20	raticate	1	\N	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/20.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/20.ogg	185	7	t
+10093	raticate-totem-alola	17	1	20	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10093.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10093.ogg	1050	14	f
+21	spearow	1	3	21	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/21.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/21.ogg	20	3	t
+22	fearow	1	3	22	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/22.ogg	380	12	t
+102	exeggcute	12	14	102	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/102.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/102.ogg	25	4	t
+103	exeggutor	12	14	103	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/103.ogg	1200	20	t
+10114	exeggutor-alola	12	16	103	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10114.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10114.ogg	4156	109	f
+104	cubone	5	\N	104	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/104.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/104.ogg	65	4	t
+23	ekans	4	\N	23	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/23.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/23.ogg	69	20	t
+24	arbok	4	\N	24	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/24.ogg	650	35	t
+25	pikachu	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/25.ogg	60	4	t
+10080	pikachu-rock-star	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10080.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10080.ogg	60	4	f
+10081	pikachu-belle	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10081.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10081.ogg	60	4	f
+10082	pikachu-pop-star	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10082.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10082.ogg	60	4	f
+10097	pikachu-unova-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10097.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10097.ogg	60	4	f
+10098	pikachu-kalos-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10098.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10098.ogg	60	4	f
+10099	pikachu-alola-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10099.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10099.ogg	60	4	f
+10148	pikachu-partner-cap	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10148.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10148.ogg	60	4	f
+10199	pikachu-gmax	13	\N	25	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10199.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10199.ogg	10000	210	f
+26	raichu	13	\N	26	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/26.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/26.ogg	300	8	t
+147	dratini	16	\N	147	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/147.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/147.ogg	33	18	t
+148	dragonair	16	\N	148	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/148.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/148.ogg	165	40	t
+149	dragonite	16	3	149	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/149.ogg	2100	22	t
+150	mewtwo	14	\N	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/150.ogg	1220	20	t
+10043	mewtwo-mega-x	14	2	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10043.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10043.ogg	1270	23	f
+10044	mewtwo-mega-y	14	\N	150	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10044.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10044.ogg	330	15	f
+315	roselia	12	4	315	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/315.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/315.ogg	20	3	t
+493	arceus	1	\N	493	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/493.ogg	3200	32	t
+599	klink	9	\N	599	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/599.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/599.ogg	210	3	t
+744	rockruff	6	\N	744	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/744.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/744.ogg	92	5	t
+10182	cramorant-gulping	3	11	845		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10182.ogg	180	8	f
+10187	morpeko-hangry	13	17	877		https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10187.ogg	30	3	f
+974	cetoddle	15	\N	974	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/974.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/974.ogg	450	12	t
+975	cetitan	15	\N	975	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/975.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/975.ogg	7000	45	t
+976	veluza	11	14	976	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/976.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/976.ogg	900	25	t
+977	dondozo	11	\N	977	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/977.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/977.ogg	2200	120	t
+978	tatsugiri-curly	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/978.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/978.ogg	80	3	t
+10258	tatsugiri-droopy	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10258.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10258.ogg	80	3	f
+10259	tatsugiri-stretchy	16	11	978	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10259.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10259.ogg	80	3	f
+979	annihilape	2	8	979	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/979.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/979.ogg	560	12	t
+980	clodsire	4	5	980	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/980.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/980.ogg	2230	18	t
+981	farigiraf	1	14	981	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/981.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/981.ogg	1600	32	t
+982	dudunsparce-two-segment	1	\N	982	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/982.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/982.ogg	392	36	t
+10255	dudunsparce-three-segment	1	\N	982	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10255.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/10255.ogg	474	45	f
+983	kingambit	17	9	983	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/983.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/983.ogg	1200	20	t
 1012	poltchageist	12	8	1012	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1012.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1012.ogg	11	1	t
 1013	sinistcha	12	8	1013	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1013.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1013.ogg	22	2	t
 1014	okidogi	4	2	1014	https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1014.png	https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1014.ogg	922	18	t
@@ -104764,7 +104791,7 @@ COPY public.regions (id, name) FROM stdin;
 -- Name: evolution_chain_links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.evolution_chain_links_id_seq', 1, false);
+SELECT pg_catalog.setval('public.evolution_chain_links_id_seq', 3, true);
 
 
 --
@@ -104778,7 +104805,7 @@ SELECT pg_catalog.setval('public.evolution_chains_id_seq', 1, false);
 -- Name: evolution_details_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.evolution_details_id_seq', 507, true);
+SELECT pg_catalog.setval('public.evolution_details_id_seq', 566, true);
 
 
 --
@@ -104942,6 +104969,21 @@ ALTER TABLE ONLY public.pokemons
 
 
 --
+-- Name: details_index; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX details_index ON public.evolution_details USING btree (item_id, evolution_trigger_id, gender_id,
+                                                                           held_item_id, known_move_id,
+                                                                           known_move_type_id, location_id, min_level,
+                                                                           min_happiness, min_beauty, min_affection,
+                                                                           needs_overworld_rain, party_species_id,
+                                                                           party_type_id, relative_physical_stats,
+                                                                           time_of_day, trade_species_id,
+                                                                           turn_upside_down,
+                                                                           evolution_chain_link_id) NULLS NOT DISTINCT;
+
+
+--
 -- Name: idx_evolution_chain_links_pokemon_species_id; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -104949,18 +104991,11 @@ CREATE UNIQUE INDEX idx_evolution_chain_links_pokemon_species_id ON public.evolu
 
 
 --
--- Name: idx_evolution_details_deleted_at; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX idx_evolution_details_deleted_at ON public.evolution_details USING btree (deleted_at);
-
-
---
 -- Name: evolution_details fk_evolution_chain_links_evolution_details; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_chain_links_evolution_details FOREIGN KEY (evolution_chain_link_id) REFERENCES public.evolution_chain_links(id);
+    ADD CONSTRAINT fk_evolution_chain_links_evolution_details FOREIGN KEY (evolution_chain_link_id) REFERENCES public.evolution_chain_links (id);
 
 
 --
@@ -104968,15 +105003,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_chain_links
-    ADD CONSTRAINT fk_evolution_chain_links_evolves_to FOREIGN KEY (evolves_from_id) REFERENCES public.evolution_chain_links(id);
-
-
---
--- Name: evolution_chain_links fk_evolution_chain_links_pokemon_species; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.evolution_chain_links
-    ADD CONSTRAINT fk_evolution_chain_links_pokemon_species FOREIGN KEY (pokemon_species_id) REFERENCES public.pokemon_species(id);
+    ADD CONSTRAINT fk_evolution_chain_links_evolves_to FOREIGN KEY (evolves_from_id) REFERENCES public.evolution_chain_links (id);
 
 
 --
@@ -104984,7 +105011,7 @@ ALTER TABLE ONLY public.evolution_chain_links
 --
 
 ALTER TABLE ONLY public.evolution_chains
-    ADD CONSTRAINT fk_evolution_chains_baby_trigger_item FOREIGN KEY (baby_trigger_item_id) REFERENCES public.items(id);
+    ADD CONSTRAINT fk_evolution_chains_baby_trigger_item FOREIGN KEY (baby_trigger_item_id) REFERENCES public.items (id);
 
 
 --
@@ -104992,15 +105019,7 @@ ALTER TABLE ONLY public.evolution_chains
 --
 
 ALTER TABLE ONLY public.evolution_chains
-    ADD CONSTRAINT fk_evolution_chains_chain_link FOREIGN KEY (chain_link_id) REFERENCES public.evolution_chain_links(id);
-
-
---
--- Name: evolution_chains fk_evolution_chains_init_pokemon_species; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.evolution_chains
-    ADD CONSTRAINT fk_evolution_chains_init_pokemon_species FOREIGN KEY (pokemon_species_id) REFERENCES public.pokemon_species(id);
+    ADD CONSTRAINT fk_evolution_chains_chain_link FOREIGN KEY (chain_link_id) REFERENCES public.evolution_chain_links (id);
 
 
 --
@@ -105008,7 +105027,7 @@ ALTER TABLE ONLY public.evolution_chains
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_evolution_trigger FOREIGN KEY (evolution_trigger_id) REFERENCES public.evolution_triggers(id);
+    ADD CONSTRAINT fk_evolution_details_evolution_trigger FOREIGN KEY (evolution_trigger_id) REFERENCES public.evolution_triggers (id);
 
 
 --
@@ -105016,7 +105035,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_held_item FOREIGN KEY (held_item_id) REFERENCES public.items(id);
+    ADD CONSTRAINT fk_evolution_details_held_item FOREIGN KEY (held_item_id) REFERENCES public.items (id);
 
 
 --
@@ -105024,7 +105043,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_item FOREIGN KEY (item_id) REFERENCES public.items(id);
+    ADD CONSTRAINT fk_evolution_details_item FOREIGN KEY (item_id) REFERENCES public.items (id);
 
 
 --
@@ -105032,7 +105051,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_known_move FOREIGN KEY (known_move_id) REFERENCES public.moves(id);
+    ADD CONSTRAINT fk_evolution_details_known_move FOREIGN KEY (known_move_id) REFERENCES public.moves (id);
 
 
 --
@@ -105040,7 +105059,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_known_move_type FOREIGN KEY (known_move_type_id) REFERENCES public.move_types(id);
+    ADD CONSTRAINT fk_evolution_details_known_move_type FOREIGN KEY (known_move_type_id) REFERENCES public.move_types (id);
 
 
 --
@@ -105048,7 +105067,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_location FOREIGN KEY (location_id) REFERENCES public.locations(id);
+    ADD CONSTRAINT fk_evolution_details_location FOREIGN KEY (location_id) REFERENCES public.locations (id);
 
 
 --
@@ -105056,7 +105075,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_party_species FOREIGN KEY (party_species_id) REFERENCES public.pokemon_species(id);
+    ADD CONSTRAINT fk_evolution_details_party_species FOREIGN KEY (party_species_id) REFERENCES public.pokemon_species (id);
 
 
 --
@@ -105064,7 +105083,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_party_type FOREIGN KEY (party_type_id) REFERENCES public.move_types(id);
+    ADD CONSTRAINT fk_evolution_details_party_type FOREIGN KEY (party_type_id) REFERENCES public.move_types (id);
 
 
 --
@@ -105072,7 +105091,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.evolution_details
-    ADD CONSTRAINT fk_evolution_details_trade_species FOREIGN KEY (trade_species_id) REFERENCES public.pokemon_species(id);
+    ADD CONSTRAINT fk_evolution_details_trade_species FOREIGN KEY (trade_species_id) REFERENCES public.pokemon_species (id);
 
 
 --
@@ -105080,7 +105099,7 @@ ALTER TABLE ONLY public.evolution_details
 --
 
 ALTER TABLE ONLY public.moves
-    ADD CONSTRAINT fk_moves_move_type FOREIGN KEY (move_type_id) REFERENCES public.move_types(id);
+    ADD CONSTRAINT fk_moves_move_type FOREIGN KEY (move_type_id) REFERENCES public.move_types (id);
 
 
 --
@@ -105088,7 +105107,7 @@ ALTER TABLE ONLY public.moves
 --
 
 ALTER TABLE ONLY public.pokemon_move_sets
-    ADD CONSTRAINT fk_pokemon_move_sets_move FOREIGN KEY (move_id) REFERENCES public.moves(id);
+    ADD CONSTRAINT fk_pokemon_move_sets_move FOREIGN KEY (move_id) REFERENCES public.moves (id);
 
 
 --
@@ -105096,7 +105115,15 @@ ALTER TABLE ONLY public.pokemon_move_sets
 --
 
 ALTER TABLE ONLY public.pokemon_move_sets
-    ADD CONSTRAINT fk_pokemon_move_sets_pokemon FOREIGN KEY (pokemon_id) REFERENCES public.pokemons(id);
+    ADD CONSTRAINT fk_pokemon_move_sets_pokemon FOREIGN KEY (pokemon_id) REFERENCES public.pokemons (id);
+
+
+--
+-- Name: evolution_chain_links fk_pokemon_species_evolution_chain_link; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.evolution_chain_links
+    ADD CONSTRAINT fk_pokemon_species_evolution_chain_link FOREIGN KEY (pokemon_species_id) REFERENCES public.pokemon_species (id);
 
 
 --
@@ -105104,7 +105131,7 @@ ALTER TABLE ONLY public.pokemon_move_sets
 --
 
 ALTER TABLE ONLY public.pokemons
-    ADD CONSTRAINT fk_pokemon_species_varieties FOREIGN KEY (pokemon_species_id) REFERENCES public.pokemon_species(id);
+    ADD CONSTRAINT fk_pokemon_species_varieties FOREIGN KEY (pokemon_species_id) REFERENCES public.pokemon_species (id);
 
 
 --
@@ -105112,7 +105139,7 @@ ALTER TABLE ONLY public.pokemons
 --
 
 ALTER TABLE ONLY public.pokemons
-    ADD CONSTRAINT fk_pokemons_primary_type FOREIGN KEY (primary_type_id) REFERENCES public.move_types(id);
+    ADD CONSTRAINT fk_pokemons_primary_type FOREIGN KEY (primary_type_id) REFERENCES public.move_types (id);
 
 
 --
@@ -105120,7 +105147,7 @@ ALTER TABLE ONLY public.pokemons
 --
 
 ALTER TABLE ONLY public.pokemons
-    ADD CONSTRAINT fk_pokemons_secondary_type FOREIGN KEY (secondary_type_id) REFERENCES public.move_types(id);
+    ADD CONSTRAINT fk_pokemons_secondary_type FOREIGN KEY (secondary_type_id) REFERENCES public.move_types (id);
 
 
 --
@@ -105128,7 +105155,7 @@ ALTER TABLE ONLY public.pokemons
 --
 
 ALTER TABLE ONLY public.locations
-    ADD CONSTRAINT fk_regions_locations FOREIGN KEY (region_id) REFERENCES public.regions(id);
+    ADD CONSTRAINT fk_regions_locations FOREIGN KEY (region_id) REFERENCES public.regions (id);
 
 
 --

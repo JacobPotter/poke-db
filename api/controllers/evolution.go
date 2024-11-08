@@ -32,6 +32,33 @@ func (e *EvolutionHandler) GetEvolutionChain(c *gin.Context) {
 	c.JSON(http.StatusOK, evolutionChain)
 }
 
+func selectFromVarieties(db *gorm.DB) *gorm.DB {
+	return db.Select("name", "sprite_url", "pokemon_species_id")
+}
+func selectFromSpecies(db *gorm.DB) *gorm.DB {
+	return db.Select("id", "name").Preload("Varieties", selectFromVarieties)
+}
+
+func (e *EvolutionHandler) GetEvolutionChainLink(c *gin.Context) {
+	id := c.Param("id")
+	var evolutionChain models.EvolutionChainLink
+	if err := e.db.
+		Preload(clause.Associations).
+		Preload("EvolvesFrom.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesFrom.PokemonSpecies", selectFromSpecies).
+		Preload("EvolutionDetails."+clause.Associations).
+		Preload("EvolvesTo.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesTo.EvolvesTo.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesTo.EvolvesTo.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesTo.EvolvesTo.EvolvesTo.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesTo.EvolvesTo.EvolvesTo.EvolutionDetails."+clause.Associations).
+		First(&evolutionChain, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Evolution Chain not found"})
+		return
+	}
+	c.JSON(http.StatusOK, evolutionChain)
+}
+
 func (e *EvolutionHandler) ListEvolutionChains(c *gin.Context) {
 
 	var evolutionChains []models.EvolutionChain

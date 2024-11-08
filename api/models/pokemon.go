@@ -11,20 +11,20 @@ type ListPokemonResponse struct {
 }
 
 type Pokemon struct {
-	ID               uint            `gorm:"primary_key" json:"id"`
-	Name             string          `gorm:"unique" json:"name"`
-	PrimaryType      MoveType        `gorm:"foreignKey:PrimaryTypeId" json:"primary_type"`
-	PrimaryTypeId    *uint           `json:"primary_type_id"`
-	SecondaryType    MoveType        `gorm:"foreignKey:SecondaryTypeId;" json:"secondary_type,omitempty"`
-	SecondaryTypeId  *uint           `json:"secondary_type_id"`
+	ID               uint            `gorm:"primary_key" json:"id,omitempty"`
+	Name             string          `gorm:"unique" json:"name,omitempty"`
+	PrimaryType      *MoveType       `gorm:"foreignKey:PrimaryTypeId" json:"primary_type,omitempty"`
+	PrimaryTypeId    *uint           `json:"primary_type_id,omitempty"`
+	SecondaryType    *MoveType       `gorm:"foreignKey:SecondaryTypeId;" json:"secondary_type,omitempty"`
+	SecondaryTypeId  *uint           `json:"secondary_type_id,omitempty"`
 	PokemonSpecies   *PokemonSpecies `gorm:"foreignKey:PokemonSpeciesId" json:"pokemon_species,omitempty"`
-	PokemonSpeciesId uint            `json:"pokemon_species_id"`
-	SpriteUrl        string          `json:"sprite_url"`
-	Cry              string          `json:"cry"`
-	Weight           int             `json:"weight"`
-	Height           int             `json:"height"`
-	IsDefault        bool            `json:"is_default"`
-	LearnableMoves   []Move          `gorm:"many2many:pokemon_move_sets;" json:"learnable_moves"`
+	PokemonSpeciesId uint            `json:"pokemon_species_id,omitempty"`
+	SpriteUrl        string          `json:"sprite_url,omitempty"`
+	Cry              string          `json:"cry,omitempty"`
+	Weight           int             `json:"weight,omitempty"`
+	Height           int             `json:"height,omitempty"`
+	IsDefault        bool            `json:"is_default,omitempty"`
+	LearnableMoves   []Move          `gorm:"many2many:pokemon_move_sets;" json:"learnable_moves,omitempty"`
 }
 
 //TODO: add species JSONb column to table
@@ -41,14 +41,14 @@ type Sprites struct {
 }
 
 type PokemonSpecies struct {
-	ID                   uint      `gorm:"primary_key" json:"id"`
-	HasGenderDifferences bool      `json:"has_gender_differences"`
-	HatchCounter         int       `json:"hatch_counter"`
-	IsBaby               bool      `json:"is_baby"`
-	IsLegendary          bool      `json:"is_legendary"`
-	IsMythical           bool      `json:"is_mythical"`
-	Name                 string    `json:"name"`
-	Varieties            []Pokemon `json:"varieties"`
+	ID                   uint      `gorm:"primary_key" json:"id,omitempty"`
+	HasGenderDifferences bool      `json:"has_gender_differences,omitempty"`
+	HatchCounter         int       `json:"hatch_counter,omitempty"`
+	IsBaby               bool      `json:"is_baby,omitempty"`
+	IsLegendary          bool      `json:"is_legendary,omitempty"`
+	IsMythical           bool      `json:"is_mythical,omitempty"`
+	Name                 string    `json:"name,omitempty"`
+	Varieties            []Pokemon `json:"varieties,omitempty"`
 }
 
 type ListPokemonParams struct {

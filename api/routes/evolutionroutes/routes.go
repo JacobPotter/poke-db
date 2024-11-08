@@ -10,5 +10,6 @@ func RegisterRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	handler := controllers.NewEvolutionHandler(db)
 	// Define routes
 	router.GET("/evolution/:id", handler.GetEvolutionChain)
+	router.GET("/evolution/chain/:id", handler.GetEvolutionChainLink)
 	router.GET("/evolution", handler.ListEvolutionChains)
 }

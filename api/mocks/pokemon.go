@@ -19,9 +19,9 @@ var MockPSecondaryTypeId uint = 2
 var MockPokemonVarietiesBulbasaur = []models.Pokemon{{
 	ID:               1,
 	Name:             "bulbasaur",
-	PrimaryType:      MockTypesGrass,
+	PrimaryType:      &MockTypesGrass,
 	PrimaryTypeId:    &MockPrimaryTypeId,
-	SecondaryType:    MockTypesPoison,
+	SecondaryType:    &MockTypesPoison,
 	SecondaryTypeId:  &MockPSecondaryTypeId,
 	PokemonSpeciesId: 1,
 	SpriteUrl:        "https://example.com/pokemon.png",

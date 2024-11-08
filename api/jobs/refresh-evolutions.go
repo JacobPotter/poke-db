@@ -92,10 +92,9 @@ func (r RefreshDB) refreshEvolutionsChains() {
 		}
 
 		evolutionChains[i] = &models.EvolutionChain{
-			ID:                 uint(clientChain.ID),
-			BabyTriggerItem:    babyTriggerItem,
-			InitPokemonSpecies: chainLink.PokemonSpecies,
-			ChainLink:          chainLink,
+			ID:              uint(clientChain.ID),
+			BabyTriggerItem: babyTriggerItem,
+			ChainLink:       chainLink,
 		}
 	}
 
@@ -119,7 +118,7 @@ func (r RefreshDB) getChainLinkModelFromApi(clientChainLink *structs.ChainLink) 
 	chainLink = models.EvolutionChainLink{
 		ID:               species.ID,
 		IsBaby:           clientChainLink.IsBaby,
-		PokemonSpecies:   species,
+		PokemonSpeciesId: species.ID,
 		EvolutionDetails: r.getEvolutionDetailsModelFromApi(clientChainLink.EvolutionDetails),
 		EvolvesTo:        r.getEvolvesToFromApi(clientChainLink.EvolvesTo, species.ID),
 	}
@@ -145,7 +144,7 @@ func (r RefreshDB) getEvolvesToFromApi(evolvesToApi []structs.ChainLink, previou
 		evolvesTo = append(evolvesTo, models.EvolutionChainLink{
 			ID:               species.ID,
 			IsBaby:           link.IsBaby,
-			PokemonSpecies:   species,
+			PokemonSpeciesId: species.ID,
 			EvolutionDetails: r.getEvolutionDetailsModelFromApi(link.EvolutionDetails),
 			EvolvesTo:        r.getEvolvesToFromApi(link.EvolvesTo, species.ID),
 			EvolvesFromId:    &previousSpeciesId,
@@ -211,7 +210,22 @@ func (r RefreshDB) getEvolutionDetailsModelFromApi(clientDetails []structs.Evolu
 			TurnUpsideDown:        &detail.TurnUpsideDown,
 		})
 	}
+
+	evolutionDetails = removeDuplicateDetails(evolutionDetails)
+
 	return evolutionDetails
+}
+
+func removeDuplicateDetails(details []models.EvolutionDetails) (newDetails []models.EvolutionDetails) {
+	seen := make(map[models.EvolutionDetails]bool)
+
+	for _, detail := range details {
+		if !seen[detail] {
+			seen[detail] = true
+			newDetails = append(newDetails, detail)
+		}
+	}
+	return newDetails
 }
 
 func (r RefreshDB) getItemFromClientDetails(clientItem interface{}) (item *models.Item) {
