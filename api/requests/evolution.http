@@ -7,3 +7,10 @@ GET {{host}}/evolution
 ###
 GET {{host}}/evolution/chain/2
 
+
+### Eevee
+GET {{host}}/evolution/chain/133
+
+### Politoed
+GET {{host}}/evolution/chain/186
+

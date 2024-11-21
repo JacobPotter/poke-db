@@ -20,7 +20,7 @@ export function HamburgerButton({onClick, reset}: HamburgerButtonProps) {
         }
     }, [reset]);
 
-    return <div className={"md:hidden mt-1"}>
+    return <div data-testid={"hamburger-button"} className={"md:hidden mt-1"}>
         <button
             className={`z-40 block hamburger md:hidden focus:outline-none ${active ? "open" : ""}`}
             onClick={handleClick}>

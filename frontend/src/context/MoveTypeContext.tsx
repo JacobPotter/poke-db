@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren} from "react";
+import {createContext, FC, PropsWithChildren, useCallback} from "react";
 import {MoveType, MoveTypeResp} from "../models/pokemon.ts";
 import useAxios from "axios-hooks";
 
@@ -15,9 +15,9 @@ export const MoveTypeProvider: FC<PropsWithChildren> = ({children}) => {
         `/api/v1/type`
     )
 
-    const refresh = () => {
+    const refresh = useCallback(() => {
         refetch()
-    }
+    }, [refetch])
 
     const filteredData = data?.data.filter(m => m.name !== 'stellar')
 

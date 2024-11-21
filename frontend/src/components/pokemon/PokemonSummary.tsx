@@ -5,12 +5,12 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import {PlayIcon} from "@heroicons/react/24/solid";
 import {isSafari} from 'react-device-detect';
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
+import {useOutletContext} from "react-router-dom";
 
-interface PokemonSummaryProps {
-    pokemonSpecies: PokemonSpecies | null
-}
 
-export const PokemonSummary = ({pokemonSpecies}: PokemonSummaryProps) => {
+export const PokemonSummary = () => {
+
+    const {pokemonSpecies} = useOutletContext<{ pokemonSpecies: PokemonSpecies | null }>()
 
     const [selectedPokemonVariety, setSelectedPokemonVariety] = useState<PokemonVariety>();
     const [varietyIndex, setVarietyIndex] = useState(0);
@@ -20,7 +20,9 @@ export const PokemonSummary = ({pokemonSpecies}: PokemonSummaryProps) => {
 
 
     const handlePlay = () => {
-        audioRef.current && audioRef?.current.play();
+        if (audioRef.current) {
+            audioRef?.current.play();
+        }
     };
 
     useEffect(() => {
@@ -44,11 +46,11 @@ export const PokemonSummary = ({pokemonSpecies}: PokemonSummaryProps) => {
             audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
         }
 
-        // const to = setTimeout(handlePlay, 400);
 
         return () => {
-            audioRef.current && audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
-            // clearTimeout(to)
+            if (audioRef.current) {
+                audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+            }
         }
 
     }, [selectedPokemonVariety?.cry]);

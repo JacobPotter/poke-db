@@ -23,7 +23,8 @@
     "noFallthroughCasesInSwitch": true,
     "types": [
       "vite/client",
-      "vite-plugin-svgr/client"
+      "vite-plugin-svgr/client",
+      "@vitest/browser/providers/playwright"
     ],
     "allowSyntheticDefaultImports": true
   },

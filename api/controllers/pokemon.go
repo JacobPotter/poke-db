@@ -152,7 +152,9 @@ func (h *PokemonHandler) ListPokemon(c *gin.Context) {
 	}
 
 	tx = tx.Debug().Scopes(models.Paginate(page, pageSize)).
-		Preload("Varieties").
+		Preload("Varieties", func(db *gorm.DB) *gorm.DB {
+			return db.Order("id ASC")
+		}).
 		Preload("Varieties.PrimaryType").
 		Preload("Varieties.SecondaryType").
 		Order(clause.OrderByColumn{

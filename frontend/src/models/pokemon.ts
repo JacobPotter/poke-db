@@ -2,13 +2,10 @@ export interface ListPokemonResponse {
     nextPage: string;
     page: number;
     pageSize: number;
-    params: Params;
+    params: ListPokemonParams;
     pokemon: PokemonSpecies[];
     prevPage: string;
     total: number;
-}
-
-export interface Params {
 }
 
 export interface PokemonSpecies {
@@ -58,6 +55,8 @@ export interface MoveType {
 }
 
 export interface ListPokemonParams {
-    pokemonName: string | null
-    pokemonTypeId: number | null
+    page?: number;
+    pageSize?: number;
+    pokemonName?: string | null
+    pokemonTypeId?: number | null
 }

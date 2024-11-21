@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/WebWizardsDev/poke-db/api/docs"
-	"github.com/WebWizardsDev/poke-db/api/jobs"
 	"github.com/WebWizardsDev/poke-db/api/models"
 	"github.com/WebWizardsDev/poke-db/api/routes"
 	"github.com/bamzi/jobrunner"
@@ -14,7 +13,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"os"
-	"time"
 )
 
 //
@@ -49,13 +47,14 @@ func main() {
 
 	router := routes.SetupRouter(models.DB)
 
-	initJobs := os.Getenv("INIT_JOBS")
+	//initJobs := os.Getenv("INIT_JOBS")
 
-	jobrunner.Start()
-	if initJobs == "true" {
-		jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
-	}
-	err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
+	//jobrunner.Start()
+	//if initJobs == "true" {
+	//	jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
+	//}
+	//err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
+
 	if err != nil {
 		log.Fatalf("Failed to schedule job: %v", err)
 		return

@@ -1,0 +1,519 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "normal",
+      "half_damage_to": [
+        6,
+        9
+      ],
+      "no_damage_to": [
+        8
+      ],
+      "double_damage_from": [
+        2
+      ],
+      "no_damage_from": [
+        8
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/1.png"
+    },
+    {
+      "id": 2,
+      "name": "fighting",
+      "double_damage_to": [
+        1,
+        6,
+        9,
+        15,
+        17
+      ],
+      "half_damage_to": [
+        3,
+        4,
+        7,
+        14,
+        18
+      ],
+      "no_damage_to": [
+        8
+      ],
+      "double_damage_from": [
+        3,
+        14,
+        18
+      ],
+      "half_damage_from": [
+        6,
+        7,
+        17
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/2.png"
+    },
+    {
+      "id": 3,
+      "name": "flying",
+      "double_damage_to": [
+        2,
+        7,
+        12
+      ],
+      "half_damage_to": [
+        6,
+        9,
+        13
+      ],
+      "double_damage_from": [
+        6,
+        13,
+        15
+      ],
+      "half_damage_from": [
+        2,
+        7,
+        12
+      ],
+      "no_damage_from": [
+        5
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/3.png"
+    },
+    {
+      "id": 4,
+      "name": "poison",
+      "double_damage_to": [
+        12,
+        18
+      ],
+      "half_damage_to": [
+        4,
+        5,
+        6,
+        8
+      ],
+      "no_damage_to": [
+        9
+      ],
+      "double_damage_from": [
+        5,
+        14
+      ],
+      "half_damage_from": [
+        2,
+        4,
+        7,
+        12,
+        18
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/4.png"
+    },
+    {
+      "id": 19,
+      "name": "stellar"
+    },
+    {
+      "id": 5,
+      "name": "ground",
+      "double_damage_to": [
+        4,
+        6,
+        9,
+        10,
+        13
+      ],
+      "half_damage_to": [
+        7,
+        12
+      ],
+      "no_damage_to": [
+        3
+      ],
+      "double_damage_from": [
+        11,
+        12,
+        15
+      ],
+      "half_damage_from": [
+        4,
+        6
+      ],
+      "no_damage_from": [
+        13
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/5.png"
+    },
+    {
+      "id": 18,
+      "name": "fairy",
+      "double_damage_to": [
+        2,
+        16,
+        17
+      ],
+      "half_damage_to": [
+        4,
+        9,
+        10
+      ],
+      "double_damage_from": [
+        4,
+        9
+      ],
+      "half_damage_from": [
+        2,
+        7,
+        17
+      ],
+      "no_damage_from": [
+        16
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/18.png"
+    },
+    {
+      "id": 7,
+      "name": "bug",
+      "double_damage_to": [
+        12,
+        14,
+        17
+      ],
+      "half_damage_to": [
+        2,
+        3,
+        4,
+        8,
+        9,
+        10,
+        18
+      ],
+      "double_damage_from": [
+        3,
+        6,
+        10
+      ],
+      "half_damage_from": [
+        2,
+        5,
+        12
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/7.png"
+    },
+    {
+      "id": 10001,
+      "name": "unknown"
+    },
+    {
+      "id": 10002,
+      "name": "shadow"
+    },
+    {
+      "id": 11,
+      "name": "water",
+      "double_damage_to": [
+        5,
+        6,
+        10
+      ],
+      "half_damage_to": [
+        11,
+        12,
+        16
+      ],
+      "double_damage_from": [
+        12,
+        13
+      ],
+      "half_damage_from": [
+        9,
+        10,
+        11,
+        15
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/11.png"
+    },
+    {
+      "id": 15,
+      "name": "ice",
+      "double_damage_to": [
+        3,
+        5,
+        12,
+        16
+      ],
+      "half_damage_to": [
+        9,
+        10,
+        11,
+        15
+      ],
+      "double_damage_from": [
+        2,
+        6,
+        9,
+        10
+      ],
+      "half_damage_from": [
+        15
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/15.png"
+    },
+    {
+      "id": 12,
+      "name": "grass",
+      "double_damage_to": [
+        5,
+        6,
+        11
+      ],
+      "half_damage_to": [
+        3,
+        4,
+        7,
+        9,
+        10,
+        12,
+        16
+      ],
+      "double_damage_from": [
+        3,
+        4,
+        7,
+        10,
+        15
+      ],
+      "half_damage_from": [
+        5,
+        11,
+        12,
+        13
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/12.png"
+    },
+    {
+      "id": 8,
+      "name": "ghost",
+      "double_damage_to": [
+        8,
+        14
+      ],
+      "half_damage_to": [
+        17
+      ],
+      "no_damage_to": [
+        1
+      ],
+      "double_damage_from": [
+        8,
+        17
+      ],
+      "half_damage_from": [
+        4,
+        7
+      ],
+      "no_damage_from": [
+        1,
+        2
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/8.png"
+    },
+    {
+      "id": 16,
+      "name": "dragon",
+      "double_damage_to": [
+        16
+      ],
+      "half_damage_to": [
+        9
+      ],
+      "no_damage_to": [
+        18
+      ],
+      "double_damage_from": [
+        15,
+        16,
+        18
+      ],
+      "half_damage_from": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/16.png"
+    },
+    {
+      "id": 13,
+      "name": "electric",
+      "double_damage_to": [
+        3,
+        11
+      ],
+      "half_damage_to": [
+        12,
+        13,
+        16
+      ],
+      "no_damage_to": [
+        5
+      ],
+      "double_damage_from": [
+        5
+      ],
+      "half_damage_from": [
+        3,
+        9,
+        13
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/13.png"
+    },
+    {
+      "id": 9,
+      "name": "steel",
+      "double_damage_to": [
+        6,
+        15,
+        18
+      ],
+      "half_damage_to": [
+        9,
+        10,
+        11,
+        13
+      ],
+      "double_damage_from": [
+        2,
+        5,
+        10
+      ],
+      "half_damage_from": [
+        1,
+        3,
+        6,
+        7,
+        9,
+        12,
+        14,
+        15,
+        16,
+        18
+      ],
+      "no_damage_from": [
+        4
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/9.png"
+    },
+    {
+      "id": 17,
+      "name": "dark",
+      "double_damage_to": [
+        8,
+        14
+      ],
+      "half_damage_to": [
+        2,
+        17,
+        18
+      ],
+      "double_damage_from": [
+        2,
+        7,
+        18
+      ],
+      "half_damage_from": [
+        8,
+        17
+      ],
+      "no_damage_from": [
+        14
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/17.png"
+    },
+    {
+      "id": 6,
+      "name": "rock",
+      "double_damage_to": [
+        3,
+        7,
+        10,
+        15
+      ],
+      "half_damage_to": [
+        2,
+        5,
+        9
+      ],
+      "double_damage_from": [
+        2,
+        5,
+        9,
+        11,
+        12
+      ],
+      "half_damage_from": [
+        1,
+        3,
+        4,
+        10
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/6.png"
+    },
+    {
+      "id": 14,
+      "name": "psychic",
+      "double_damage_to": [
+        2,
+        4
+      ],
+      "half_damage_to": [
+        9,
+        14
+      ],
+      "no_damage_to": [
+        17
+      ],
+      "double_damage_from": [
+        7,
+        8,
+        17
+      ],
+      "half_damage_from": [
+        2,
+        14
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/14.png"
+    },
+    {
+      "id": 10,
+      "name": "fire",
+      "double_damage_to": [
+        7,
+        9,
+        12,
+        15
+      ],
+      "half_damage_to": [
+        6,
+        10,
+        11,
+        16
+      ],
+      "double_damage_from": [
+        5,
+        6,
+        11
+      ],
+      "half_damage_from": [
+        7,
+        9,
+        10,
+        12,
+        15,
+        18
+      ],
+      "img_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/legends-arceus/10.png"
+    }
+  ],
+  "page": 1,
+  "pageSize": 100,
+  "total": 21
+}
