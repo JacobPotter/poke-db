@@ -1,0 +1,89 @@
+{
+  "id": 2,
+  "pokemonSpecies": {
+    "id": 2,
+    "name": "ivysaur",
+    "varieties": [
+      {
+        "name": "ivysaur",
+        "pokemon_species_id": 2,
+        "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
+      }
+    ]
+  },
+  "pokemonSpeciesId": 2,
+  "evolutionDetails": [
+    {
+      "id": 37,
+      "trigger": {
+        "id": 1,
+        "name": "level-up"
+      },
+      "triggerId": 1,
+      "minLevel": 16,
+      "needsOverworldRain": false,
+      "timeOfDay": "",
+      "turnUpsideDown": false,
+      "chainLinkId": 2
+    }
+  ],
+  "evolvesTo": [
+    {
+      "id": 3,
+      "pokemonSpecies": {
+        "id": 3,
+        "name": "venusaur",
+        "varieties": [
+          {
+            "name": "venusaur",
+            "pokemon_species_id": 3,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png"
+          },
+          {
+            "name": "venusaur-mega",
+            "pokemon_species_id": 3,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png"
+          },
+          {
+            "name": "venusaur-gmax",
+            "pokemon_species_id": 3,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10195.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 3,
+      "evolutionDetails": [
+        {
+          "id": 48,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 32,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 3
+        }
+      ],
+      "evolvesFromId": 2
+    }
+  ],
+  "evolvesFrom": {
+    "id": 1,
+    "pokemonSpecies": {
+      "id": 1,
+      "name": "bulbasaur",
+      "varieties": [
+        {
+          "name": "bulbasaur",
+          "pokemon_species_id": 1,
+          "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+        }
+      ]
+    },
+    "pokemonSpeciesId": 1
+  },
+  "evolvesFromId": 1
+}

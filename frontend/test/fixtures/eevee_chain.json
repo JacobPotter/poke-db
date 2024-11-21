@@ -1,0 +1,317 @@
+{
+  "id": 133,
+  "pokemonSpecies": {
+    "id": 133,
+    "name": "eevee",
+    "varieties": [
+      {
+        "name": "eevee",
+        "pokemon_species_id": 133,
+        "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/133.png"
+      },
+      {
+        "name": "eevee-starter",
+        "pokemon_species_id": 133
+      },
+      {
+        "name": "eevee-gmax",
+        "pokemon_species_id": 133,
+        "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10205.png"
+      }
+    ]
+  },
+  "pokemonSpeciesId": 133,
+  "evolvesTo": [
+    {
+      "id": 134,
+      "pokemonSpecies": {
+        "id": 134,
+        "name": "vaporeon",
+        "varieties": [
+          {
+            "name": "vaporeon",
+            "pokemon_species_id": 134,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/134.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 134,
+      "evolutionDetails": [
+        {
+          "id": 133,
+          "trigger": {
+            "id": 3,
+            "name": "use-item"
+          },
+          "triggerId": 3,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 134
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 135,
+      "pokemonSpecies": {
+        "id": 135,
+        "name": "jolteon",
+        "varieties": [
+          {
+            "name": "jolteon",
+            "pokemon_species_id": 135,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/135.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 135,
+      "evolutionDetails": [
+        {
+          "id": 134,
+          "trigger": {
+            "id": 3,
+            "name": "use-item"
+          },
+          "triggerId": 3,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 135
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 136,
+      "pokemonSpecies": {
+        "id": 136,
+        "name": "flareon",
+        "varieties": [
+          {
+            "name": "flareon",
+            "pokemon_species_id": 136,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/136.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 136,
+      "evolutionDetails": [
+        {
+          "id": 135,
+          "trigger": {
+            "id": 3,
+            "name": "use-item"
+          },
+          "triggerId": 3,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 136
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 196,
+      "pokemonSpecies": {
+        "id": 196,
+        "name": "espeon",
+        "varieties": [
+          {
+            "name": "espeon",
+            "pokemon_species_id": 196,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/196.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 196,
+      "evolutionDetails": [
+        {
+          "id": 136,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "minHappiness": 160,
+          "needsOverworldRain": false,
+          "timeOfDay": "day",
+          "turnUpsideDown": false,
+          "chainLinkId": 196
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 197,
+      "pokemonSpecies": {
+        "id": 197,
+        "name": "umbreon",
+        "varieties": [
+          {
+            "name": "umbreon",
+            "pokemon_species_id": 197,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/197.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 197,
+      "evolutionDetails": [
+        {
+          "id": 137,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "minHappiness": 160,
+          "needsOverworldRain": false,
+          "timeOfDay": "night",
+          "turnUpsideDown": false,
+          "chainLinkId": 197
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 470,
+      "pokemonSpecies": {
+        "id": 470,
+        "name": "leafeon",
+        "varieties": [
+          {
+            "name": "leafeon",
+            "pokemon_species_id": 470,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/470.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 470,
+      "evolutionDetails": [
+        {
+          "id": 138,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 470
+        },
+        {
+          "id": 141,
+          "trigger": {
+            "id": 3,
+            "name": "use-item"
+          },
+          "triggerId": 3,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 470
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 471,
+      "pokemonSpecies": {
+        "id": 471,
+        "name": "glaceon",
+        "varieties": [
+          {
+            "name": "glaceon",
+            "pokemon_species_id": 471,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/471.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 471,
+      "evolutionDetails": [
+        {
+          "id": 142,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 471
+        },
+        {
+          "id": 145,
+          "trigger": {
+            "id": 3,
+            "name": "use-item"
+          },
+          "triggerId": 3,
+          "minLevel": 0,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 471
+        }
+      ],
+      "evolvesFromId": 133
+    },
+    {
+      "id": 700,
+      "pokemonSpecies": {
+        "id": 700,
+        "name": "sylveon",
+        "varieties": [
+          {
+            "name": "sylveon",
+            "pokemon_species_id": 700,
+            "sprite_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/700.png"
+          }
+        ]
+      },
+      "pokemonSpeciesId": 700,
+      "evolutionDetails": [
+        {
+          "id": 146,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "minAffection": 2,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 700
+        },
+        {
+          "id": 147,
+          "trigger": {
+            "id": 1,
+            "name": "level-up"
+          },
+          "triggerId": 1,
+          "minLevel": 0,
+          "minHappiness": 160,
+          "needsOverworldRain": false,
+          "timeOfDay": "",
+          "turnUpsideDown": false,
+          "chainLinkId": 700
+        }
+      ],
+      "evolvesFromId": 133
+    }
+  ]
+}

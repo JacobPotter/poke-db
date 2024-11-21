@@ -33,7 +33,7 @@ func (e *EvolutionHandler) GetEvolutionChain(c *gin.Context) {
 }
 
 func selectFromVarieties(db *gorm.DB) *gorm.DB {
-	return db.Select("name", "sprite_url", "pokemon_species_id")
+	return db.Order("id ASC").Select("id", "name", "sprite_url", "pokemon_species_id")
 }
 func selectFromSpecies(db *gorm.DB) *gorm.DB {
 	return db.Select("id", "name").Preload("Varieties", selectFromVarieties)
@@ -44,14 +44,20 @@ func (e *EvolutionHandler) GetEvolutionChainLink(c *gin.Context) {
 	var evolutionChain models.EvolutionChainLink
 	if err := e.db.
 		Preload(clause.Associations).
+		Preload("PokemonSpecies", selectFromSpecies).
 		Preload("EvolvesFrom.PokemonSpecies", selectFromSpecies).
-		Preload("EvolvesFrom.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesFrom.EvolvesTo.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesFrom.EvolvesFrom.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesFrom.EvolvesFrom.EvolvesTo.PokemonSpecies", selectFromSpecies).
+		Preload("EvolvesFrom.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesFrom.EvolvesTo.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesFrom.EvolvesFrom.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesFrom.EvolvesFrom.EvolvesTo.EvolutionDetails."+clause.Associations).
 		Preload("EvolutionDetails."+clause.Associations).
 		Preload("EvolvesTo.EvolutionDetails."+clause.Associations).
+		Preload("EvolvesTo.PokemonSpecies", selectFromSpecies).
 		Preload("EvolvesTo.EvolvesTo.PokemonSpecies", selectFromSpecies).
 		Preload("EvolvesTo.EvolvesTo.EvolutionDetails."+clause.Associations).
-		Preload("EvolvesTo.EvolvesTo.EvolvesTo.PokemonSpecies", selectFromSpecies).
-		Preload("EvolvesTo.EvolvesTo.EvolvesTo.EvolutionDetails."+clause.Associations).
 		First(&evolutionChain, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Evolution Chain not found"})
 		return

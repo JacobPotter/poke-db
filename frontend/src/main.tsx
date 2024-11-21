@@ -9,6 +9,9 @@ import {EvolutionsPage} from "./components/pages/EvolutionsPage.tsx";
 import {TypesPage} from "./components/pages/TypesPage.tsx";
 import {MovesPage} from "./components/pages/MovesPage.tsx";
 import {MoveTypeProvider} from "./context/MoveTypeContext.tsx";
+import {PokemonSummary} from "./components/pokemon/PokemonSummary.tsx";
+import {EvolutionChainSummary} from "./components/pokemon/EvolutionChainSummary.tsx";
+import {ComingSoon} from "./components/ui/ComingSoon.tsx";
 
 
 export const router = createBrowserRouter([
@@ -18,15 +21,35 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to={'pokemon/1'}/>
+                element: <Navigate to={'pokemon/1/summary'}/>
             },
             {
                 path: 'pokemon',
                 element: <PokemonPage/>,
                 children: [
                     {
-                        path: ':id',
-                        element: <PokemonPage/>
+                        index: true,
+                        element: <Navigate to={"1/summary"}/>
+                    },
+                    {
+                        path: ":id/",
+                        element: <PokemonSummary/>,
+                    },
+                    {
+                        path: ":id",
+                        element: <PokemonSummary/>,
+                    },
+                    {
+                        path: ':id/summary',
+                        element: <PokemonSummary/>
+                    },
+                    {
+                        path: ':id/evolutions',
+                        element: <EvolutionChainSummary/>
+                    },
+                    {
+                        path: ':id/stats',
+                        element: <ComingSoon/>
                     }
                 ]
             },

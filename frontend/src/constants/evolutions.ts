@@ -1,0 +1,1 @@
+export const EEVEE_EVOLUTIONS = [133, 134, 135, 136, 196, 197, 470, 471, 700];
