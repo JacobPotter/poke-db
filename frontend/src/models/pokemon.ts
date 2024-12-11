@@ -16,7 +16,7 @@ export interface PokemonSpecies {
     is_legendary: boolean;
     is_mythical: boolean;
     name: string;
-    varieties: PokemonVariety[];
+    varieties: Partial<PokemonVariety>[];
 }
 
 export interface PokemonVariety {

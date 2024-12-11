@@ -64,7 +64,7 @@ export const EvolutionChainSummary = () => {
         }
 
 
-    }, [walkEvolvesToChain]);
+    }, []);
 
     useEffect(() => {
         if (loading) return;

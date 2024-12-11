@@ -2,6 +2,11 @@ import {MoveType, PokemonSpecies} from "./pokemon.ts";
 import {Item} from "./item.ts";
 import {Move} from "./move.ts";
 
+export interface Location {
+    id: number
+    name: string
+}
+
 export interface EvolutionChain {
     id?: number;
     babyTriggerItem?: Item;

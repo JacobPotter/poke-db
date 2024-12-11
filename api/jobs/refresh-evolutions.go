@@ -161,34 +161,8 @@ func (r RefreshDB) getEvolutionDetailsModelFromApi(clientDetails []structs.Evolu
 		return evolutionDetails
 	}
 
-	var partyPokemon *models.PokemonSpecies
-	var tradePokemon *models.PokemonSpecies
-
 	for _, detail := range clientDetails {
 
-		if detail.PartySpecies != nil {
-
-			switch pokemonSpecies := detail.PartySpecies.(type) {
-			case structs.Result:
-				partyPokemon = r.getPokemonSpeciesFromName(pokemonSpecies.Name)
-			case map[string]interface{}:
-				partyPokemon = r.getPokemonSpeciesFromName(pokemonSpecies["name"].(string))
-			default:
-				log.Printf("Unknown type for party species: %s", pokemonSpecies)
-			}
-
-		}
-
-		if detail.TradeSpecies != nil {
-			switch pokemonSpecies := detail.TradeSpecies.(type) {
-			case structs.Result:
-				partyPokemon = r.getPokemonSpeciesFromName(pokemonSpecies.Name)
-			case map[string]interface{}:
-				partyPokemon = r.getPokemonSpeciesFromName(pokemonSpecies["name"].(string))
-			default:
-				log.Printf("Unknown type for party species: %s", pokemonSpecies)
-			}
-		}
 		evolutionDetails = append(evolutionDetails, models.EvolutionDetails{
 			Item:                  r.getItemFromClientDetails(detail.Item),
 			EvolutionTrigger:      r.getEvolutionTriggerFromClientDetails(detail),
@@ -202,11 +176,11 @@ func (r RefreshDB) getEvolutionDetailsModelFromApi(clientDetails []structs.Evolu
 			MinBeauty:             r.getIntFieldFromInterface(detail.MinBeauty),
 			MinAffection:          r.getIntFieldFromInterface(detail.MinAffection),
 			NeedsOverworldRain:    &detail.NeedsOverworldRain,
-			PartySpecies:          partyPokemon,
+			PartySpecies:          r.getSpeciesFromApi(detail.PartySpecies),
 			PartyType:             r.getMoveTypeFromClientDetails(detail.PartyType),
 			RelativePhysicalStats: r.getIntFieldFromInterface(detail.RelativePhysicalStats),
 			TimeOfDay:             &detail.TimeOfDay,
-			TradeSpecies:          tradePokemon,
+			TradeSpecies:          r.getSpeciesFromApi(detail.TradeSpecies),
 			TurnUpsideDown:        &detail.TurnUpsideDown,
 		})
 	}
@@ -228,8 +202,21 @@ func removeDuplicateDetails(details []models.EvolutionDetails) (newDetails []mod
 	return newDetails
 }
 
+func (r RefreshDB) getSpeciesFromApi(species interface{}) (speciesModel *models.PokemonSpecies) {
+	switch pokemonSpecies := species.(type) {
+	case structs.Result:
+		speciesModel = r.getPokemonSpeciesFromName(pokemonSpecies.Name)
+	case map[string]interface{}:
+		speciesModel = r.getPokemonSpeciesFromName(pokemonSpecies["name"].(string))
+	default:
+		log.Printf("Unknown type for party species: %T", pokemonSpecies)
+	}
+	return speciesModel
+}
+
 func (r RefreshDB) getItemFromClientDetails(clientItem interface{}) (item *models.Item) {
-	if itemResult, ok := clientItem.(structs.Result); ok {
+	switch itemResult := clientItem.(type) {
+	case structs.Result:
 		tx := r.DB.Model(models.Item{}).Where("name = ?", itemResult.Name).Find(&item)
 		if tx.Error != nil {
 			log.Printf("Error getting item from db, trying api: %s", tx.Error)
@@ -245,6 +232,22 @@ func (r RefreshDB) getItemFromClientDetails(clientItem interface{}) (item *model
 			}
 
 		}
+	case map[string]interface{}:
+		tx := r.DB.Model(models.Item{}).Where("name = ?", itemResult["name"].(string)).Find(&item)
+		if tx.Error != nil {
+			log.Printf("Error getting item from db, trying api: %s", tx.Error)
+			clientItem, err := pokeapi.Item(itemResult["name"].(string))
+			if err != nil {
+				log.Printf("Error getting item from api: %s", err)
+			} else {
+				item = &models.Item{
+					GenericId: models.GenericId(uint(clientItem.ID)),
+					Name:      clientItem.Name,
+					SpriteUrl: clientItem.Sprites.Default,
+				}
+			}
+		}
+
 	}
 	return item
 }
@@ -292,28 +295,45 @@ func (r RefreshDB) getIntFieldFromInterface(apiValue interface{}) *int {
 }
 
 func (r RefreshDB) getMoveFromClientDetails(moveApi interface{}) (move *models.Move) {
-	if moveResult, ok := moveApi.(structs.Result); ok {
+	switch moveResult := moveApi.(type) {
+	case structs.Result:
 		tx := r.DB.Model(models.Move{}).Where("name = ?", moveResult.Name).Find(&move)
 		if tx.Error != nil {
 			log.Printf("Error getting move from db %s", tx.Error)
 			return nil
 		}
 		return move
-	} else {
+	case map[string]interface{}:
+		tx := r.DB.Model(models.Move{}).Where("name = ?", moveResult["name"].(string)).Find(&move)
+		if tx.Error != nil {
+			log.Printf("Error getting move from db %s", tx.Error)
+			return nil
+		}
+		return move
+	default:
 		return nil
 	}
+
 }
 
 func (r RefreshDB) getMoveTypeFromClientDetails(moveTypeApi interface{}) (moveType *models.MoveType) {
 
-	if moveTypeResult, ok := moveTypeApi.(structs.Result); ok {
+	switch moveTypeResult := moveTypeApi.(type) {
+	case structs.Result:
 		tx := r.DB.Model(models.MoveType{}).Where("name = ?", moveTypeResult.Name).Find(&moveType)
 		if tx.Error != nil {
 			log.Printf("Error getting move type from db %s", tx.Error)
 			return nil
 		}
 		return moveType
-	} else {
+	case map[string]interface{}:
+		tx := r.DB.Model(models.MoveType{}).Where("name = ?", moveTypeResult["name"].(string)).Find(&moveType)
+		if tx.Error != nil {
+			log.Printf("Error getting move type from db %s", tx.Error)
+			return nil
+		}
+		return moveType
+	default:
 		return nil
 	}
 
@@ -321,14 +341,22 @@ func (r RefreshDB) getMoveTypeFromClientDetails(moveTypeApi interface{}) (moveTy
 
 func (r RefreshDB) getLocationFromClientDetails(locationApi interface{}) (location *models.Location) {
 
-	if result, ok := locationApi.(structs.Result); ok {
+	switch result := locationApi.(type) {
+	case structs.Result:
 		tx := r.DB.Model(models.Location{}).Where("name = ?", result.Name).Find(&location)
 		if tx.Error != nil {
 			log.Printf("Error getting location from db %s", tx.Error)
 			return nil
 		}
 		return location
-	} else {
+	case map[string]interface{}:
+		tx := r.DB.Model(models.Location{}).Where("name = ?", result["name"].(string)).Find(&location)
+		if tx.Error != nil {
+			log.Printf("Error getting location from db %s", tx.Error)
+			return nil
+		}
+		return location
+	default:
 		return nil
 	}
 

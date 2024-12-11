@@ -7,6 +7,10 @@
     @apply w-6 h-6 cursor-pointer transition-all duration-[0.25s] relative;
 }
 
+.clip-bottom {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
 
 .hamburger-top,
 .hamburger-middle,
