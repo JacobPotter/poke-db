@@ -76,23 +76,27 @@ export const PokemonPage: FC = () => {
         setEditForm(false)
     };
 
-    const calculatePageFromId = (pokemonId: string | undefined) => {
+    const calculatePageFromId = useCallback((pokemonId: string | undefined) => {
         if (!pokemonId) return 1;
         const numericId = parseInt(pokemonId, 10);
         if (numericId < 1) {
             throw new Error(`pokemonId ${numericId} is out of range`);
         }
-        return Math.ceil(numericId / DEFAULT_PAGE_SIZE);
-    };
+
+        return Math.ceil(numericId / (searchParams?.pageSize || DEFAULT_PAGE_SIZE));
+    }, [searchParams?.pageSize])
 
     // Initial page setup based on pokemonId from URL
     useEffect(() => {
-        if (pokemonId) {
+        if (pokemonId && !searchParams?.pokemonName && !searchParams?.pokemonTypeId) {
             const pageFromId = calculatePageFromId(pokemonId);
             setPage(pageFromId);
 
+        } else {
+            setPage(1)
         }
-    }, [pokemonId]);
+
+    }, [calculatePageFromId, pokemonId, searchParams]);
 
     // Synchronize selected Pokémon on data load
     useEffect(() => {
@@ -100,9 +104,6 @@ export const PokemonPage: FC = () => {
             const selectedPokemon = data.pokemon.find(pokemon => pokemon.id === parseInt(pokemonId || '', 10));
             if (selectedPokemon) {
                 setCurrentPokemon(selectedPokemon);
-            } else if (pokemonId) {
-                // if the pokemonId in URL is invalid, reset to the first Pokémon in the list
-                handlePokemonSelect(data.pokemon[0].id);
             } else {
                 // if no pokemonId in URL, default to the first Pokémon in the list
                 setCurrentPokemon(data.pokemon[0]);

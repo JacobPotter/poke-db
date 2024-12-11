@@ -55,11 +55,6 @@ func main() {
 	//}
 	//err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
 
-	if err != nil {
-		log.Fatalf("Failed to schedule job: %v", err)
-		return
-	}
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	router.GET("/jobrunner/json", JobJson)
