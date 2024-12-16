@@ -1,8 +1,8 @@
 import {describe, expect, it} from "vitest";
 import {render} from "vitest-browser-react";
 import {Tooltip} from "../Tooltip.tsx";
-import {PokemonListItem} from "../../pokemon/PokemonListItem.tsx";
-import mockPokemonResponse from "../../../../test/fixtures/pokemon_page_1.json"
+import {PokemonListItem} from "@/components/pokemon/PokemonListItem.tsx";
+import mockPokemonResponse from "@/test/fixtures/pokemon_page_1.json"
 import {FC, PropsWithChildren} from "react";
 
 const ToolTipWrapper: FC<PropsWithChildren> = ({children}) => (

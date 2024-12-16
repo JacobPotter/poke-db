@@ -1,7 +1,7 @@
 // DarkModeContext.test.tsx
 import {FC, useContext} from 'react'
 import {describe, expect, it} from 'vitest'
-import {render} from 'vitest-browser-react'
+import {render} from '@/test/utils'
 import {DarkModeContext, DarkModeProvider} from '../DarkModeContext.tsx'
 
 describe('DarkModeProvider', () => {

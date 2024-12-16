@@ -1,99 +1,19 @@
-import {PokemonSpecies} from "../../models/pokemon.ts";
-import useAxios from "axios-hooks";
-import {EvolutionChainLink, EvolutionDetails} from "../../models/evolution.ts";
-import {ReactElement, useCallback, useEffect, useState} from "react";
+import {PokemonSpecies} from "@/models/pokemon.ts";
+import {EvolutionChainLink, EvolutionDetails} from "@/models/evolution.ts";
+import {ReactElement, useCallback} from "react";
 import {EvolutionChainItem} from "./EvolutionChainItem.tsx";
 import {LineTo} from "react-lineto-hooks";
-import {EEVEE_EVOLUTIONS} from "../../constants/evolutions.ts";
+import {EEVEE_EVOLUTIONS} from "@/constants/evolutions.ts";
 import {useOutletContext} from "react-router-dom";
+import {useEvolutions} from "@/query/hooks/useEvolutions.ts";
 
 export const EvolutionChainSummary = () => {
 
     const {pokemonSpecies: pokemon} = useOutletContext<{ pokemonSpecies: PokemonSpecies | null }>()
 
-    const [{data, loading, error, response}] = useAxios<EvolutionChainLink>({
-        url: pokemon ? `/api/v1/evolution/chain/${EEVEE_EVOLUTIONS.includes(pokemon.id) ? 133 : pokemon.id}` : undefined,
-        method: 'GET',
-    });
 
-    const [evolutionChain, setEvolutionChain] = useState<Array<Partial<EvolutionChainLink>[]>>([]);
-    const [showError, setShowError] = useState(false);
+    const evolutionChain = useEvolutions()
 
-    const walkEvolvesToChain = useCallback((chains: Partial<EvolutionChainLink>[]) => {
-        const addToEvolutionChain = (chainElement: Partial<EvolutionChainLink>[]) => {
-            setEvolutionChain(prevState => [...prevState, chainElement]);
-        };
-
-        const processChains = (chains: Partial<EvolutionChainLink>[]) => {
-            if (chains.length === 0) return;
-
-            let nextStageChains: Partial<EvolutionChainLink>[] = [];
-            addToEvolutionChain(chains);
-
-            for (const link of chains) {
-                if (link.evolvesTo) {
-                    nextStageChains = [...nextStageChains, ...link.evolvesTo];
-                }
-            }
-
-            if (nextStageChains.length > 0) {
-                processChains(nextStageChains);
-            }
-        };
-
-        processChains(chains);
-    }, []);
-
-    const walkEvolvesFromChain = useCallback((chain: EvolutionChainLink, visited: Set<number> = new Set()) => {
-        if (!chain || visited.has(chain.pokemonSpeciesId)) return;
-        visited.add(chain.pokemonSpeciesId);
-
-
-        const siblings = chain.evolvesFrom && chain.evolvesFrom.evolvesTo ? chain.evolvesFrom.evolvesTo.filter((sibling) => sibling.pokemonSpeciesId !== chain.pokemonSpeciesId) : [];
-
-
-        if (chain.evolvesFrom) {
-            walkEvolvesFromChain(chain.evolvesFrom, visited);
-        }
-
-        // Add all siblings to the evolution chain
-        if (siblings && siblings.length > 0) {
-            setEvolutionChain(prevState => [...prevState, [chain, ...siblings]]);
-        } else {
-            setEvolutionChain(prevState => [...prevState, [chain]]);
-        }
-
-
-    }, []);
-
-    useEffect(() => {
-        if (loading) return;
-        if (error) {
-            setShowError(true);
-            return;
-        }
-        if (response?.status === 404) {
-            setShowError(true);
-            return;
-        }
-        if (data) {
-            setEvolutionChain([])
-            const visited = new Set<number>();
-            if (data.evolvesFrom && !data.evolvesTo) {
-                walkEvolvesFromChain(data, visited);
-            } else if (data.evolvesFrom && data.evolvesTo) {
-                walkEvolvesFromChain(data, visited);
-                walkEvolvesToChain(data.evolvesTo);
-            } else {
-                walkEvolvesToChain([data]);
-            }
-
-        }
-    }, [loading, data, response, error, walkEvolvesFromChain, walkEvolvesToChain]);
-
-    useEffect(() => {
-        if (showError || error) console.error(error);
-    }, [showError, error]);
 
     function getBorderColor(details: EvolutionDetails[] | undefined) {
         if (!details || details.length === 0) return "rgb(148 163 184)"
@@ -104,7 +24,7 @@ export const EvolutionChainSummary = () => {
                 case "level-up":
                     return "rgb(148 163 184)"
                 case "trade":
-                    return "rgb(62, 222, 51)"
+                    return "rgb(62,177,53)"
                 case "use-item":
                     return "rgb(250, 175, 110)"
                 case "shed":
@@ -154,7 +74,7 @@ export const EvolutionChainSummary = () => {
                         <LineTo from={"eevee"} to={`eevee-${link.pokemonSpeciesId}`} zIndex={0}
                                 borderColor={getBorderColor(link.evolutionDetails)}
                                 borderWidth={4}
-                                delay={0}/>))}
+                                delay={100}/>))}
                 </div>
             );
         } else {
@@ -188,7 +108,7 @@ export const EvolutionChainSummary = () => {
                             borderWidth={4}
                             fromAnchor={"bottom center"}
                             toAnchor={"top center"}
-                            delay={0}
+                            delay={100}
                             orientation={"v"}
                             stepped
                         />

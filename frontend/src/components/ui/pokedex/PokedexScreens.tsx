@@ -41,6 +41,6 @@ export const RightScreenContainer: React.FC<PropsWithChildren<Sizeable & Loadabl
                                                                                            loading = false,
                                                                                            size = 'small'
                                                                                        }) => <div
-    className={`min-h-40 max-h-44 sm:max-h-60 md:max-h-full md::min-h-[575px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-t-none md:rounded-t-lg px-1 py-1 xs:px-3 xs:py-2 overflow-scroll ${size === 'small' ? "md:row-span-5" : 'md:row-span-6'}`}>
+    className={`min-h-40 max-h-44 sm:max-h-60 md:max-h-full md::min-h-[575px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-t-none md:rounded-t-lg overflow-y-auto ${size === 'small' ? "md:row-span-5" : 'md:row-span-6'}`}>
     {loading ? <RightScreenLoading/> : children}
 </div>;

@@ -8,10 +8,14 @@ import {PokemonPage} from "./components/pages/PokemonPage.tsx";
 import {EvolutionsPage} from "./components/pages/EvolutionsPage.tsx";
 import {TypesPage} from "./components/pages/TypesPage.tsx";
 import {MovesPage} from "./components/pages/MovesPage.tsx";
-import {MoveTypeProvider} from "./context/MoveTypeContext.tsx";
 import {PokemonSummary} from "./components/pokemon/PokemonSummary.tsx";
 import {EvolutionChainSummary} from "./components/pokemon/EvolutionChainSummary.tsx";
 import {ComingSoon} from "./components/ui/ComingSoon.tsx";
+import {QueryClientProvider} from "@tanstack/react-query";
+import {queryClient} from "./query/queryClient.ts";
+import {loader as pokemonLoader} from "./loaders/pokemon.ts";
+import {loader as evolutionChainLoader} from "./loaders/evolutionChain.ts";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
 
 export const router = createBrowserRouter([
@@ -26,29 +30,23 @@ export const router = createBrowserRouter([
             {
                 path: 'pokemon',
                 element: <PokemonPage/>,
+                loader: pokemonLoader(queryClient),
                 children: [
                     {
                         index: true,
-                        element: <Navigate to={"1/summary"}/>
+                        element: <Navigate to={"summary"}/>
                     },
                     {
-                        path: ":id/",
-                        element: <PokemonSummary/>,
-                    },
-                    {
-                        path: ":id",
-                        element: <PokemonSummary/>,
-                    },
-                    {
-                        path: ':id/summary',
+                        path: 'summary',
                         element: <PokemonSummary/>
                     },
                     {
-                        path: ':id/evolutions',
+                        path: 'evolutions',
+                        loader: evolutionChainLoader(queryClient),
                         element: <EvolutionChainSummary/>
                     },
                     {
-                        path: ':id/stats',
+                        path: 'stats',
                         element: <ComingSoon/>
                     }
                 ]
@@ -72,9 +70,10 @@ export const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <DarkModeProvider>
-            <MoveTypeProvider>
+            <QueryClientProvider client={queryClient}>
                 <RouterProvider router={router}/>
-            </MoveTypeProvider>
+                <ReactQueryDevtools/>
+            </QueryClientProvider>
         </DarkModeProvider>
     </StrictMode>,
 )

@@ -1,14 +1,11 @@
 import {describe, expect, it} from 'vitest'
-import {render} from 'vitest-browser-react'
-import {MemoryRouter} from 'react-router-dom'
+import {render} from '@/test/utils'
 import {Navbar} from '../Navbar.tsx'
 
 describe('Navbar', () => {
     it('toggles the state on hamburger click', async () => {
         const {getByTestId} = render(
-            <MemoryRouter initialEntries={['/']}>
-                <Navbar/>
-            </MemoryRouter>
+            <Navbar/>
         )
         const button = getByTestId('hamburger-button')
         await button.click()
@@ -21,9 +18,7 @@ describe('Navbar', () => {
 
     it('should clear the menu on link click', async () => {
         const {getByTestId} = render(
-            <MemoryRouter initialEntries={['/']}>
-                <Navbar/>
-            </MemoryRouter>
+            <Navbar/>
         )
         const button = getByTestId('hamburger-button')
         await button.click()

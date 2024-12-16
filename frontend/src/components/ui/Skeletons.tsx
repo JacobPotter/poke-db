@@ -14,6 +14,10 @@ export function SkeletonBlock({thick, withIcon}: { thick?: boolean, withIcon?: b
     </div>;
 }
 
-export function SkeletonIcon() {
-    return <div className="rounded-full h-20 w-20 sm:h-32 sm:w-32 bg-sky-600 opacity-80"></div>;
+interface SkeletonIconProps {
+    className?: string
+}
+
+export function SkeletonIcon({className}: SkeletonIconProps) {
+    return <div className={`rounded-full ${className || "h-20 w-20 sm:h-32 sm:w-32"} bg-sky-600 opacity-80`}></div>;
 }

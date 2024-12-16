@@ -1,8 +1,15 @@
 import {createContext, FC, PropsWithChildren, useCallback} from "react";
-import {MoveType, MoveTypeResp} from "../models/pokemon.ts";
-import useAxios from "axios-hooks";
+import {MoveType} from "../models/pokemon.ts";
+import {useQuery} from "@tanstack/react-query";
+import {MOVE_TYPE_DEFAULT_QUERY_OPTIONS} from "@/query/keyFactories.ts";
 
-export const MoveTypeContext = createContext<{ moveTypes: MoveType[], refresh: VoidFunction, loading: boolean }>({
+export interface MoveContextType {
+    moveTypes: MoveType[],
+    refresh: VoidFunction,
+    loading: boolean
+}
+
+export const MoveTypeContext = createContext<MoveContextType>({
     moveTypes: [],
     refresh: () => {
     },
@@ -11,15 +18,12 @@ export const MoveTypeContext = createContext<{ moveTypes: MoveType[], refresh: V
 
 
 export const MoveTypeProvider: FC<PropsWithChildren> = ({children}) => {
-    const [{data, loading}, refetch] = useAxios<MoveTypeResp>(
-        `/api/v1/type`
-    )
-
+    const {data, isLoading: loading, refetch} = useQuery(MOVE_TYPE_DEFAULT_QUERY_OPTIONS)
     const refresh = useCallback(() => {
         refetch()
     }, [refetch])
 
-    const filteredData = data?.data.filter(m => m.name !== 'stellar')
+    const filteredData = data?.filter(m => m.name.toLowerCase() !== 'stellar')
 
     return <MoveTypeContext.Provider
         value={{

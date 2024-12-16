@@ -57,8 +57,8 @@ export const PokemonSummary = () => {
 
 
     useEffect(() => {
-        if (!pokemonSpecies) return;
-        setSelectedPokemonVariety(pokemonSpecies?.varieties[varietyIndex]);
+        if (!pokemonSpecies || !pokemonSpecies.varieties) return;
+        setSelectedPokemonVariety(pokemonSpecies?.varieties[varietyIndex] as PokemonVariety);
     }, [pokemonSpecies, varietyIndex]);
 
 
@@ -82,10 +82,10 @@ export const PokemonSummary = () => {
     return (
         <section className={'relative flex flex-col items-center justify-center font-mono h-full'}>
             <div className={'max-w-md flex flex-col flex-grow w-full justify-between'}>
-                <h1 className="sm:text-lg md:text-3xl lg:text-4xl z-10">{pokemonSpecies && pokemonSpecies.name?.split("-").length > 1 ? `${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[0])} ${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[1])}` : capitalize(pokemonSpecies?.varieties[0]?.name)} #{pokemonSpecies?.varieties[0]?.id} {varietyIndex > 0 ? showVariety() ? capitalize(`${selectedPokemonVariety?.name.split("-")[1]}-${capitalize(selectedPokemonVariety?.name.split("-")[2])}`) : capitalize(selectedPokemonVariety?.name.split("-")[1]) : <></>}</h1>
-                <div className="translate-y-[10%] flex items-center justify-end sm:justify-center">
+                <h1 className="sm:text-lg md:text-3xl lg:text-4xl xl:text-5xl z-10">{pokemonSpecies && pokemonSpecies?.varieties[0].name && pokemonSpecies.name?.split("-").length > 1 ? `${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[0])} ${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[1])}` : capitalize(pokemonSpecies?.varieties[0]?.name)} #{pokemonSpecies?.varieties[0]?.id} {varietyIndex > 0 ? showVariety() ? capitalize(`${selectedPokemonVariety?.name.split("-")[1]}-${capitalize(selectedPokemonVariety?.name.split("-")[2])}`) : capitalize(selectedPokemonVariety?.name.split("-")[1]) : <></>}</h1>
+                <div className="translate-y-[10%] md:translate-y-0 flex items-center justify-end sm:justify-center">
                     <img src={selectedPokemonVariety?.sprite_url} alt={selectedPokemonVariety?.name}
-                         className={'h-auto w-2/5 md:w-3/4 animate-bounce'}/>
+                         className={'h-auto w-2/5 md:w-3/4 lg:w-full animate-bounce'}/>
                 </div>
             </div>
             <div className={'grid grid-cols-2 gap-2 w-full'}>
