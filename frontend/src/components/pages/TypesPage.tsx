@@ -1,18 +1,18 @@
 import Pokedex from "../ui/pokedex/Pokedex.tsx";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {TypeList} from "../moveTypes/TypesList.tsx";
 import {TypesSummary} from "../moveTypes/TypesSummary.tsx";
 import {TypeDetails} from "../moveTypes/TypeDetails.tsx";
 import {TypesChart} from "../moveTypes/TypesChart.tsx";
 import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
-import {MoveTypeContext} from "../../context/MoveTypeContext.tsx";
+import {useMoveTypes} from "@/query/hooks/useMoveTypes.ts";
 
 export function TypesPage() {
 
     const [listIndex, setListIndex] = useState(0);
     const [tabIndex, setTabIndex] = useState(0);
 
-    const {moveTypes, loading, refresh} = useContext(MoveTypeContext)
+    const moveTypes = useMoveTypes()
 
     const handlePrev = () => {
         if (listIndex > 0) {
@@ -31,18 +31,18 @@ export function TypesPage() {
     }
 
     return <Pokedex>
-        <Pokedex.LeftScreen loading={loading}>
+        <Pokedex.LeftScreen>
             {tabIndex === 0 ? <TypesSummary moveType={moveTypes[listIndex]}/> : tabIndex === 1 ?
                 <TypeDetails/> : <TypesChart/>}
         </Pokedex.LeftScreen>
-        <Pokedex.RightScreen size={'large'} loading={loading}>
+        <Pokedex.RightScreen size={'large'}>
             <TypeList onTypeSelect={handleTypeSelect} moveTypes={moveTypes} listIndex={listIndex}/>
         </Pokedex.RightScreen>
         <Pokedex.TabButtons>
             <Pokedex.TabButton pulse={tabIndex === 0} onClick={() => setTabIndex(0)} type={'info'}/>
             <Pokedex.TabButton pulse={tabIndex === 1} onClick={() => setTabIndex(1)} type={'details'}/>
             <Pokedex.TabButton pulse={tabIndex === 2} onClick={() => setTabIndex(2)} type={'other'}/>
-            <Pokedex.TabButton onClick={refresh} type={'refresh'}/>
+            <Pokedex.TabButton type={'refresh'}/>
         </Pokedex.TabButtons>
         <Pokedex.KeyboardButtons>
             <div className="flex justify-evenly items-center">

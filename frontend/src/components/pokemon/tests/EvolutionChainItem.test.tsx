@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import ivysaurChain from '../../../../test/fixtures/ivysaur_chain.json'
+import ivysaurChain from '@/test/fixtures/ivysaur_chain.json'
 import {render} from "vitest-browser-react";
 import {EvolutionChainItem} from "../EvolutionChainItem.tsx";
 

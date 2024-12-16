@@ -1,7 +1,7 @@
 import {describe, expect, it, vi} from "vitest";
 import {PokemonList} from "../PokemonList.tsx";
 import {render} from "vitest-browser-react";
-import pokemon_page_1 from '../../../../test/fixtures/pokemon_page_1.json'
+import pokemon_page_1 from '@/test/fixtures/pokemon_page_1.json'
 
 
 describe("PokemonList", () => {

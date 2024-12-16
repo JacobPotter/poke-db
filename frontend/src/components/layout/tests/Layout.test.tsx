@@ -1,6 +1,6 @@
 import {afterEach, describe, expect, it, vi} from "vitest";
 import {render} from "vitest-browser-react";
-import {DarkModeContext} from "../../../context/DarkModeContext.tsx";
+import {DarkModeContext} from "@/context/DarkModeContext.tsx";
 import Layout from "../Layout.tsx";
 import {MemoryRouter, Route, Routes} from "react-router-dom";
 

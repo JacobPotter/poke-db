@@ -3,6 +3,7 @@ import {useContext} from "react";
 import {DarkModeContext} from "../../context/DarkModeContext.tsx";
 import {Navbar} from "./Navbar.tsx";
 
+
 function Layout() {
     const {dark} = useContext(DarkModeContext)
     return (
