@@ -55,7 +55,7 @@ jobs:
           DB_NAME: postgres
           DB_USER: postgres
           DB_PASSWORD: postgres
-        run: go test github.com/WebWizardsDev/poke-db/api/jobs -v ./...
+        run: go test github.com/JacobPotter/poke-db/api/jobs -v ./...
 
       - name: Test Controllers
         env:
@@ -63,7 +63,7 @@ jobs:
           DB_NAME: postgres
           DB_USER: postgres
           DB_PASSWORD: postgres
-        run: go test github.com/WebWizardsDev/poke-db/api/controllers -v ./...
+        run: go test github.com/JacobPotter/poke-db/api/controllers -v ./...
 
   build-frontend:
     runs-on: ubuntu-latest

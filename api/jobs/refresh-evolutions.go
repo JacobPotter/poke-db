@@ -2,12 +2,13 @@ package jobs
 
 import (
 	"fmt"
-	"github.com/JacobPotter/pokeapi-go"
-	"github.com/JacobPotter/pokeapi-go/structs"
-	"github.com/WebWizardsDev/poke-db/api/models"
-	"gorm.io/gorm/clause"
 	"log"
 	"strings"
+
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/JacobPotter/pokeapi-go"
+	"github.com/JacobPotter/pokeapi-go/structs"
+	"gorm.io/gorm/clause"
 )
 
 func (r RefreshDB) refreshEvolutionTriggers() {

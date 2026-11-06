@@ -2,8 +2,8 @@ package controllers_test
 
 import (
 	"encoding/json"
-	"github.com/WebWizardsDev/poke-db/api/models"
-	"github.com/WebWizardsDev/poke-db/api/routes"
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/JacobPotter/poke-db/api/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/suite"
 	"net/http"

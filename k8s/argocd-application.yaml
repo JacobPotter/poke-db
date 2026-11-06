@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: poke-db
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/JacobPotter/poke-db.git
+    targetRevision: testing-updates
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: poke-db
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

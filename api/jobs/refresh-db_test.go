@@ -1,12 +1,13 @@
 package jobs
 
 import (
-	"github.com/WebWizardsDev/poke-db/api/models"
-	"github.com/stretchr/testify/suite"
-	"gorm.io/gorm"
 	"log"
 	"os"
 	"testing"
+
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/stretchr/testify/suite"
+	"gorm.io/gorm"
 )
 
 type RefreshDbTestSuite struct {

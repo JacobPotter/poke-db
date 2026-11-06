@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"github.com/WebWizardsDev/poke-db/api/routes/evolutionroutes"
-	"github.com/WebWizardsDev/poke-db/api/routes/pokemonroutes"
-	"github.com/WebWizardsDev/poke-db/api/routes/typeroutes"
+	"github.com/JacobPotter/poke-db/api/routes/evolutionroutes"
+	"github.com/JacobPotter/poke-db/api/routes/pokemonroutes"
+	"github.com/JacobPotter/poke-db/api/routes/typeroutes"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
