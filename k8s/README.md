@@ -34,6 +34,8 @@ k8s/
 
 Nothing deploys from `latest`; it is kept only for manual and local use.
 
+`deploy-prod` pushes to `main` as a **GitHub App** with *Contents: read & write*, installed on this repo only. It uses the Actions variable `DEPLOY_APP_ID` and the secret `DEPLOY_APP_PRIVATE_KEY`, and the `main` ruleset lists the app as a bypass actor.
+
 ---
 
 ## 1. GitHub Container Registry (GHCR) Visibility

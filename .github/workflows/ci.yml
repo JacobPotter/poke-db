@@ -1,0 +1,95 @@
+# Entry point: triggers and job graph only. Job bodies live in the _*.yml
+# reusable workflows (on: workflow_call), which never run on their own.
+#
+#            ┌─> backend ─┐
+#   changes ─┤            ├─> publish (api, frontend) ─> deploy-prod (push to main only)
+#            └─> frontend ┘
+#   ci-ok: single required status check; passes when nothing failed (skips are OK).
+#
+# On PRs, test suites run only when their paths changed. Pushes to main always
+# run everything. Both images are always published, because prod and previews
+# point at tags for both.
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@0e4a8c6effa4802afeda77dc8d303f8176d7dfad # v3.0.4
+        with:
+          filters: |
+            backend:
+              - 'api/**'
+              - 'compose.test.yaml'
+              - 'scripts/test-db.sh'
+              - '.github/workflows/_test-backend.yml'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'frontend/**'
+              - '.github/workflows/_test-frontend.yml'
+              - '.github/workflows/ci.yml'
+
+  backend:
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.backend == 'true'
+    uses: ./.github/workflows/_test-backend.yml
+
+  frontend:
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.frontend == 'true'
+    uses: ./.github/workflows/_test-frontend.yml
+
+  publish:
+    needs: [backend, frontend]
+    # Run even if a test suite was skipped, but not if one failed.
+    if: ${{ !failure() && !cancelled() }}
+    strategy:
+      matrix:
+        include:
+          - name: api
+            context: api
+          - name: frontend
+            context: frontend
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/_publish-image.yml
+    with:
+      image: ghcr.io/jacobpotter/poke-db-${{ matrix.name }}
+      context: ${{ matrix.context }}
+
+  deploy-prod:
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_deploy-prod.yml
+    secrets: inherit
+
+  # The only check the main ruleset should require.
+  ci-ok:
+    needs: [changes, backend, frontend, publish]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: |
+          echo "One or more required jobs failed or were cancelled." >&2
+          exit 1
+      - run: echo "All required jobs passed or were skipped."
