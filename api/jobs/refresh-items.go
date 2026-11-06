@@ -1,10 +1,11 @@
 package jobs
 
 import (
-	"github.com/JacobPotter/pokeapi-go"
-	"github.com/WebWizardsDev/poke-db/api/models"
-	"gorm.io/gorm/clause"
 	"log"
+
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/JacobPotter/pokeapi-go"
+	"gorm.io/gorm/clause"
 )
 
 func (r RefreshDB) refreshItems() {

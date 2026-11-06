@@ -1,7 +1,7 @@
 package typeroutes
 
 import (
-	"github.com/WebWizardsDev/poke-db/api/controllers"
+	"github.com/JacobPotter/poke-db/api/controllers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

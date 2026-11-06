@@ -1,9 +1,9 @@
 package jobs
 
 import (
+	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/JacobPotter/pokeapi-go"
 	"github.com/JacobPotter/pokeapi-go/structs"
-	"github.com/WebWizardsDev/poke-db/api/models"
 	"github.com/lib/pq"
 	"gorm.io/gorm/clause"
 	"log"

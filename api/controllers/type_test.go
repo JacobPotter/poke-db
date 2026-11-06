@@ -1,13 +1,14 @@
 package controllers_test
 
 import (
-	"github.com/WebWizardsDev/poke-db/api/models"
-	"github.com/WebWizardsDev/poke-db/api/routes"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/suite"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/JacobPotter/poke-db/api/routes"
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/suite"
 )
 
 type TypeTestSuite struct {

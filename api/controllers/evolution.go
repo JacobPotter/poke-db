@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/WebWizardsDev/poke-db/api/models"
+	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

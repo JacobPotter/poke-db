@@ -1,4 +1,4 @@
-module github.com/WebWizardsDev/poke-db/api
+module github.com/JacobPotter/poke-db/api
 
 go 1.23.0
 
