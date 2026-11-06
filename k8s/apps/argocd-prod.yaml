@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: poke-db
+  name: poke-db-prod
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/JacobPotter/poke-db.git
-    targetRevision: testing-updates
-    path: k8s
+    targetRevision: main
+    path: k8s/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: poke-db
