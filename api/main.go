@@ -2,7 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/WebWizardsDev/poke-db/api/docs"
+	"github.com/WebWizardsDev/poke-db/api/jobs"
 	"github.com/WebWizardsDev/poke-db/api/models"
 	"github.com/WebWizardsDev/poke-db/api/routes"
 	"github.com/bamzi/jobrunner"
@@ -11,8 +16,6 @@ import (
 	cors "github.com/rs/cors/wrapper/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"log"
-	"os"
 )
 
 //
@@ -47,13 +50,13 @@ func main() {
 
 	router := routes.SetupRouter(models.DB)
 
-	//initJobs := os.Getenv("INIT_JOBS")
+	initJobs := os.Getenv("INIT_JOBS")
 
-	//jobrunner.Start()
-	//if initJobs == "true" {
-	//	jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
-	//}
-	//err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
+	jobrunner.Start()
+	if initJobs == "true" {
+		jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
+	}
+	err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

@@ -44,7 +44,49 @@ CREATE DATABASE pokedb;
    ```
    The API will start at `http://localhost:8080`.
 
-### 3. Frontend Client
+### 3. Database Seeding & Data Refresh
+
+There are two ways to seed and populate your local database:
+
+#### Option 1: Offline Mock Database Dump (Instant & Recommended for Fast Setup)
+Restore the pre-generated PostgreSQL SQL dump file (`api/seed/mock-dump.sql`) to immediately populate your database with schema tables, sequences, and seed data without making external network calls:
+
+> **Note**: For best results, import the SQL dump into a freshly created database before starting the API server for the first time.
+
+- **From repository root**:
+  ```bash
+  psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
+  ```
+
+- **From `api/` directory**:
+  ```bash
+  cd api
+  psql -h localhost -U postgres -d pokedb -f seed/mock-dump.sql
+  ```
+
+*(Adjust `-h`, `-U`, or `-d` if your database host, user, or name differs from the defaults in `.env`)*
+
+#### Option 2: Live PokeAPI Data Ingestion
+The backend includes a data ingestion job (`jobs.RefreshDB`) in `api/jobs/refresh-db.go` that fetches live Pokémon species, moves, items, types, locations, and evolution chains from the PokeAPI.
+
+##### Quick Sample Seed (Live Subset)
+Populates a small sample subset (~50 records per category) for rapid local development:
+```bash
+cd api
+go test -v ./jobs -run TestRefreshDBSuite
+```
+
+##### Full Database Seed (Live Ingestion)
+Fetches the complete dataset (~1,500 Pokémon and full associations). Because this makes extensive API calls to PokeAPI, pass an extended timeout:
+```bash
+cd api
+FULL_SEED_TEST=true go test -v -timeout 30m ./jobs -run TestRefreshDBSuite
+```
+
+#### Background Job Scheduling
+The API server also integrates `github.com/bamzi/jobrunner` to run scheduled background refresh jobs. You can inspect scheduled job status and execution history via the JobRunner dashboard at `http://localhost:8080/jobrunner/html`.
+
+### 4. Frontend Client
 1. Navigate to the `frontend` directory:
    ```bash
    cd frontend

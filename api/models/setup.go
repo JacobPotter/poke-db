@@ -2,12 +2,14 @@
 package models
 
 import (
-	_ "ariga.io/atlas-provider-gorm/gormschema"
 	"fmt"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"os"
+
+	_ "ariga.io/atlas-provider-gorm/gormschema"
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -16,6 +18,11 @@ var DB *gorm.DB
 // It initializes the `DB` variable with the connected database.
 // If an error occurs during the connection or migration, a fatal log is generated.
 func ConnectDatabase() {
+	for _, envPath := range []string{".env", "../.env", "../../.env"} {
+		if err := godotenv.Load(envPath); err == nil {
+			break
+		}
+	}
 
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=UTC",
