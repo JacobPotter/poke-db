@@ -21,8 +21,10 @@ k8s/
 │   └── preview/
 │       └── kustomization.yaml      # no namespace/tags; set per PR by the ApplicationSet
 └── apps/
-    ├── argocd-prod.yaml            # ArgoCD Application for poke-db (production)
-    └── argocd-preview-appset.yaml  # ApplicationSet: one preview env per PR labelled "preview"
+    ├── argocd-notifications-cm.yaml           # Notification service, templates, triggers
+    ├── argocd-notifications-secret.example.yaml # Example secret template for GitHub App credentials
+    ├── argocd-prod.yaml                       # ArgoCD Application for poke-db (production)
+    └── argocd-preview-appset.yaml             # ApplicationSet: one preview env per PR labelled "preview"
 ```
 
 ### Release flow
@@ -50,6 +52,7 @@ Nothing deploys from `latest`; it is kept only for manual and local use.
 ## 2. Deploying with ArgoCD
 
 ```bash
+kubectl apply -f k8s/apps/argocd-notifications-cm.yaml
 kubectl apply -f k8s/apps/argocd-prod.yaml
 kubectl apply -f k8s/apps/argocd-preview-appset.yaml
 ```
@@ -89,4 +92,48 @@ argocd app get poke-db-prod
 argocd app sync poke-db-prod
 argocd appset get poke-db-previews
 argocd app list | grep poke-db-pr-
+```
+
+---
+
+## 5. Argo CD GitHub Notifications
+
+Argo CD notifications are integrated with GitHub to post commit status checks (`pending`, `success`, `failure`) directly to PRs and branch commits under the `continuous-delivery/<app-name>` context.
+
+### GitHub App Configuration & Permissions
+1. Create a GitHub App (or use an existing deployment bot App) in your GitHub organization / account.
+2. Grant the following **Repository permissions**:
+   - **Commit statuses**: `Read and write` (to post synchronization and health state status checks)
+   - **Metadata**: `Read-only` (default required permission)
+3. Generate and download a private key (`.pem`) for the App.
+4. Install the App on the `JacobPotter/poke-db` repository and note the **App ID** and **Installation ID**.
+
+### Secret Configuration
+Create the `argocd-notifications-secret` in the `argocd` namespace with the GitHub App credentials:
+
+```bash
+kubectl create secret generic argocd-notifications-secret \
+  -n argocd \
+  --from-literal=github-app-id="<GITHUB_APP_ID>" \
+  --from-literal=github-installation-id="<GITHUB_INSTALLATION_ID>" \
+  --from-file=github-privateKey=/path/to/private-key.pem
+```
+
+Alternatively, apply a populated copy of `k8s/apps/argocd-notifications-secret.example.yaml`.
+
+### Notification Triggers & Commit Status States
+- **`pending`**: Emitted when sync is initiated (`app.status.operationState.phase in ['Running']`).
+- **`success`**: Emitted when sync succeeds and resources are healthy (`app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'`).
+- **`failure`**: Emitted when sync fails or resource health is degraded (`phase in ['Error', 'Failed']` or `health.status == 'Degraded'`).
+
+### Verification & Diagnostics
+```bash
+# Check notification controller logs
+kubectl logs -n argocd -l app.kubernetes.io/name=argocd-notifications-controller -f
+
+# Verify notifications ConfigMap
+kubectl get cm argocd-notifications-cm -n argocd -o yaml
+
+# Inspect GitHub commit status checks via GitHub CLI
+gh api repos/JacobPotter/poke-db/commits/<commit-sha>/statuses
 ```

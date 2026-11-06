@@ -3,6 +3,11 @@ kind: Application
 metadata:
   name: poke-db-prod
   namespace: argocd
+  annotations:
+    notifications.argoproj.io/subscribe.on-sync-running.github: ""
+    notifications.argoproj.io/subscribe.on-sync-succeeded.github: ""
+    notifications.argoproj.io/subscribe.on-sync-failed.github: ""
+    notifications.argoproj.io/subscribe.on-health-degraded.github: ""
 spec:
   project: default
   source:

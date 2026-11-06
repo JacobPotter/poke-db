@@ -26,6 +26,11 @@ spec:
   template:
     metadata:
       name: 'poke-db-pr-{{.number}}'
+      annotations:
+        notifications.argoproj.io/subscribe.on-sync-running.github: ""
+        notifications.argoproj.io/subscribe.on-sync-succeeded.github: ""
+        notifications.argoproj.io/subscribe.on-sync-failed.github: ""
+        notifications.argoproj.io/subscribe.on-health-degraded.github: ""
     spec:
       project: default
       source:
