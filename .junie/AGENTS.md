@@ -8,9 +8,9 @@ This guide provides technical specifications, build processes, testing strategie
 
 - **Backend (`/api`)**:
   - **Runtime & Language**: Go 1.23+ (`go.mod` specifies Go 1.23).
-  - **Frameworks & Libraries**: Gin Web Framework (`github.com/gin-gonic/gin`), GORM (`gorm.io/gorm`, `gorm.io/driver/postgres`), Jobrunner (`github.com/bamzi/jobrunner`), Swaggo (`github.com/swaggo/gin-swagger`), Testify (`github.com/stretchr/testify`).
+  - **Frameworks & Libraries**: Gin Web Framework (`github.com/gin-gonic/gin`), GORM (`gorm.io/gorm`, `gorm.io/driver/postgres`), Swaggo (`github.com/swaggo/gin-swagger`), Testify (`github.com/stretchr/testify`).
   - **Database**: PostgreSQL with GORM auto-migrations and seed dump support.
-  - **External Ingestion**: PokeAPI ingestion jobs scheduled via Jobrunner (`api/jobs`).
+  - **External Ingestion**: PokeAPI ingestion in `api/refresh`, run by the standalone `api/cmd/refresh-db` binary as a Kubernetes CronJob (`k8s/base/refresh-db-cronjob.yaml`) and an Argo CD PostSync seed hook (`-if-empty`). Requires PostgreSQL 15+.
 - **Frontend (`/frontend`)**:
   - **Runtime & Build**: Node.js 18+ (tested with Node 23 & npm 10), Vite 5, TypeScript 5.5, Tailwind CSS 3.4.
   - **State & Data Fetching**: `@tanstack/react-query` v5, `axios-hooks`.
@@ -37,7 +37,7 @@ DB_USER=postgres
 DB_PASSWORD=admin
 DB_NAME=pokedb
 PORT=8080
-INIT_JOBS=false
+# DB_PORT=5432  (optional)
 ```
 
 ### Database Initialization
@@ -51,7 +51,7 @@ Two seeding methods are supported:
    Populate small sample dataset (~50 records per entity):
    ```bash
    cd api
-   go test -v ./jobs -run TestRefreshDBSuite
+   go test -v ./refresh -run TestRefreshDBSuite
    ```
 
 ### Backend Build & Execution
@@ -100,9 +100,14 @@ Two seeding methods are supported:
 ## 3. Testing Information
 
 ### Backend Testing (Go / Testify)
-Backend tests consist of HTTP handler integration tests (`api/controllers`) and database ingestion job suites (`api/jobs`).
+Backend tests consist of HTTP handler integration tests (`api/controllers`) and database ingestion job suites (`api/refresh`).
 
 #### Running Tests
+- **Start a seeded PostgreSQL 17 test DB and run tests** (Docker Compose, port 5433; the same setup CI uses):
+  ```bash
+  scripts/test-db.sh test                # or: scripts/test-db.sh test ./refresh/...
+  eval "$(scripts/test-db.sh env)"       # export DB_* to run go test directly
+  ```
 - **Run all backend tests**:
   ```bash
   cd api
@@ -237,6 +242,4 @@ describe('SampleComponent', () => {
 - Document re-usable UI components with Storybook stories in `stories/` folders.
 
 ### Observability & Admin Endpoints
-- **Jobrunner Admin Dashboard**: `http://localhost:8080/jobrunner/html`
-- **Jobrunner JSON Metrics**: `http://localhost:8080/jobrunner/json`
 - **Swagger Documentation**: `http://localhost:8080/swagger/index.html`

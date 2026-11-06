@@ -24,12 +24,18 @@ func ConnectDatabase() {
 		}
 	}
 
+	port := os.Getenv("DB_PORT")
+	if port == "" {
+		port = "5432"
+	}
+
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=UTC",
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
+		port,
 	)
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
@@ -37,7 +43,15 @@ func ConnectDatabase() {
 		log.Fatalf("failed to connect database: %v", err.Error())
 	}
 
-	err = database.AutoMigrate(
+	if err = database.AutoMigrate(coreModels()...); err != nil {
+		log.Fatalf("Failed to migrate database: %v", err.Error())
+	}
+
+	DB = database
+}
+
+func coreModels() []interface{} {
+	return []interface{}{
 		&PokemonSpecies{},
 		&Pokemon{},
 		&MoveType{},
@@ -46,14 +60,16 @@ func ConnectDatabase() {
 		&Location{},
 		&Region{},
 		&EvolutionTrigger{},
-		//&EvolutionDetails{},
-		//&EvolutionChainLink{},
-		//&EvolutionChain{},
-	)
-
-	if err != nil {
-		log.Fatalf("Failed to migrate database: %v", err.Error())
 	}
+}
 
-	DB = database
+// MigrateAll creates or updates all tables, including the evolution tables
+// populated by the refresh job.
+// Requires PostgreSQL 15+ (EvolutionDetails uses a NULLS NOT DISTINCT unique index).
+func MigrateAll(db *gorm.DB) error {
+	return db.AutoMigrate(append(coreModels(),
+		&EvolutionChain{},
+		&EvolutionChainLink{},
+		&EvolutionDetails{},
+	)...)
 }

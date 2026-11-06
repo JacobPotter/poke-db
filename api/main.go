@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"github.com/JacobPotter/poke-db/api/docs"
-	"github.com/JacobPotter/poke-db/api/jobs"
 	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/JacobPotter/poke-db/api/routes"
-	"github.com/bamzi/jobrunner"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	cors "github.com/rs/cors/wrapper/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -50,21 +46,7 @@ func main() {
 
 	router := routes.SetupRouter(models.DB)
 
-	initJobs := os.Getenv("INIT_JOBS")
-
-	jobrunner.Start()
-	if initJobs == "true" {
-		jobrunner.In(5*time.Second, jobs.RefreshDB{DB: models.DB})
-	}
-	err = jobrunner.Schedule("0 0 * * *", jobs.RefreshDB{DB: models.DB})
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-
-	router.GET("/jobrunner/json", JobJson)
-
-	// Returns html page at given endpoint based on the loaded
-	// template from above
-	router.GET("/jobrunner/html", JobHtml)
 
 	router.Use(cors.Default())
 	port := os.Getenv("PORT")
@@ -78,15 +60,4 @@ func main() {
 	if err != nil {
 		log.Fatalf("router err: %v", err)
 	}
-}
-
-func JobJson(c *gin.Context) {
-	// returns a map[string]interface{} that can be marshalled as JSON
-	c.JSON(200, jobrunner.StatusJson())
-}
-
-func JobHtml(c *gin.Context) {
-	// Returns the template data pre-parsed
-	c.HTML(200, "", jobrunner.StatusPage())
-
 }

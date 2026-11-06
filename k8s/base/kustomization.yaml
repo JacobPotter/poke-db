@@ -4,4 +4,6 @@ kind: Kustomization
 resources:
   - postgres.yaml
   - api.yaml
+  - refresh-db-cronjob.yaml
+  - refresh-db-seed-hook.yaml
   - frontend.yaml

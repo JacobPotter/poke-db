@@ -1,0 +1,7 @@
+# Per-PR preview environments. Namespace and image tags are set per PR by the
+# poke-db-previews ApplicationSet (k8s/apps/argocd-preview-appset.yaml).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base

@@ -17,59 +17,36 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-latest
-    container: golang:1.23-bookworm
-
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     defaults:
       run:
         working-directory: ./api
+    env:
+      DB_HOST: localhost
+      DB_PORT: "5433"
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PostgreSQL client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
-
-      - name: Postgres Backup Restore
-        uses: tj-actions/pg-restore@v6
+      - uses: actions/setup-go@v5
         with:
-          database_url: "postgres://postgres:postgres@postgres:5432/postgres"
-          backup_file: "api/seed/mock-dump.sql"
+          go-version-file: api/go.mod
+          cache-dependency-path: api/go.sum
+
+      # Same database as local runs (scripts/test-db.sh); seeds from api/seed/mock-dump.sql.
+      - name: Start test database
+        working-directory: .
+        run: docker compose -f compose.test.yaml up -d --wait
 
       - name: Build
         run: go build -v -buildvcs=false ./...
 
-      - name: Test Jobs
-        env:
-          DB_HOST: postgres
-          DB_NAME: postgres
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-        run: go test github.com/JacobPotter/poke-db/api/jobs -v ./...
+      - name: Test Refresh Job
+        run: go test -v ./refresh/...
 
       - name: Test Controllers
-        env:
-          DB_HOST: postgres
-          DB_NAME: postgres
-          DB_USER: postgres
-          DB_PASSWORD: postgres
-        run: go test github.com/JacobPotter/poke-db/api/controllers -v ./...
+        run: go test -v ./controllers/...
 
   build-frontend:
     runs-on: ubuntu-latest
@@ -119,7 +96,6 @@ jobs:
         with:
           images: ghcr.io/jacobpotter/poke-db-api
           tags: |
-            type=raw,value=staging,enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=pr-${{ github.event.pull_request.number }},enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' }}
             type=sha,format=short,prefix=sha-,enable=${{ github.event_name == 'push' }}
@@ -159,7 +135,6 @@ jobs:
         with:
           images: ghcr.io/jacobpotter/poke-db-frontend
           tags: |
-            type=raw,value=staging,enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=pr-${{ github.event.pull_request.number }},enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' }}
             type=sha,format=short,prefix=sha-,enable=${{ github.event_name == 'push' }}
@@ -175,6 +150,33 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-       
-     
-       
+
+  # Pin prod to this commit's images. Argo CD deploys from the committed overlay.
+  deploy-prod:
+    needs: [publish-api, publish-frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set prod image tags
+        working-directory: k8s/overlays/prod
+        run: |
+          # Must match docker/metadata-action type=sha,format=short (7 chars) of the triggering commit.
+          SHORT="${GITHUB_SHA::7}"
+          echo "SHORT=$SHORT" >> "$GITHUB_ENV"
+          kustomize edit set image \
+            "ghcr.io/jacobpotter/poke-db-api=ghcr.io/jacobpotter/poke-db-api:sha-$SHORT" \
+            "ghcr.io/jacobpotter/poke-db-frontend=ghcr.io/jacobpotter/poke-db-frontend:sha-$SHORT"
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then echo "No changes"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(deploy): prod -> sha-${SHORT} [skip ci]"
+          git push origin HEAD:main

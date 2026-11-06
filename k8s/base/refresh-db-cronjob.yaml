@@ -1,0 +1,34 @@
+# Nightly PokeAPI -> Postgres ingestion. Replaces the in-process jobrunner schedule.
+# Trigger a one-off run (e.g. initial seed):
+#   kubectl create job --from=cronjob/refresh-db refresh-db-manual -n <namespace>
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: refresh-db
+spec:
+  schedule: "0 0 * * *"
+  timeZone: Etc/UTC
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 7200
+      template:
+        metadata:
+          labels:
+            app: refresh-db
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: refresh-db
+              image: ghcr.io/jacobpotter/poke-db-api:latest
+              imagePullPolicy: Always
+              command: ["/app/refresh-db"]
+              envFrom:
+                - configMapRef:
+                    name: api-config
+                - secretRef:
+                    name: api-secret

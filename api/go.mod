@@ -19,17 +19,12 @@ require (
 	github.com/rs/cors/wrapper/gin v0.0.0-20240830163046-1084d89a1692
 )
 
-require (
-	github.com/alecthomas/kong v1.4.0 // indirect
-	github.com/rs/cors v1.11.1 // indirect
-	golang.org/x/mod v0.22.0 // indirect
-)
+require github.com/rs/cors v1.11.1 // indirect
 
 require (
 	ariga.io/atlas-go-sdk v0.6.4 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/bamzi/jobrunner v1.0.0
 	github.com/bytedance/sonic v1.12.4 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
@@ -68,7 +63,6 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.12.0 // indirect
