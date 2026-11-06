@@ -1,0 +1,46 @@
+# Entry point: triggers and job graph only. Job bodies live in the _*.yml
+# reusable workflows (on: workflow_call), which never run on their own.
+#
+#   backend ─┐
+#            ├─> publish (api, frontend) ─> deploy-prod (push to main only)
+#   frontend ┘
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    uses: ./.github/workflows/_test-backend.yml
+
+  frontend:
+    uses: ./.github/workflows/_test-frontend.yml
+
+  publish:
+    needs: [backend, frontend]
+    strategy:
+      matrix:
+        include:
+          - name: api
+            context: api
+          - name: frontend
+            context: frontend
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/_publish-image.yml
+    with:
+      image: ghcr.io/jacobpotter/poke-db-${{ matrix.name }}
+      context: ${{ matrix.context }}
+
+  deploy-prod:
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/_deploy-prod.yml
+    secrets: inherit

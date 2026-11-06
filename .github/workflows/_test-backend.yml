@@ -1,0 +1,39 @@
+# Go build + tests against the compose test database (same as scripts/test-db.sh).
+name: Test backend
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    env:
+      DB_HOST: localhost
+      DB_PORT: "5433"
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: api/go.mod
+          cache-dependency-path: api/go.sum
+
+      # Seeds from api/seed/mock-dump.sql.
+      - name: Start test database
+        working-directory: .
+        run: docker compose -f compose.test.yaml up -d --wait
+
+      - name: Build
+        run: go build -v -buildvcs=false ./...
+
+      - name: Test Refresh Job
+        run: go test -v ./refresh/...
+
+      - name: Test Controllers
+        run: go test -v ./controllers/...

@@ -1,0 +1,30 @@
+name: Test frontend
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup npm
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 18.8.x
+
+      - name: Install
+        run: npm install
+
+      - name: Playwright Install
+        run: npx playwright install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
