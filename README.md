@@ -141,3 +141,13 @@ npm run lint
   npm run storybook
   ```
   Accessible at `http://localhost:6006`.
+
+---
+
+## Deployment & Infrastructure (Kubernetes & ArgoCD)
+
+PokeDB includes multi-environment Kubernetes manifests structured with Kustomize and declarative ArgoCD Application configurations in the `k8s/` directory.
+
+- **Container Registry**: Multi-stage Docker images are built and published automatically to GHCR (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`) with `:staging` tags on pull requests and `:latest` / SHA tags on merge to `main`.
+- **GitOps Multi-Environment Sync**: ArgoCD reconciles staging into `poke-db-staging` and production into `poke-db`.
+- **Deployment Details**: See [`k8s/README.md`](k8s/README.md) for full deployment instructions, Kustomize overlay usage, GHCR visibility configuration, and cluster diagnostic commands.
