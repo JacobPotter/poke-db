@@ -1,6 +1,6 @@
 # Kubernetes & GitOps (ArgoCD) Deployment
 
-This directory contains the Kubernetes manifests and ArgoCD application configurations for deploying PokeDB across isolated staging and production environments on a Kubernetes / Kind cluster.
+This directory contains the Kubernetes manifests and ArgoCD configuration for PokeDB: one production environment, plus an on-demand preview environment for each labelled pull request.
 
 ---
 
@@ -9,60 +9,66 @@ This directory contains the Kubernetes manifests and ArgoCD application configur
 ```
 k8s/
 ├── base/
-│   ├── api.yaml                 # Namespace-agnostic API Deployment and Service
-│   ├── frontend.yaml            # Namespace-agnostic Frontend Deployment and Service
-│   ├── postgres.yaml            # Namespace-agnostic Postgres PVC, Secret, ConfigMap, Deployment, Service
-│   └── kustomization.yaml       # Base Kustomize resource list
+│   ├── api.yaml                    # API Deployment, Service, ConfigMap, Secret
+│   ├── frontend.yaml               # Frontend Deployment and Service
+│   ├── postgres.yaml               # Postgres PVC, Secret, ConfigMap, Deployment, Service
+│   ├── refresh-db-cronjob.yaml     # Nightly PokeAPI -> Postgres refresh (CronJob)
+│   ├── refresh-db-seed-hook.yaml   # Argo CD PostSync hook: seeds an empty database
+│   └── kustomization.yaml
 ├── overlays/
-│   ├── staging/
-│   │   └── kustomization.yaml   # Staging overlay (namespace: poke-db-staging, tag: :staging)
-│   └── prod/
-│       └── kustomization.yaml   # Production overlay (namespace: poke-db, tag: :latest)
+│   ├── prod/
+│   │   └── kustomization.yaml      # namespace: poke-db, image tags pinned by CI (sha-<short>)
+│   └── preview/
+│       └── kustomization.yaml      # no namespace/tags; set per PR by the ApplicationSet
 └── apps/
-    ├── argocd-staging.yaml      # ArgoCD Application for poke-db-staging
-    └── argocd-prod.yaml         # ArgoCD Application for poke-db (production)
+    ├── argocd-prod.yaml            # ArgoCD Application for poke-db (production)
+    └── argocd-preview-appset.yaml  # ApplicationSet: one preview env per PR labelled "preview"
 ```
+
+### Release flow
+
+1. Open a PR. CI builds and pushes `ghcr.io/jacobpotter/poke-db-{api,frontend}:pr-<N>`.
+2. Add the **`preview`** label to the PR. Within about 5 minutes, ArgoCD creates `poke-db-pr-<N>` with its own Postgres, seeded by the PostSync hook.
+3. Merge. CI pushes `sha-<short>` and `latest`. The `deploy-prod` job then commits the `sha-<short>` tag into `overlays/prod` (`[skip ci]`), and ArgoCD rolls it out.
+4. When the PR is closed or unlabelled, the preview Application is deleted. Remove the leftover namespace with `kubectl delete ns poke-db-pr-<N>`.
+
+Nothing deploys from `latest`; it is kept only for manual and local use.
 
 ---
 
 ## 1. GitHub Container Registry (GHCR) Visibility
 
-When GitHub Actions builds and pushes container images to GHCR:
-- Staging images: `ghcr.io/jacobpotter/poke-db-api:staging` and `ghcr.io/jacobpotter/poke-db-frontend:staging` (built on PRs targeting `main`).
-- Production images: `ghcr.io/jacobpotter/poke-db-api:latest` and `ghcr.io/jacobpotter/poke-db-frontend:latest` (built on merge/push to `main`).
 - By default, GitHub may set newly created packages to **Private**.
-- To allow the Kind cluster to pull images anonymously without creating and configuring `imagePullSecrets`:
-  1. Navigate to your GitHub profile or repository -> **Packages**.
-  2. Select `poke-db-api` -> **Package settings** -> **Danger Zone** -> **Change package visibility** -> Select **Public**.
-  3. Select `poke-db-frontend` -> **Package settings** -> **Danger Zone** -> **Change package visibility** -> Select **Public**.
+- To let the cluster pull images anonymously, without `imagePullSecrets`:
+  1. Go to your GitHub profile or repository -> **Packages**.
+  2. For `poke-db-api` and `poke-db-frontend`: **Package settings** -> **Danger Zone** -> **Change package visibility** -> **Public**.
 
 ---
 
 ## 2. Deploying with ArgoCD
 
-Apply the ArgoCD Application manifests to your cluster's `argocd` namespace:
-
 ```bash
-# Deploy both staging and production ArgoCD applications
-kubectl apply -f k8s/apps/argocd-staging.yaml
 kubectl apply -f k8s/apps/argocd-prod.yaml
+kubectl apply -f k8s/apps/argocd-preview-appset.yaml
 ```
 
-ArgoCD will automatically create the `poke-db-staging` and `poke-db` namespaces, track the `main` branch, and reconcile changes automatically.
+The PR generator calls the GitHub API. Configure `tokenRef` in the ApplicationSet to avoid rate limits; it's required if the repo is private.
+
+### Database refresh
+
+- **Seed**: the `refresh-db-seed` PostSync hook runs `/app/refresh-db -if-empty` after every sync, and does nothing if the database already has data.
+- **Nightly**: the `refresh-db` CronJob does a full refresh at 00:00 UTC.
+- **Manual run**:
+  ```bash
+  kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
+  ```
 
 ---
 
 ## 3. Manual Deployment (Direct kubectl / Kustomize)
 
-To deploy or preview manifests manually without ArgoCD:
-
 ```bash
-# Preview rendered manifests
-kubectl kustomize k8s/overlays/staging
-kubectl kustomize k8s/overlays/prod
-
-# Apply directly to cluster
-kubectl apply -k k8s/overlays/staging
+kubectl kustomize k8s/overlays/prod      # preview rendered manifests
 kubectl apply -k k8s/overlays/prod
 ```
 
@@ -70,34 +76,15 @@ kubectl apply -k k8s/overlays/prod
 
 ## 4. Verification & Diagnostics
 
-### Check Pod and Workload Health
-
 ```bash
-# Check resources in staging
-kubectl get all -n poke-db-staging
-kubectl rollout status deployment/api -n poke-db-staging
-kubectl rollout status deployment/frontend -n poke-db-staging
-kubectl rollout status deployment/postgres -n poke-db-staging
-
-# Check resources in production
 kubectl get all -n poke-db
 kubectl rollout status deployment/api -n poke-db
-kubectl rollout status deployment/frontend -n poke-db
-kubectl rollout status deployment/postgres -n poke-db
-
-# View container logs
-kubectl logs -n poke-db-staging -l app=api -f
 kubectl logs -n poke-db -l app=api -f
-```
+kubectl logs -n poke-db job/refresh-db-seed
+kubectl get cronjob,jobs -n poke-db
 
-### Check ArgoCD Application Status
-
-```bash
-# Check ArgoCD application status via CLI
-argocd app get poke-db-staging
 argocd app get poke-db-prod
-
-# Manually trigger synchronization
-argocd app sync poke-db-staging
 argocd app sync poke-db-prod
+argocd appset get poke-db-previews
+argocd app list | grep poke-db-pr-
 ```

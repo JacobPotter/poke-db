@@ -1,0 +1,37 @@
+# Seeds a fresh environment after each Argo CD sync. Skips when data already
+# exists (-if-empty), so routine syncs are cheap. Nightly refreshes are done by
+# the refresh-db CronJob.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: refresh-db-seed
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 7200
+  template:
+    metadata:
+      labels:
+        app: refresh-db-seed
+    spec:
+      restartPolicy: OnFailure
+      initContainers:
+        # postgres has no readiness probe, so wait until it accepts connections.
+        - name: wait-for-postgres
+          image: postgres:16
+          command: ["sh", "-c", "until pg_isready -h \"$DB_HOST\" -U \"$DB_USER\"; do sleep 2; done"]
+          envFrom:
+            - configMapRef:
+                name: api-config
+      containers:
+        - name: refresh-db
+          image: ghcr.io/jacobpotter/poke-db-api:latest
+          imagePullPolicy: Always
+          command: ["/app/refresh-db", "-if-empty"]
+          envFrom:
+            - configMapRef:
+                name: api-config
+            - secretRef:
+                name: api-secret

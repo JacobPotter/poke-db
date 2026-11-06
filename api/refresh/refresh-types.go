@@ -1,6 +1,7 @@
-package jobs
+package refresh
 
 import (
+	"fmt"
 	"github.com/JacobPotter/poke-db/api/models"
 	"github.com/JacobPotter/pokeapi-go"
 	"github.com/JacobPotter/pokeapi-go/structs"
@@ -10,11 +11,10 @@ import (
 	"reflect"
 )
 
-func (r RefreshDB) refreshTypes() {
+func (r RefreshDB) refreshTypes() error {
 	types, err := pokeapi.Resource("type", 0, 100)
 	if err != nil {
-		log.Printf("Error with getting moveTypes: %v", err)
-		return
+		return fmt.Errorf("getting move types: %w", err)
 	}
 
 	moveTypes := make([]*models.MoveType, len(types.Results))
@@ -46,11 +46,7 @@ func (r RefreshDB) refreshTypes() {
 	}).Create(moveTypes)
 
 	if tx.Error != nil {
-		log.Printf("Error with creating moveTypes: %v", tx.Error)
-		if r.Test {
-			panic("Stopping test, cannot write moveTypes")
-		}
-		return
+		return fmt.Errorf("creating move types: %w", tx.Error)
 	}
 
 	log.Printf("Created # of new moveTypes: %v", tx.RowsAffected)
@@ -101,6 +97,7 @@ func (r RefreshDB) refreshTypes() {
 			}
 		}
 	}
+	return nil
 }
 
 func (r RefreshDB) linkDamage(damageModifiers interface{}) []int64 {

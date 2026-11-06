@@ -67,24 +67,39 @@ Restore the pre-generated PostgreSQL SQL dump file (`api/seed/mock-dump.sql`) to
 *(Adjust `-h`, `-U`, or `-d` if your database host, user, or name differs from the defaults in `.env`)*
 
 #### Option 2: Live PokeAPI Data Ingestion
-The backend includes a data ingestion job (`jobs.RefreshDB`) in `api/jobs/refresh-db.go` that fetches live Pokémon species, moves, items, types, locations, and evolution chains from the PokeAPI.
+The backend includes a standalone data ingestion command (`api/cmd/refresh-db`, logic in `api/refresh/`) that fetches live Pokémon species, moves, items, types, locations, and evolution chains from the PokeAPI.
 
 ##### Quick Sample Seed (Live Subset)
 Populates a small sample subset (~50 records per category) for rapid local development:
 ```bash
 cd api
-go test -v ./jobs -run TestRefreshDBSuite
+go test -v ./refresh -run TestRefreshDBSuite
 ```
+
+> Requires **PostgreSQL 15+** (the evolution tables use a `NULLS NOT DISTINCT` unique index). Set `DB_PORT` if your database is not on 5432.
 
 ##### Full Database Seed (Live Ingestion)
 Fetches the complete dataset (~1,500 Pokémon and full associations). Because this makes extensive API calls to PokeAPI, pass an extended timeout:
 ```bash
 cd api
-FULL_SEED_TEST=true go test -v -timeout 30m ./jobs -run TestRefreshDBSuite
+FULL_SEED_TEST=true go test -v -timeout 30m ./refresh -run TestRefreshDBSuite
 ```
 
-#### Background Job Scheduling
-The API server also integrates `github.com/bamzi/jobrunner` to run scheduled background refresh jobs. You can inspect scheduled job status and execution history via the JobRunner dashboard at `http://localhost:8080/jobrunner/html`.
+Or run the command directly (`REFRESH_TEST_MODE=true` fetches only a sample subset):
+```bash
+cd api
+go run ./cmd/refresh-db
+```
+
+#### Refresh in Kubernetes
+The refresh doesn't run inside the API server. In Kubernetes:
+- the `refresh-db-seed` Argo CD PostSync hook seeds empty databases (`/app/refresh-db -if-empty`, which is a no-op once the database has data);
+- the `refresh-db` CronJob refreshes nightly.
+
+To trigger a one-off run:
+```bash
+kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
+```
 
 ### 4. Frontend Client
 1. Navigate to the `frontend` directory:
@@ -106,12 +121,15 @@ The API server also integrates `github.com/bamzi/jobrunner` to run scheduled bac
 ## Testing
 
 ### Backend API Tests
-Run the Go test suite:
+The simplest way to get a PostgreSQL 17 test database, seeded from `api/seed/mock-dump.sql`, is `scripts/test-db.sh` (Docker Compose, port 5433). CI uses the same `compose.test.yaml`:
 ```bash
-cd api
-go test -v ./...
+scripts/test-db.sh test                       # start/seed DB if needed, then go test ./...
+scripts/test-db.sh test ./refresh/...         # just the refresh job suite
+eval "$(scripts/test-db.sh env)"              # export DB_* for go test / GoLand in this shell
+scripts/test-db.sh down                       # stop and wipe (next "up" re-seeds)
 ```
-*Note: Ensure test database connection parameters are available in `.env` as integration tests connect to the database.*
+
+Or point `api/.env` at your own PostgreSQL 15+ database and run `cd api && go test -v ./...`.
 
 ### Frontend Tests
 Run Vitest browser tests:
@@ -134,7 +152,6 @@ npm run lint
 ## Developer Tooling & UI
 
 - **Swagger API Docs**: `http://localhost:8080/swagger/index.html`
-- **JobRunner Dashboard**: `http://localhost:8080/jobrunner/html`
 - **Storybook UI Component Explorer**:
   ```bash
   cd frontend
@@ -148,6 +165,6 @@ npm run lint
 
 PokeDB includes multi-environment Kubernetes manifests structured with Kustomize and declarative ArgoCD Application configurations in the `k8s/` directory.
 
-- **Container Registry**: Multi-stage Docker images are built and published automatically to GHCR (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`) with `:staging` tags on pull requests and `:latest` / SHA tags on merge to `main`.
-- **GitOps Multi-Environment Sync**: ArgoCD reconciles staging into `poke-db-staging` and production into `poke-db`.
+- **Container Registry**: Multi-stage Docker images are built and published automatically to GHCR (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`) with `:pr-<N>` tags on pull requests and `:latest` / `:sha-<short>` tags on merge to `main`. After a merge, CI commits the new `sha-<short>` tag into `k8s/overlays/prod`.
+- **GitOps Sync**: ArgoCD reconciles production into `poke-db`. An ApplicationSet creates a `poke-db-pr-<N>` preview environment for each PR labelled `preview`.
 - **Deployment Details**: See [`k8s/README.md`](k8s/README.md) for full deployment instructions, Kustomize overlay usage, GHCR visibility configuration, and cluster diagnostic commands.
