@@ -13,7 +13,7 @@ func (g GenericId) ID() uint {
 func FilterDuplicates[T IDer](items []T) []T {
 	seen := make(map[uint]bool)
 	var result []T
-	
+
 	for _, item := range items {
 		if !seen[item.ID()] {
 			seen[item.ID()] = true
