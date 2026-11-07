@@ -16,21 +16,23 @@ API_IMAGE="ghcr.io/jacobpotter/poke-db-api:latest"
 FRONTEND_IMAGE="ghcr.io/jacobpotter/poke-db-frontend:latest"
 
 build_images() {
-  echo "==> Building API image (${API_IMAGE})..."
+  echo "==> Building API image (${API_IMAGE}) from local code..."
   docker build -t "${API_IMAGE}" "$ROOT/api"
 
-  echo "==> Building Frontend image (${FRONTEND_IMAGE})..."
+  echo "==> Building Frontend image (${FRONTEND_IMAGE}) from local code..."
   docker build -t "${FRONTEND_IMAGE}" "$ROOT/frontend"
 
   # If Kind or Minikube is used, load images into the cluster
   if command -v kind >/dev/null 2>&1 && kind get clusters 2>/dev/null | grep -q .; then
-    echo "==> Loading images into Kind cluster..."
-    kind load docker-image "${API_IMAGE}" || true
-    kind load docker-image "${FRONTEND_IMAGE}" || true
+    local kind_cluster
+    kind_cluster="${KIND_CLUSTER_NAME:-$(kind get clusters 2>/dev/null | head -n1)}"
+    echo "==> Loading images into Kind cluster '${kind_cluster}'..."
+    kind load docker-image "${API_IMAGE}" --name "${kind_cluster}"
+    kind load docker-image "${FRONTEND_IMAGE}" --name "${kind_cluster}"
   elif command -v minikube >/dev/null 2>&1 && minikube status >/dev/null 2>&1; then
     echo "==> Loading images into Minikube cluster..."
-    minikube image load "${API_IMAGE}" || true
-    minikube image load "${FRONTEND_IMAGE}" || true
+    minikube image load "${API_IMAGE}"
+    minikube image load "${FRONTEND_IMAGE}"
   fi
 }
 
@@ -40,6 +42,10 @@ deploy_k8s() {
 
   echo "==> Applying Kustomize local overlay..."
   kubectl apply -k "$ROOT/k8s/overlays/local"
+
+  # Restart deployments if already present so newly loaded local images are picked up
+  echo "==> Triggering rollout restart for local deployments..."
+  kubectl rollout restart deployment/api deployment/frontend -n "${NAMESPACE}" 2>/dev/null || true
 
   echo "==> Waiting for Postgres deployment to be ready..."
   kubectl rollout status deployment/postgres -n "${NAMESPACE}" --timeout=120s
@@ -129,7 +135,7 @@ case "${1:-up}" in
     status_k8s
     ;;
   *)
-    sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'
+    sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
     exit 1
     ;;
 esac
