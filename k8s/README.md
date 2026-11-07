@@ -16,6 +16,8 @@ k8s/
 │   ├── refresh-db-seed-hook.yaml   # Argo CD PostSync hook: seeds an empty database
 │   └── kustomization.yaml
 ├── overlays/
+│   ├── local/
+│   │   └── kustomization.yaml      # namespace: poke-db-local, imagePullPolicy: IfNotPresent
 │   ├── prod/
 │   │   └── kustomization.yaml      # namespace: poke-db, image tags pinned by CI (sha-<short>)
 │   └── preview/
