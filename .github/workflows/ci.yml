@@ -39,6 +39,7 @@ jobs:
               - 'api/**'
               - 'compose.test.yaml'
               - 'scripts/test-db.sh'
+              - 'scripts/local-dev.sh'
               - '.github/workflows/_test-backend.yml'
               - '.github/workflows/ci.yml'
             frontend:

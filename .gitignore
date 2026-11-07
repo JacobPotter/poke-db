@@ -5,3 +5,4 @@ api/.idea/
 /.vite/vitest/results.json
 .junie/plans
 .idea
+/.junie/prompts/

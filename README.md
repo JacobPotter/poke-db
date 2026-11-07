@@ -116,12 +116,20 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
    ```
    The frontend will be available at `http://localhost:5173`. API requests sent to `/api` are automatically proxied to `http://localhost:8080`.
 
+### 5. Local Kubernetes Full Stack Development (Alternative)
+You can build and run the entire stack (Postgres, API, Frontend) inside a local Kubernetes cluster (e.g., Kind, Minikube, Docker Desktop):
+```bash
+scripts/local-dev.sh up             # builds images, applies k8s/overlays/local, seeds database
+scripts/local-dev.sh port-forward   # forwards frontend (3000), API (8080), and Postgres (5432)
+scripts/local-dev.sh down           # tears down local environment
+```
+
 ---
 
 ## Testing
 
 ### Backend API Tests
-The simplest way to get a PostgreSQL 17 test database, seeded from `api/seed/mock-dump.sql`, is `scripts/test-db.sh` (Docker Compose, port 5433). CI uses the same `compose.test.yaml`:
+The simplest way to get a PostgreSQL test database, seeded from `api/seed/mock-dump.sql`, is `scripts/test-db.sh` using the Kubernetes Postgres manifests on port 5433:
 ```bash
 scripts/test-db.sh test                       # start/seed DB if needed, then go test ./...
 scripts/test-db.sh test ./refresh/...         # just the refresh job suite

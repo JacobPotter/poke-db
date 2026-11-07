@@ -1,5 +1,5 @@
-# Test database for local runs and CI. Seeds from api/seed/mock-dump.sql the
-# first time the volume is created. Reset with: scripts/test-db.sh down
+# Test database for GitHub Actions CI pipeline. Seeds from api/seed/mock-dump.sql the
+# first time the volume is created.
 services:
   postgres:
     image: postgres:17

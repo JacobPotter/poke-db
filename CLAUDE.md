@@ -22,7 +22,7 @@ go run ./cmd/refresh-db                 # PokeAPI ingestion; REFRESH_TEST_MODE=t
 swag init                                # regenerate Swagger docs (docs/ is generated)
 ```
 
-Tests need a reachable PostgreSQL 15+ database. They connect to it for real; nothing is mocked. `scripts/test-db.sh test [pkgs]` (run from the repo root) starts and seeds one via `compose.test.yaml` on port 5433 and runs `go test`. CI uses the same compose file. You can also point `api/.env` at your own database (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, optional `DB_PORT`).
+Tests need a reachable PostgreSQL 15+ database. They connect to it for real; nothing is mocked. `scripts/test-db.sh test [pkgs]` (run from the repo root) manages a local Kubernetes test database (`k8s/base/postgres.yaml`) on port 5433 and runs `go test`. You can also point `api/.env` at your own database (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, optional `DB_PORT`).
 
 ```bash
 go test -v ./...                                                    # everything
