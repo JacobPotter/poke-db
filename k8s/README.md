@@ -29,16 +29,54 @@ k8s/
     └── argocd-preview-appset.yaml             # ApplicationSet: one preview env per PR labelled "preview"
 ```
 
-### Release flow
+### Release & Image Promotion Flow
 
-1. Open a PR. CI builds and pushes `ghcr.io/jacobpotter/poke-db-{api,frontend}:pr-<N>`.
-2. Add the **`preview`** label to the PR. Within about 5 minutes, ArgoCD creates `poke-db-pr-<N>` with its own Postgres, seeded by the PostSync hook.
-3. Merge. CI pushes `sha-<short>` and `latest`. The `deploy-prod` job then commits the `sha-<short>` tag into `overlays/prod` (`[skip ci]`), and ArgoCD rolls it out.
-4. When the PR is closed or unlabelled, the preview Application is deleted. Remove the leftover namespace with `kubectl delete ns poke-db-pr-<N>`.
+```
+[Local Development]
+   │
+   ├─► `scripts/local-dev.sh up` (Local build + containerd sync + imagePullPolicy: Never)
+   │
+[Pull Request]
+   │
+   ├─► Push branch & open PR
+   ├─► GitHub Actions CI (.github/workflows/ci.yml):
+   │     ├─ Runs backend & frontend test suites
+   │     └─ Publishes: ghcr.io/jacobpotter/poke-db-{api,frontend}:pr-<N>
+   ├─► Add `preview` label to PR
+   └─► ArgoCD ApplicationSet (k8s/apps/argocd-preview-appset.yaml):
+         ├─ Deploys k8s/overlays/preview to namespace `poke-db-pr-<N>`
+         ├─ Overrides image tags to `pr-<N>`
+         └─ PostSync hook seeds database on first deployment
+   │
+[Production Deployment]
+   │
+   ├─► Merge PR to `main`
+   ├─► GitHub Actions CI:
+   │     ├─ Runs full test suite
+   │     ├─ Publishes: ghcr.io/jacobpotter/poke-db-{api,frontend}:{latest,sha-<short>,<short>}
+   │     └─ `deploy-prod` job:
+   │           ├─ Uses GitHub App token to update `k8s/overlays/prod/kustomization.yaml`
+   │           ├─ Pins images to `sha-<short>`
+   │           └─ Commits and pushes `chore(deploy): prod -> sha-<short> [skip ci]` to `main`
+   └─► ArgoCD Application (k8s/apps/argocd-prod.yaml):
+         ├─ Detects commit on `main` branch
+         ├─ Synchronizes `k8s/overlays/prod` to namespace `poke-db`
+         └─ Rolls out updated pods running immutable `sha-<short>` container images
+```
 
-Nothing deploys from `latest`; it is kept only for manual and local use.
-
-`deploy-prod` pushes to `main` as a **GitHub App** with *Contents: read & write*, installed on this repo only. It uses the Actions variable `DEPLOY_APP_ID` and the secret `DEPLOY_APP_PRIVATE_KEY`, and the `main` ruleset lists the app as a bypass actor.
+1. **Pull Request & Preview Environments**:
+   - Opening or updating a PR triggers GitHub Actions CI (`.github/workflows/ci.yml`), which builds and publishes container images tagged with `:pr-<N>` to GHCR.
+   - Adding the **`preview`** label to the PR instructs the ArgoCD ApplicationSet (`k8s/apps/argocd-preview-appset.yaml`) to instantiate a preview environment in namespace `poke-db-pr-<N>` with images `ghcr.io/jacobpotter/poke-db-{api,frontend}:pr-<N>`.
+   - When the PR is closed or the `preview` label is removed, ArgoCD automatically cleans up the Application and its resources.
+2. **Production Release**:
+   - Merging changes to the `main` branch triggers CI to publish `:latest` and `:sha-<short>` tags.
+   - The `deploy-prod` workflow job automatically updates the image tags in `k8s/overlays/prod/kustomization.yaml` to the new `sha-<short>` digest and commits back to `main`.
+   - The ArgoCD production Application (`k8s/apps/argocd-prod.yaml`) syncs the updated overlay and deploys the new images to the `poke-db` namespace.
+3. **Deploying Routing Fixes to Remote Environments**:
+   - To deploy the frontend routing and Nginx proxy fixes to preview or production clusters:
+     1. Commit the changes and push the branch to GitHub.
+     2. Open a Pull Request and apply the `preview` label to test in an ephemeral preview environment.
+     3. Once validated, merge the PR into `main` to trigger automated production tagging and ArgoCD rollout.
 
 ---
 

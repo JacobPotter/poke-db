@@ -79,7 +79,7 @@ Load the dump into a fresh database before first starting the API. CI does the s
 - Local dev: browser → Vite (`:5173`) → proxy `/api` → Go API (`:8080`).
 - Production: nginx serves the SPA and `location /api/` proxies to `http://api:8080/` (`frontend/nginx.conf`). The trailing slash on `proxy_pass` strips the `/api/` prefix, so the Go routes still resolve under `/api/v1`.
 
-Cluster and Argo CD work is covered by the `cluster-access` skill (`.claude/skills/cluster-access/SKILL.md`).
+Cluster and Argo CD work is covered by the `cluster-access` skill (`.agents`).
 
 ## Conventions
 

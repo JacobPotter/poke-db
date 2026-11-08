@@ -9,7 +9,7 @@ description: Guidelines for Kubernetes and ArgoCD GitOps workflows, manifest-bas
 - **Infrastructure**: Kubernetes Kustomize manifests (`k8s/base/`, `k8s/overlays/`)
 - **Deployment Engine**: ArgoCD tracking the Git repository (`k8s/apps/`)
 - **Environment**: Local cluster via Kind/Minikube or production/preview namespaces
-- **Primary Reference**: See `.claude/skills/k8s-gitops-deployment/SKILL.md` for comprehensive release flow and directory structure.
+- **Primary Reference**: See `../..` for comprehensive release flow and directory structure.
 
 ## Execution Steps
 
