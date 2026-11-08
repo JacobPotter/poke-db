@@ -5,9 +5,9 @@ description: Use when working with Kubernetes manifests, ArgoCD applications, Ku
 # Kubernetes GitOps Deployment Protocol
 
 ## Context
-- **Repository**: `k8s/` contains all Kubernetes manifests and ArgoCD configuration.
-- **Structure**: Kustomize base (`k8s/base/`) + overlays (`k8s/overlays/{local,prod,preview}`).
-- **Deployment Engine**: ArgoCD Application for production (`k8s/apps/argocd-prod.yaml`), ApplicationSet for per-PR previews (`k8s/apps/argocd-preview-appset.yaml`).
+- **Repository**: `../../../k8s` contains all Kubernetes manifests and ArgoCD configuration.
+- **Structure**: Kustomize base (`../../../k8s/base`) + overlays (`k8s/overlays/{local,prod,preview}`).
+- **Deployment Engine**: ArgoCD Application for production (`../../../k8s/apps/argocd-prod.yaml`), ApplicationSet for per-PR previews (`k8s/apps/argocd-preview-appset.yaml`).
 - **Namespaces**: Production = `poke-db`, Local = `poke-db-local`, Preview = `poke-db-pr-<N>`.
 - **Registry**: GHCR — `ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`.
 
@@ -42,26 +42,26 @@ k8s/
 ### 1. Manifest Modifications — Always Edit Git-Tracked Files
 
 - **NEVER** run `kubectl apply` directly on the cluster for application resources.
-- All changes to Deployments, Services, ConfigMaps, Secrets, CronJobs, or Jobs must be made by editing the manifests under `k8s/base/` or `k8s/overlays/`.
-- Base manifests (`k8s/base/`) define the default resources. Overlays patch or replace values per environment.
-- When adding a new resource (e.g., a HorizontalPodAutoscaler), create it in `k8s/base/` and add it to `k8s/base/kustomization.yaml`.
+- All changes to Deployments, Services, ConfigMaps, Secrets, CronJobs, or Jobs must be made by editing the manifests under `../../../k8s/base` or `k8s/overlays/`.
+- Base manifests (`../../../k8s/base`) define the default resources. Overlays patch or replace values per environment.
+- When adding a new resource (e.g., a HorizontalPodAutoscaler), create it in `../../../k8s/base` and add it to `k8s/base/kustomization.yaml`.
 
 ### 2. Kustomize Overlay Conventions
 
-- **`overlays/local`**: Used by `scripts/local-dev.sh`. Patches `imagePullPolicy` to `IfNotPresent` for all Deployments, Jobs, and CronJobs. Namespace is `poke-db-local`.
+- **`overlays/local`**: Used by `../../../scripts/local-dev.sh`. Patches `imagePullPolicy` to `IfNotPresent` for all Deployments, Jobs, and CronJobs. Namespace is `poke-db-local`.
 - **`overlays/prod`**: Namespace `poke-db`. Image tags are pinned to `sha-<short>` and committed by the CI `deploy-prod` job. **Do not manually edit image tags here** — the CI workflow updates them.
 - **`overlays/preview`**: Minimal overlay; namespace and image tags are set per-PR by the ApplicationSet template.
 
 ### 3. ArgoCD Production Application
 
-- `k8s/apps/argocd-prod.yaml` deploys `k8s/overlays/prod` into namespace `poke-db`.
+- `../../../k8s/apps/argocd-prod.yaml` deploys `k8s/overlays/prod` into namespace `poke-db`.
 - Sync policy: `automated` with `prune: true` and `selfHeal: true`.
-- Source: `targetRevision: main`, path `k8s/overlays/prod`.
+- Source: `targetRevision: main`, path `../../../k8s/overlays/prod`.
 - ArgoCD reconciles automatically when CI commits new image tags to `overlays/prod`.
 
 ### 4. Preview Environments (Per-PR)
 
-- `k8s/apps/argocd-preview-appset.yaml` creates one ArgoCD Application per open PR labelled `preview`.
+- `../../../k8s/apps/argocd-preview-appset.yaml` creates one ArgoCD Application per open PR labelled `preview`.
 - Each preview gets:
   - Namespace: `poke-db-pr-<N>`
   - Images: `ghcr.io/jacobpotter/poke-db-{api,frontend}:pr-<N>`
@@ -74,7 +74,7 @@ k8s/
 
 1. **PR opened**: CI builds and pushes `:pr-<N>` images to GHCR.
 2. **`preview` label added**: ArgoCD ApplicationSet creates `poke-db-pr-<N>` namespace with its own stack.
-3. **PR merged to `main`**: CI pushes `:sha-<short>` and `:latest` tags. The `deploy-prod` job commits the `sha-<short>` tag into `k8s/overlays/prod/kustomization.yaml` with `[skip ci]`.
+3. **PR merged to `main`**: CI pushes `:sha-<short>` and `:latest` tags. The `deploy-prod` job commits the `sha-<short>` tag into `../../../k8s/overlays/prod/kustomization.yaml` with `[skip ci]`.
 4. **ArgoCD syncs**: Production automatically rolls out the new images.
 
 **Nothing deploys from `:latest`** — it is kept only for manual and local use.
@@ -91,7 +91,7 @@ k8s/
 ### 7. ArgoCD GitHub Notifications
 
 - Notifications post commit status checks (`pending`, `success`, `failure`) to PRs and branch commits.
-- Configured in `k8s/apps/argocd-notifications-cm.yaml` with triggers for sync-running, sync-succeeded, sync-failed, and health-degraded.
+- Configured in `../../../k8s/apps/argocd-notifications-cm.yaml` with triggers for sync-running, sync-succeeded, sync-failed, and health-degraded.
 - Requires a GitHub App with **Commit statuses: Read and write** permission.
 - Secret `argocd-notifications-secret` in the `argocd` namespace holds the GitHub App credentials.
 
@@ -118,7 +118,7 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-notifications-controller
 
 **Using Kubernetes MCP:**
 - Read pod logs and container restart reasons for failed deployments or PostSync seed jobs.
-- Inspect live manifests and diff applied cluster state against Kustomize overlays in `k8s/overlays/`.
+- Inspect live manifests and diff applied cluster state against Kustomize overlays in `../../../k8s/overlays`.
 - Inspect ArgoCD Application status conditions (`Synced`, `Healthy`, `Degraded`, `Progressing`).
 
 ### 9. Namespace Safety & Finalizer Management
@@ -128,7 +128,7 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-notifications-controller
 
 ### 10. Local Kubernetes Development
 
-Use `scripts/local-dev.sh` for local cluster development:
+Use `../../../scripts/local-dev.sh` for local cluster development:
 ```bash
 scripts/local-dev.sh up             # Build images, deploy, seed
 scripts/local-dev.sh port-forward   # Forward ports (3000, 8080, 5432)
@@ -139,8 +139,8 @@ scripts/local-dev.sh down           # Tear down
 
 ## Key Constraints
 
-- **Never manually edit `k8s/overlays/prod/kustomization.yaml` image tags** — the CI `deploy-prod` job manages them.
+- **Never manually edit `../../../k8s/overlays/prod/kustomization.yaml` image tags** — the CI `deploy-prod` job manages them.
 - **Never use `:latest` for production** — only `sha-<short>` tags are deployed.
-- **Base images in `k8s/base/` use `:latest`** — overlays override them with specific tags.
-- **The refresh binary is bundled in the API image** — both `poke-api` and `refresh-db` are built in the same Dockerfile (`api/Dockerfile`).
+- **Base images in `../../../k8s/base` use `:latest`** — overlays override them with specific tags.
+- **The refresh binary is bundled in the API image** — both `poke-api` and `refresh-db` are built in the same Dockerfile (`../../../api/Dockerfile`).
 - **Postgres has no readiness probe** — the seed hook uses an init container to wait for connectivity.

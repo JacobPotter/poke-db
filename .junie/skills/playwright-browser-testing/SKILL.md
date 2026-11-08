@@ -5,8 +5,8 @@ description: Use when running frontend browser tests with Vitest, debugging DOM 
 # Playwright Browser Testing & UI Verification Protocol
 
 ## Context
-- **Testing Engine**: Vitest 2.1 configured with Playwright Chromium browser mode (`frontend/vite.config.ts`)
-- **API Mocking**: Mock Service Worker (MSW) in `frontend/src/setupTests.ts` and `frontend/src/test/mocks/`
+- **Testing Engine**: Vitest 2.1 configured with Playwright Chromium browser mode (`../../../frontend/vite.config.ts`)
+- **API Mocking**: Mock Service Worker (MSW) in `../../../frontend/src/setupTests.ts` and `frontend/src/test/mocks/`
 - **Component Explorer**: Storybook 8 (`frontend/npm run storybook` on `:6006`)
 - **Live Verification**: Playwright MCP server (`playwright` toolset) for interactive browser validation against Vite dev server (`:5173`) or Storybook (`:6006`)
 

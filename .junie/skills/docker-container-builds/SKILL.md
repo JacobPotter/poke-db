@@ -5,8 +5,8 @@ description: Use when working with Docker images, the CI build-and-push workflow
 # Docker Container Builds Protocol
 
 ## Context
-- **API image**: `api/Dockerfile` — multi-stage Go build → Debian slim runtime.
-- **Frontend image**: `frontend/Dockerfile` — multi-stage Node build → nginx runtime.
+- **API image**: `../../../api/Dockerfile` — multi-stage Go build → Debian slim runtime.
+- **Frontend image**: `../../../frontend/Dockerfile` — multi-stage Node build → nginx runtime.
 - **Registry**: GitHub Container Registry (GHCR) — `ghcr.io/jacobpotter/poke-db-{api,frontend}`.
 - **Tagging**: `:pr-<N>` on PRs, `:sha-<short>` and `:latest` on merge to `main`.
 
@@ -16,7 +16,7 @@ description: Use when working with Docker images, the CI build-and-push workflow
 
 ### 1. API Dockerfile — Multi-Stage Build
 
-**File**: `api/Dockerfile`
+**File**: `../../../api/Dockerfile`
 
 ```dockerfile
 # Stage 1: Build
@@ -46,7 +46,7 @@ CMD ["/app/poke-api"]
 
 ### 2. Frontend Dockerfile — Multi-Stage Build
 
-**File**: `frontend/Dockerfile`
+**File**: `../../../frontend/Dockerfile`
 
 ```dockerfile
 # Stage 1: Build
@@ -68,11 +68,11 @@ CMD ["nginx", "-g", "daemon off;"]
 **Key points:**
 - **Build stage**: `node:18-bookworm` runs `npm ci` and `npm run build` (which includes `tsc -b` typecheck).
 - **Runtime**: `nginx:1.27-alpine` serves the static files.
-- **nginx.conf**: Custom config (`frontend/nginx.conf`) — `location /api/` proxies to `http://api:8080/`. The trailing slash strips the `/api/` prefix so Go routes resolve under `/api/v1`.
+- **nginx.conf**: Custom config (`../../../frontend/nginx.conf`) — `location /api/` proxies to `http://api:8080/`. The trailing slash strips the `/api/` prefix so Go routes resolve under `/api/v1`.
 
 ### 3. CI Image Tagging Strategy
 
-**Workflow**: `.github/workflows/_publish-image.yml` (called from `ci.yml`)
+**Workflow**: `../../../.github/workflows/_publish-image.yml` (called from `ci.yml`)
 
 | Event | Tags Pushed | Used By |
 |-------|-------------|---------|
@@ -84,7 +84,7 @@ CMD ["nginx", "-g", "daemon off;"]
 - `:sha-b6a6a6b` — built from commit `b6a6a6b...` on main (7-character short SHA).
 - `:latest` — always points to the last main build.
 
-**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job commits the `:sha-<short>` tag into `k8s/overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
+**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job commits the `:sha-<short>` tag into `../../../k8s/overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
 
 ### 4. CI Pipeline Flow
 
@@ -103,7 +103,7 @@ PR or push to main
 
 ### 5. Local Image Building
 
-**Using `scripts/local-dev.sh`:**
+**Using `../../../scripts/local-dev.sh`:**
 ```bash
 scripts/local-dev.sh up    # Builds images, deploys to local K8s, seeds DB
 scripts/local-dev.sh build # Builds images only
@@ -114,8 +114,8 @@ The script:
 2. Detects Kind or Minikube and loads images into the cluster:
    - **Kind**: `kind load docker-image <image>`
    - **Minikube**: `minikube image load <image>`
-3. Applies `k8s/overlays/local` (patches `imagePullPolicy: IfNotPresent`).
-4. Seeds the database with `api/seed/mock-dump.sql`.
+3. Applies `../../../k8s/overlays/local` (patches `imagePullPolicy: IfNotPresent`).
+4. Seeds the database with `../../../api/seed/mock-dump.sql`.
 
 **Manual build commands:**
 ```bash
@@ -134,7 +134,7 @@ kind load docker-image ghcr.io/jacobpotter/poke-db-frontend:latest
 
 Use the Docker MCP server (`docker` toolset) or the Docker CLI to manage and inspect local containers during development:
 - **Inspect local images**: List built images and verify tag presence (`ghcr.io/jacobpotter/poke-db-api:latest`, `ghcr.io/jacobpotter/poke-db-frontend:latest`).
-- **Container health & logs**: Query container status and stream logs for `compose.test.yaml` or local Kind/Minikube control planes.
+- **Container health & logs**: Query container status and stream logs for `../../../compose.test.yaml` or local Kind/Minikube control planes.
 - **Port bindings & environment**: Verify running container port bindings (e.g. Postgres on 5432/5433, API on 8080).
 
 ### 7. GHCR Visibility
@@ -152,7 +152,7 @@ Use the Docker MCP server (`docker` toolset) or the Docker CLI to manage and ins
 
 **When modifying the Frontend Dockerfile:**
 - `npm run build` includes typechecking — if types are broken, the Docker build fails.
-- The nginx config (`frontend/nginx.conf`) must proxy `/api/` to the Go API.
+- The nginx config (`../../../frontend/nginx.conf`) must proxy `/api/` to the Go API.
 - Keep the nginx version pinned (currently `1.27-alpine`).
 
 ### 9. Image Size Considerations

@@ -5,8 +5,8 @@ description: Use when working with the PokeAPI data ingestion pipeline in api/re
 # PokeAPI Data Ingestion Protocol
 
 ## Context
-- **Package**: `api/refresh` — ingests data from PokeAPI into PostgreSQL.
-- **Entry point**: `api/cmd/refresh-db` — standalone binary, not part of the API server.
+- **Package**: `../../../api/refresh` — ingests data from PokeAPI into PostgreSQL.
+- **Entry point**: `../../../api/cmd/refresh-db` — standalone binary, not part of the API server.
 - **Runtime**: Runs as a Kubernetes CronJob (nightly) and as an ArgoCD PostSync hook (initial seed).
 - **API client**: `github.com/JacobPotter/pokeapi-go` — Go client for PokeAPI.
 - **Database**: PostgreSQL 15+ (evolution tables require `NULLS NOT DISTINCT`).
@@ -86,10 +86,10 @@ Two K8s resources handle data ingestion:
 
 | Resource | Manifest | Schedule | Command |
 |----------|----------|----------|---------|
-| **CronJob** | `k8s/base/refresh-db-cronjob.yaml` | 00:00 UTC daily | `/app/refresh-db` |
-| **PostSync Hook** | `k8s/base/refresh-db-seed-hook.yaml` | After every ArgoCD sync | `/app/refresh-db -if-empty` |
+| **CronJob** | `../../../k8s/base/refresh-db-cronjob.yaml` | 00:00 UTC daily | `/app/refresh-db` |
+| **PostSync Hook** | `../../../k8s/base/refresh-db-seed-hook.yaml` | After every ArgoCD sync | `/app/refresh-db -if-empty` |
 
-**Both use the API image** — the Dockerfile (`api/Dockerfile`) builds both `poke-api` and `refresh-db` binaries into the same image.
+**Both use the API image** — the Dockerfile (`../../../api/Dockerfile`) builds both `poke-api` and `refresh-db` binaries into the same image.
 
 **Manual trigger:**
 ```bash
@@ -100,10 +100,10 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
 
 **When adding a new entity type (e.g., `Abilities`):**
 
-1. **Create the model** in `api/models/` with appropriate GORM tags.
+1. **Create the model** in `../../../api/models` with appropriate GORM tags.
 2. **Add to migrations**:
-   - If needed by the API server: add to `coreModels()` in `api/models/setup.go`.
-   - If only populated by refresh: add to `MigrateAll()` in `api/models/setup.go`.
+   - If needed by the API server: add to `coreModels()` in `../../../api/models/setup.go`.
+   - If only populated by refresh: add to `MigrateAll()` in `../../../api/models/setup.go`.
 3. **Create the refresh function** in `api/refresh/refresh-<entity>.go`:
    ```go
    func (r RefreshDB) refreshAbilities() error {
@@ -111,17 +111,17 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
        // ... fetch, transform, upsert
    }
    ```
-4. **Register in `Run()`** in `api/refresh/refresh-db.go`:
+4. **Register in `Run()`** in `../../../api/refresh/refresh-db.go`:
    - Place it after its dependencies and before its dependents.
    - Decide whether errors should abort the run (only types should).
 5. **Add API endpoint** if the entity should be queryable:
-   - Create controller in `api/controllers/`.
+   - Create controller in `../../../api/controllers`.
    - Create routes in `api/routes/<entity>routes/`.
-   - Register in `api/routes/setup.go`.
+   - Register in `../../../api/routes/setup.go`.
 6. **Add frontend integration** if applicable:
-   - Raw API function in `frontend/src/query/api/`.
-   - Query key and options in `frontend/src/query/`.
-   - Custom hook in `frontend/src/query/hooks/`.
+   - Raw API function in `../../../frontend/src/query/api`.
+   - Query key and options in `../../../frontend/src/query`.
+   - Custom hook in `../../../frontend/src/query/hooks`.
 
 ### 6. Debugging and Database Verification via Postgres MCP
 
@@ -177,7 +177,7 @@ REFRESH_TEST_MODE=true go run ./cmd/refresh-db
 
 ### 7. Refresh Test Suite
 
-The test suite (`api/refresh/refresh-db_test.go`) runs the full pipeline against a real database:
+The test suite (`../../../api/refresh/refresh-db_test.go`) runs the full pipeline against a real database:
 
 ```bash
 # Run refresh tests (sample mode)

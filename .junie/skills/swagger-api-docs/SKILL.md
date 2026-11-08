@@ -6,7 +6,7 @@ description: Use when adding or modifying API endpoints, Swagger / OpenAPI annot
 
 ## Context
 - **Tool**: Swaggo (`github.com/swaggo/swag`, `github.com/swaggo/gin-swagger`)
-- **Generated Output**: `api/docs/` (`docs.go`, `swagger.json`, `swagger.yaml`)
+- **Generated Output**: `../../../api/docs` (`docs.go`, `swagger.json`, `swagger.yaml`)
 - **API Base Path**: `/api/v1`
 - **Swagger UI**: Served at `http://localhost:8080/swagger/index.html`
 
@@ -15,7 +15,7 @@ description: Use when adding or modifying API endpoints, Swagger / OpenAPI annot
 ## Execution Steps
 
 ### 1. General API-Level Annotations
-Global API metadata is configured in `api/main.go` doc comments:
+Global API metadata is configured in `../../../api/main.go` doc comments:
 
 ```go
 // @title PokeDB REST API
@@ -25,7 +25,7 @@ Global API metadata is configured in `api/main.go` doc comments:
 ```
 
 ### 2. Controller Handler Annotations
-Every HTTP controller in `api/controllers/` must be annotated with standard Swaggo tags above the handler function:
+Every HTTP controller in `../../../api/controllers` must be annotated with standard Swaggo tags above the handler function:
 
 ```go
 // ListPokemon godoc
@@ -57,7 +57,7 @@ Every HTTP controller in `api/controllers/` must be annotated with standard Swag
 | `@Router` | Path relative to `@BasePath` and HTTP method | `@Router /pokemon/{id} [get]` |
 
 ### 4. Regenerating Swagger Documentation
-After adding or editing any handler annotations, response models in `api/models/`, or routes:
+After adding or editing any handler annotations, response models in `../../../api/models`, or routes:
 
 ```bash
 cd api
@@ -65,13 +65,13 @@ swag init
 ```
 
 **Verification:**
-1. Check that `api/docs/docs.go`, `api/docs/swagger.json`, and `api/docs/swagger.yaml` are updated.
+1. Check that `../../../api/docs/docs.go`, `api/docs/swagger.json`, and `api/docs/swagger.yaml` are updated.
 2. Ensure no parse errors or unresolved type warnings occur during `swag init`.
 3. Verify interactive Swagger UI locally at `http://localhost:8080/swagger/index.html`.
 
 ---
 
 ## Key Constraints
-- **Never hand-edit files in `api/docs/`**: `docs.go`, `swagger.json`, and `swagger.yaml` are auto-generated.
+- **Never hand-edit files in `../../../api/docs`**: `docs.go`, `swagger.json`, and `swagger.yaml` are auto-generated.
 - **Route paths in `@Router` are relative to `@BasePath`**: Do not repeat `/api/v1` in `@Router` (e.g. use `@Router /pokemon [get]`, NOT `@Router /api/v1/pokemon [get]`).
 - **Response types must match actual returned models**: Reference concrete structs from `models.*` rather than generic `interface{}` / `any`.
