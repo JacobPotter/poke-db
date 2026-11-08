@@ -17,7 +17,7 @@ k8s/
 │   └── kustomization.yaml
 ├── overlays/
 │   ├── local/
-│   │   └── kustomization.yaml      # namespace: poke-db-local, imagePullPolicy: IfNotPresent
+│   │   └── kustomization.yaml      # namespace: poke-db-local, imagePullPolicy: Never
 │   ├── prod/
 │   │   └── kustomization.yaml      # namespace: poke-db, image tags pinned by CI (sha-<short>)
 │   └── preview/

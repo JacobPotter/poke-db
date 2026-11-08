@@ -141,7 +141,20 @@ describe('ComponentName', () => {
 - Add handlers to `src/test/mocks/handlers.ts`.
 - Place JSON fixtures in `src/test/fixtures/`.
 
-### 6. Build and Development
+### 6. Framework Documentation & Visual Debugging via MCP
+
+#### A. Context7 MCP for Live Documentation
+When implementing new queries, mutations, route configurations, or Tailwind utilities, leverage Context7 MCP (`context7` toolset) to avoid hallucinated or outdated APIs:
+- **TanStack Query v5**: Query options syntax (`queryOptions`), `useQuery`, `useMutation`, `useQueryClient` cache invalidation patterns, and `gcTime` / `staleTime` configs (note: v5 uses `gcTime` instead of v4's `cacheTime`).
+- **Tailwind CSS 3.4**: Look up utility class names for flexbox, grid, transitions, dark mode (`dark:` variant), and typography.
+- **Vitest & React Testing Library**: Query latest API signatures for browser-mode assertions and Mock Service Worker (MSW) integration.
+
+#### B. Playwright MCP for Interactive UI Verification
+Use Playwright MCP (`playwright` toolset) to inspect and validate running UI instances:
+- Connect to local Vite dev server (`http://localhost:5173`) or Storybook (`http://localhost:6006`).
+- Navigate to pages/components, take accessibility snapshots, click elements, and inspect rendered DOM trees to verify CSS styling, responsive layout, and interaction states.
+
+### 7. Build and Development
 
 ```bash
 cd frontend
@@ -153,12 +166,12 @@ npm run storybook      # Component explorer on :6006
 
 **Important**: `npm run build` includes TypeScript typechecking — if typecheck fails, the build fails.
 
-### 7. Request Path
+### 8. Request Path
 
 - **Local dev**: Browser → Vite (`:5173`) → proxy `/api` → Go API (`:8080`).
 - **Production**: nginx serves the SPA; `location /api/` proxies to `http://api:8080/`. The trailing slash on `proxy_pass` strips the `/api/` prefix, so Go routes still resolve under `/api/v1`.
 
-### 8. Loaders
+### 9. Loaders
 
 Data loaders for React Router live in `src/loaders/`. They prefetch data before page rendering and pass initial data to TanStack Query hooks via `useLoaderData()`.
 

@@ -123,7 +123,33 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
    - Query key and options in `frontend/src/query/`.
    - Custom hook in `frontend/src/query/hooks/`.
 
-### 6. Debugging Partial Ingestion Failures
+### 6. Debugging and Database Verification via Postgres MCP
+
+Use the PostgreSQL MCP server (`postgres` toolset) or `psql` to verify data ingestion status and database integrity:
+
+**Key verification queries:**
+```sql
+-- Check entity counts after ingestion
+SELECT 'move_types' AS table_name, count(*) FROM move_types
+UNION ALL
+SELECT 'items', count(*) FROM items
+UNION ALL
+SELECT 'locations', count(*) FROM locations
+UNION ALL
+SELECT 'pokemon_species', count(*) FROM pokemon_species
+UNION ALL
+SELECT 'moves', count(*) FROM moves
+UNION ALL
+SELECT 'evolution_chains', count(*) FROM evolution_chains;
+
+-- Verify PostgreSQL 15+ NULLS NOT DISTINCT index on evolution_details
+SELECT indexname, indexdef
+FROM pg_indexes
+WHERE tablename = 'evolution_details' AND indexname LIKE '%nulls_not_distinct%';
+
+-- Verify foreign key relations and damage relations
+SELECT count(*) FROM move_types WHERE double_damage_to IS NOT NULL AND array_length(double_damage_to, 1) > 0;
+```
 
 **Common issues:**
 
@@ -140,7 +166,7 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
 kubectl logs -n poke-db job/refresh-db-seed
 kubectl logs -n poke-db -l app=refresh-db --tail=100
 
-# Check database state
+# Check database state via kubectl
 kubectl exec -it -n poke-db -l app=postgres -- psql -U postgres -d postgres -c "SELECT count(*) FROM move_types;"
 kubectl exec -it -n poke-db -l app=postgres -- psql -U postgres -d postgres -c "SELECT count(*) FROM pokemon_species;"
 

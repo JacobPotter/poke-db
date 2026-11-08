@@ -116,7 +116,22 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
    ```
    The frontend will be available at `http://localhost:5173`. API requests sent to `/api` are automatically proxied to `http://localhost:8080`.
 
-### 5. Local Kubernetes Full Stack Development (Alternative)
+### 5. Docker Compose Full Stack (Quick Testing & Local Run)
+Run the complete stack (Postgres with automatic seed data, backend API, and frontend) locally with a single command:
+```bash
+docker compose up --build
+```
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8080` (Swagger docs: `http://localhost:8080/swagger/index.html`)
+- **PostgreSQL**: `localhost:5432` (`user: postgres`, `password: postgres`, `db: pokedb`)
+
+To run in detached mode or tear down:
+```bash
+docker compose up -d --build
+docker compose down
+```
+
+### 6. Local Kubernetes Full Stack Development (Alternative)
 You can build and run the entire stack (Postgres, API, Frontend) inside a local Kubernetes cluster (e.g., Kind, Minikube, Docker Desktop):
 ```bash
 scripts/local-dev.sh up             # builds images, applies k8s/overlays/local, seeds database

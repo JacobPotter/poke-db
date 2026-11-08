@@ -95,30 +95,36 @@ k8s/
 - Requires a GitHub App with **Commit statuses: Read and write** permission.
 - Secret `argocd-notifications-secret` in the `argocd` namespace holds the GitHub App credentials.
 
-### 8. Diagnostics & Verification
+### 8. Diagnostics & Verification via Kubernetes MCP and CLI
+
+Leverage the Kubernetes MCP server (`kubernetes` toolset) or `kubectl` for real-time cluster inspection:
 
 ```bash
-# Production
+# Production status & logs
 kubectl get all -n poke-db
 kubectl rollout status deployment/api -n poke-db
 kubectl logs -n poke-db -l app=api -f
 kubectl logs -n poke-db job/refresh-db-seed
 
-# ArgoCD
+# ArgoCD Application status
 argocd app get poke-db-prod
 argocd app sync poke-db-prod
 argocd appset get poke-db-previews
 argocd app list | grep poke-db-pr-
 
-# Notifications
+# Notifications controller
 kubectl logs -n argocd -l app.kubernetes.io/name=argocd-notifications-controller -f
 ```
 
-### 9. Namespace Safety
+**Using Kubernetes MCP:**
+- Read pod logs and container restart reasons for failed deployments or PostSync seed jobs.
+- Inspect live manifests and diff applied cluster state against Kustomize overlays in `k8s/overlays/`.
+- Inspect ArgoCD Application status conditions (`Synced`, `Healthy`, `Degraded`, `Progressing`).
 
-- Always specify the namespace explicitly in `kubectl` commands.
-- Production namespace: `poke-db`. Local namespace: `poke-db-local`. Preview namespaces: `poke-db-pr-<N>`.
-- If a namespace is stuck in `Terminating`, check for finalizers on custom resources before attempting raw metadata patches.
+### 9. Namespace Safety & Finalizer Management
+
+- Always specify the target namespace explicitly (`-n poke-db`, `-n poke-db-local`, `-n poke-db-pr-<N>`) in all commands and MCP queries to avoid modifying or reading the wrong environment.
+- If an ephemeral preview namespace (e.g. `poke-db-pr-<N>`) is stuck in `Terminating`, check for hanging finalizers on custom resources or PVCs before attempting raw metadata patching.
 
 ### 10. Local Kubernetes Development
 

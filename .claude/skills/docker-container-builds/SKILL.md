@@ -130,13 +130,20 @@ kind load docker-image ghcr.io/jacobpotter/poke-db-api:latest
 kind load docker-image ghcr.io/jacobpotter/poke-db-frontend:latest
 ```
 
-### 6. GHCR Visibility
+### 6. Container Inspection via Docker MCP
+
+Use the Docker MCP server (`docker` toolset) or the Docker CLI to manage and inspect local containers during development:
+- **Inspect local images**: List built images and verify tag presence (`ghcr.io/jacobpotter/poke-db-api:latest`, `ghcr.io/jacobpotter/poke-db-frontend:latest`).
+- **Container health & logs**: Query container status and stream logs for `compose.test.yaml` or local Kind/Minikube control planes.
+- **Port bindings & environment**: Verify running container port bindings (e.g. Postgres on 5432/5433, API on 8080).
+
+### 7. GHCR Visibility
 
 - GHCR packages must be set to **Public** for the cluster to pull images without `imagePullSecrets`.
 - To change visibility: GitHub → Packages → `poke-db-api` / `poke-db-frontend` → Package settings → Change visibility → Public.
 - If packages are private, you must configure `imagePullSecrets` in the K8s manifests.
 
-### 7. Modifying Dockerfiles
+### 8. Modifying Dockerfiles
 
 **When modifying the API Dockerfile:**
 - Keep both binaries (`poke-api` and `refresh-db`) in the build.
@@ -148,7 +155,7 @@ kind load docker-image ghcr.io/jacobpotter/poke-db-frontend:latest
 - The nginx config (`frontend/nginx.conf`) must proxy `/api/` to the Go API.
 - Keep the nginx version pinned (currently `1.27-alpine`).
 
-### 8. Image Size Considerations
+### 9. Image Size Considerations
 
 | Image | Base | Approximate Size |
 |-------|------|-----------------|

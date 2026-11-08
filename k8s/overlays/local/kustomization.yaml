@@ -13,25 +13,25 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+        value: Never
   - target:
       kind: Deployment
       name: frontend
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+        value: Never
   - target:
       kind: Job
       name: refresh-db-seed
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+        value: Never
   - target:
       kind: CronJob
       name: refresh-db
     patch: |-
       - op: replace
         path: /spec/jobTemplate/spec/template/spec/containers/0/imagePullPolicy
-        value: IfNotPresent
+        value: Never
