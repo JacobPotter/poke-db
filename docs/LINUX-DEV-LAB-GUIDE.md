@@ -109,14 +109,41 @@ sudo update-grub
 
 ## 2. Post-Install System Setup
 
-### 2.1 System Update
+### 2.1 Install & Configure SSH Server (Port 22)
+
+Install OpenSSH server, enable and start the service on port 22:
+
+```bash
+sudo apt update && sudo apt install -y openssh-server
+
+# Enable and start the SSH service
+sudo systemctl enable --now ssh
+
+# Verify SSH is running and listening on port 22
+sudo systemctl status ssh
+sudo ss -tulpn | grep :22
+```
+
+*(Optional) Verify Port 22 configuration in sshd:*
+```bash
+# Confirm active sshd listening port
+sudo sshd -T | grep -i port
+# Expected output: port 22
+```
+
+Connect remotely from another machine on your local network:
+```bash
+ssh <username>@192.168.0.213
+```
+
+### 2.2 System Update
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 sudo apt autoremove -y
 ```
 
-### 2.2 Install Essential Packages
+### 2.3 Install Essential Packages
 
 ```bash
 sudo apt install -y \
@@ -127,7 +154,7 @@ sudo apt install -y \
   fonts-font-awesome
 ```
 
-### 2.3 Configure Static IP
+### 2.4 Configure Static IP
 
 Identify your network interface:
 ```bash
@@ -162,16 +189,16 @@ network:
 sudo netplan apply
 ```
 
-### 2.4 Configure Firewall
+### 2.5 Configure Firewall
 
 ```bash
-sudo ufw allow ssh
-sudo ufw allow 8080/tcp   # API
-sudo ufw allow 3000/tcp   # Frontend (k8s NodePort)
+sudo ufw allow 22/tcp      # SSH (or 'sudo ufw allow ssh')
+sudo ufw allow 8080/tcp    # API
+sudo ufw allow 3000/tcp    # Frontend (k8s NodePort)
 sudo ufw enable
 ```
 
-### 2.5 Create a Non-Root User with Sudo
+### 2.6 Create a Non-Root User with Sudo
 
 If the installer didn't create one:
 ```bash
@@ -253,11 +280,11 @@ sudo systemctl restart docker
 
 ## 4. Kubernetes Cluster Setup
 
-Two options are available: **k3s** (lightweight, recommended for dev labs) and **kubeadm** (vanilla Kubernetes).
+Three options are available: **k3s** (lightweight, recommended for persistent dev servers), **Kind** (Kubernetes in Docker, ideal for fast teardowns and image testing), and **kubeadm** (vanilla Kubernetes).
 
-### Option A: k3s (Recommended for Dev Labs)
+### Option A: k3s (Recommended for Persistent Dev Labs)
 
-k3s is a lightweight, certified Kubernetes distribution that runs with minimal resources — ideal for a single-node dev lab.
+k3s is a lightweight, certified Kubernetes distribution that runs as a systemd service with minimal resources (~512 MB RAM) — ideal for a dedicated single-node dev server that persists across reboots.
 
 #### Install k3s
 
@@ -299,7 +326,69 @@ kubectl get nodes
 curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 ```
 
-### Option B: kubeadm (Vanilla Kubernetes)
+### Option B: Kind (Kubernetes in Docker)
+
+Kind runs Kubernetes clusters using Docker container "nodes". It is ideal for ephemeral development environments, fast teardown/rebuild cycles, testing multi-node topologies, and loading locally built Docker images without pushing to a registry.
+
+#### Install Kind CLI
+
+```bash
+# Download and install latest Kind binary
+KIND_VERSION=$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | grep '"tag_name"' | sed -E 's/.*"v([^"]+)".*/\1/')
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${KIND_VERSION}/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+# Verify
+kind version
+```
+
+#### Create Cluster Configuration with Port Mappings
+
+To access services (such as frontend on port 3000, API/ArgoCD on port 8080, HTTP on 80/443) directly on your host or LAN, create a configuration with `extraPortMappings`:
+
+```bash
+cat << 'EOF' > kind-config.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 30000
+    hostPort: 3000
+    protocol: TCP
+  - containerPort: 30080
+    hostPort: 8080
+    protocol: TCP
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+```
+
+#### Create & Manage the Cluster
+
+```bash
+# Create cluster
+kind create cluster --name pokedb-cluster --config kind-config.yaml
+
+# Verify cluster connection
+kubectl cluster-info --context kind-pokedb-cluster
+kubectl get nodes
+
+# Load local Docker images directly into Kind without a registry
+# (Used automatically by scripts/local-dev.sh)
+# kind load docker-image poke-db-api:latest --name pokedb-cluster
+# kind load docker-image poke-db-frontend:latest --name pokedb-cluster
+
+# Delete cluster when needed
+# kind delete cluster --name pokedb-cluster
+```
+
+### Option C: kubeadm (Vanilla Kubernetes)
 
 For a production-like single-node cluster:
 
@@ -649,6 +738,7 @@ npm --version
 psql --version
 kubectl version --client
 helm version
+kind version
 code --version
 k9s --version
 ```
@@ -660,6 +750,16 @@ k9s --version
 ```bash
 sudo usermod -aG docker $USER
 newgrp docker
+```
+
+#### Kind: "failed to create cluster: node(s) already exist for a cluster with that name" or port conflicts
+
+```bash
+# Delete existing cluster with matching name
+kind delete cluster --name pokedb-cluster
+
+# Check if another service is using port 80, 443, 3000, or 8080 on the host
+sudo ss -tulpn | grep -E ':(80|443|3000|8080)\b'
 ```
 
 #### k3s: Services not starting

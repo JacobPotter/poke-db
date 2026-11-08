@@ -1,87 +1,222 @@
-# CLAUDE.md
+# AI Agent & Developer Guide: PokeDB
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This guide provides technical specifications, architecture overviews, build instructions, testing strategies, and development conventions for AI coding assistants (GitHub Copilot, Claude Code, Junie, Cursor, etc.) and human developers working in the **PokeDB** repository.
 
-## Repository layout
+---
 
-Two independent apps plus deployment config. There is no root-level build tool; every command runs from `api/` or `frontend/`.
+## 1. Repository Layout & Tech Stack
 
-- `api/` — Go 1.23 REST API (Gin + GORM + PostgreSQL). Module path `github.com/JacobPotter/poke-db/api`.
-- `frontend/` — React 18 + TypeScript + Vite + Tailwind SPA.
-- `k8s/` — Kustomize base and overlays, plus ArgoCD Application config.
-- `.junie/AGENTS.md` and `README.md` hold the longer human-facing guides; `k8s/README.md` covers deployment.
+PokeDB is organized as two independent applications plus Kubernetes deployment manifests. There is no root-level build tool; commands are run from `api/`, `frontend/`, or the repository root.
 
-## Commands
+- **Backend (`/api`)**:
+  - **Runtime & Language**: Go 1.23+ (`go.mod` specifies Go 1.23, module `github.com/JacobPotter/poke-db/api`).
+  - **Frameworks & Libraries**: Gin Web Framework (`github.com/gin-gonic/gin`), GORM (`gorm.io/gorm`, `gorm.io/driver/postgres`), Swaggo (`github.com/swaggo/gin-swagger`), Testify (`github.com/stretchr/testify`).
+  - **Database**: PostgreSQL 15+ with GORM auto-migrations and seed dump support.
+  - **External Ingestion**: PokeAPI ingestion in `api/refresh`, run by the standalone `api/cmd/refresh-db` binary as a Kubernetes CronJob (`k8s/base/refresh-db-cronjob.yaml`) and an Argo CD PostSync seed hook (`-if-empty`).
+- **Frontend (`/frontend`)**:
+  - **Runtime & Build**: Node.js 18+ (tested with Node 23 & npm 10), Vite 5, TypeScript 5.5, Tailwind CSS 3.4.
+  - **State & Data Fetching**: `@tanstack/react-query` v5, `axios-hooks`.
+  - **UI & Testing Tools**: React 18, Storybook 8, Vitest 2.1 (Playwright Chromium browser mode), `@testing-library/react`, Mock Service Worker (MSW).
+- **Deployment & Infra (`/k8s`)**:
+  - Kubernetes manifests (Kustomize base & overlays) and ArgoCD Application configurations.
+
+---
+
+## 2. Quick Commands Reference
 
 ### Backend (run from `api/`)
 
 ```bash
-go build -v ./...                       # compile everything
-go run main.go                          # API on :8080 (PORT overrides), base path /api/v1
-go run ./cmd/refresh-db                 # PokeAPI ingestion; REFRESH_TEST_MODE=true for a small sample
-swag init                                # regenerate Swagger docs (docs/ is generated)
+go build -v ./...                       # Compile all backend packages
+go run main.go                          # Start API server on :8080 (base path /api/v1)
+go run ./cmd/refresh-db                 # Ingest data from PokeAPI (set REFRESH_TEST_MODE=true for small sample)
+swag init                               # Regenerate Swagger API docs (in docs/)
 ```
 
-Tests need a reachable PostgreSQL 15+ database. They connect to it for real; nothing is mocked. `scripts/test-db.sh test [pkgs]` (run from the repo root) manages a local Kubernetes test database (`k8s/base/postgres.yaml`) on port 5433 and runs `go test`. You can also point `api/.env` at your own database (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, optional `DB_PORT`).
+### Backend Testing
+
+Tests connect to a real PostgreSQL 15+ database (nothing is mocked). `scripts/test-db.sh` manages a local test container on port 5433:
 
 ```bash
-go test -v ./...                                                    # everything
-go test -v ./controllers                                            # handler suites only
-go test -v ./controllers -run TestPokemonSuite/TestPokemonHandler_ListPokemon_Basic   # one test method
-go test -v ./refresh -run TestRefreshDBSuite                        # refresh against live PokeAPI, sample subset
-FULL_SEED_TEST=true go test -v -timeout 30m ./refresh -run TestRefreshDBSuite        # full dataset (slow)
+# Run tests using the test-db script from repo root
+scripts/test-db.sh test                # Run all backend tests
+scripts/test-db.sh test ./controllers  # Run controller tests only
+
+# Or export DB environment variables to run go test directly
+eval "$(scripts/test-db.sh env)"
+cd api
+go test -v ./...                                                    # Run all backend tests
+go test -v ./controllers                                            # Run handler test suites
+go test -v ./controllers -run TestPokemonSuite/TestPokemonHandler_ListPokemon_Basic # Specific test method
+go test -v ./refresh -run TestRefreshDBSuite                        # PokeAPI refresh test (sample subset)
 ```
 
 ### Frontend (run from `frontend/`)
 
 ```bash
-npm run dev            # Vite dev server on :5173, proxies /api to localhost:8080
-npm run build          # tsc -b && vite build (typecheck is part of the build)
-npm run lint           # eslint .
-npm run storybook      # component explorer on :6006
-npx vitest run         # tests once (no watch); `npm test` starts watch mode
-npx vitest run src/components/ui/tests/DarkModeButton.test.tsx     # one file
-npx vitest run -t "DarkModeButton"                                  # by test name
+npm run dev            # Start Vite dev server on :5173 (proxies /api to localhost:8080)
+npm run build          # Typecheck & build production bundle (tsc -b && vite build)
+npm run lint           # Run ESLint
+npm run storybook      # Start Storybook component explorer on :6006
+npx vitest run         # Run unit and component tests once in headless Chromium
+npx vitest run src/components/ui/tests/DarkModeButton.test.tsx     # Run single test file
+npx vitest run -t "DarkModeButton"                                  # Run tests matching regex
 ```
 
-Vitest runs in real Chromium through Playwright browser mode, not jsdom. Playwright browsers must be installed (`npx playwright install`) before the first run.
+> **Note on Vitest**: Vitest runs tests in real Chromium using Playwright browser mode. Ensure Playwright browsers are installed (`npx playwright install`) before running tests.
 
-### Database
+### Database Seeding
 
 ```bash
-psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql   # offline seed; run from repo root
+# Offline seed from repo root (fast & recommended)
+psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
 ```
 
-Load the dump into a fresh database before first starting the API. CI does the same against `postgres:16` before running backend tests.
+---
 
-## Backend architecture
+## 3. Backend Architecture & Conventions
 
-**Startup and routing.** `api/main.go` loads `.env`, calls `models.ConnectDatabase()`, builds the router with `routes.SetupRouter(models.DB)`, and then adds Swagger and CORS middleware. `routes/setup.go` creates the `/api/v1` group and hands it to each feature's `RegisterRoutes` (`routes/pokemonroutes`, `routes/typeroutes`, `routes/evolutionroutes`). Each of those constructs a handler from `controllers/` with the `*gorm.DB`, so controllers take their database by constructor injection rather than reading the global.
+### Startup & Router Configuration
+- `api/main.go` loads environment variables from `.env`, initializes database connection via `models.ConnectDatabase()`, builds the router with `routes.SetupRouter(models.DB)`, and registers Swagger (`/swagger/*any`) and CORS middleware.
+- `routes/setup.go` establishes the `/api/v1` route group and delegates to feature-specific route packages (`routes/pokemonroutes`, `routes/typeroutes`, `routes/evolutionroutes`).
+- **Constructor Injection**: Controllers in `controllers/` receive their `*gorm.DB` instance via constructor functions (e.g. `NewPokemonHandler(db)`), avoiding reliance on global state.
 
-**Migrations are split in two.** `models.ConnectDatabase()` (used by the API server and tests) only auto-migrates `coreModels()`. The evolution tables (`EvolutionChain`, `EvolutionChainLink`, `EvolutionDetails`) are created only by `models.MigrateAll()`, which the refresh command and refresh test call. A database built only by starting the API will lack those tables; use the dump or run the refresh job. `EvolutionDetails` needs a `NULLS NOT DISTINCT` unique index, which requires PostgreSQL 15+.
+### Split Migration Architecture
+Database migrations are split into two stages:
+1. **Core Models (`models.ConnectDatabase()`)**: Executed on API server startup and integration test initialization. Runs `AutoMigrate` for `PokemonSpecies`, `Pokemon`, `MoveType`, `Item`, `Move`, `Location`, `Region`, and `EvolutionTrigger`.
+2. **Evolution Graph Models (`models.MigrateAll()`)**: Creates `EvolutionChain`, `EvolutionChainLink`, and `EvolutionDetails`. `EvolutionDetails` requires a `NULLS NOT DISTINCT` unique index (PostgreSQL 15+). This migration is executed only during data ingestion by `refresh-db`, `refresh-db_test.go`, and the ArgoCD PostSync hook.
 
-**Ingestion is a separate binary.** `api/refresh` holds `RefreshDB.Run()`, which runs steps in dependency order: types first (its error aborts the run), then items, locations, pokemon, moves, evolution triggers, and evolution chains. The other steps don't return errors to `Run`. `api/cmd/refresh-db` wraps it, and in Kubernetes it runs as the nightly `refresh-db` CronJob, and as the `refresh-db-seed` Argo PostSync hook with `-if-empty` (it skips when `move_types` has rows). Both use the API image with `/app/refresh-db`. There is no staging app: Argo deploys prod (`overlays/prod`, with `sha-<short>` tags committed by the CI `deploy-prod` job) and per-PR previews (`k8s/apps/argocd-preview-appset.yaml`, label `preview`). The API server doesn't ingest anything itself.
+### Ingestion Subsystem (`api/refresh`)
+`RefreshDB.Run()` ingests entities in strict dependency order:
+1. Move types (`refreshTypes` — hard dependency; failure aborts the run)
+2. Items (`refreshItems`)
+3. Locations & regions (`refreshLocations`)
+4. Pokémon & species (`refreshPokemon`)
+5. Moves & type damage relations (`refreshMoves`)
+6. Evolution triggers (`refreshEvolutionTriggers`)
+7. Evolution chains & details (`refreshEvolutionChains`)
 
-**Swagger.** The API-level annotations live in `main.go`. `docs/` is generated by `swag init`, so regenerate it rather than hand-editing.
+### Go Coding Standards (Go 1.23)
+- Use `any` instead of `interface{}`.
+- Use `errors.Is(err, target)` instead of `err == target`.
+- Prefer stdlib slice/map packages: `slices.Contains`, `slices.IndexFunc`, `slices.Max`, `slices.Min`, `maps.Clone`, `maps.Keys`.
+- Use integer range loops: `for i := range n`.
+- Handle context cancellation with `context.WithCancelCause` and `context.WithTimeoutCause`.
+- Document endpoints with Swaggo annotations on handlers and run `swag init` when modifying routes or response types.
 
-## Frontend architecture
+---
 
-**Data flow.** Server state goes through TanStack Query. `src/query/api/` has the raw request functions, `src/query/hooks/` wraps them as hooks, and `src/query/keyFactories.ts` centralizes query keys. Default caching is in `src/query/queryClient.ts` (10-minute `staleTime`, no refetch on window focus), so keep those defaults in mind when debugging "stale" data. `src/loaders/` holds the pokemon and evolution-chain loaders.
+## 4. Frontend Architecture & Conventions
 
-**Global UI state.** Lives in React contexts under `src/context/` (`DarkModeContext`, `MoveTypeContext`), not in Redux or similar.
+### Data Flow & Server State
+- Server state is managed exclusively via **TanStack Query v5**.
+- `src/query/api/` contains raw Axios request functions.
+- `src/query/hooks/` provides custom React hooks wrapping queries.
+- `src/query/keyFactories.ts` centralizes query key definitions.
+- Default caching in `src/query/queryClient.ts` uses `staleTime: 10 * 60 * 1000` (10 minutes) and `refetchOnWindowFocus: false`.
+- `src/loaders/` contains route prefetching loaders.
 
-**Components.** Grouped by domain under `src/components/` (`layout`, `pages`, `pokemon`, `moveTypes`, `ui`). Shared types are in `src/models/`. Storybook stories sit in `stories/` folders next to the components.
+### Global UI State & Components
+- Global UI state lives in React Contexts under `src/context/` (`DarkModeContext`, `MoveTypeContext`), never in Redux.
+- Component structure under `src/components/`:
+  - `layout/` — Shell, navigation, footer.
+  - `pages/` — Top-level views (`PokemonPage`, `TypesPage`, `EvolutionsPage`).
+  - `pokemon/` — Domain components for Pokémon listing, details, and evolution summaries.
+  - `moveTypes/` — Type charts and effectiveness summaries.
+  - `ui/` — Base UI primitives, Pokédex frame, buttons, skeletons.
+- Storybook stories are co-located in `stories/` folders adjacent to components.
 
-**Test harness.** `src/setupTests.ts` starts an MSW worker (`src/test/mocks/worker.ts`, `handlers.ts`) before every test and resets handlers afterward, so component tests hit mocked API responses rather than the real backend. Fixtures are in `src/test/fixtures/` and render helpers in `src/test/utils/`. Tests are co-located under `tests/` directories.
+### Frontend Coding Standards
+- Strict TypeScript: do not use `any`; use shared models from `src/models/`.
+- Styling: Use Tailwind CSS utility classes; avoid inline styles.
 
-## Request path across services
+---
 
-- Local dev: browser → Vite (`:5173`) → proxy `/api` → Go API (`:8080`).
-- Production: nginx serves the SPA and `location /api/` proxies to `http://api:8080/` (`frontend/nginx.conf`). The trailing slash on `proxy_pass` strips the `/api/` prefix, so the Go routes still resolve under `/api/v1`.
+## 5. Request Flow Across Environments
 
-Cluster and Argo CD work is covered by the `cluster-access` skill (`.agents`).
+- **Local Development**: Browser → Vite Dev Server (`:5173`) → Proxy `/api` → Go API Server (`:8080`).
+- **Production (Kubernetes)**: Browser → Nginx (serves static SPA bundle) → `location /api/` proxies to `http://api:8080/`. The trailing slash on `proxy_pass` preserves route resolution under `/api/v1`.
 
-## Conventions
+---
 
-- Go 1.23 idioms: `any` not `interface{}`, `errors.Is`, `slices`/`maps` helpers, `for i := range n`, and `context.WithCancelCause` / `WithTimeoutCause` for cancellation.
-- Frontend: strict TypeScript and avoid `any`; Tailwind utility classes, not inline styles.
+## 6. Testing Patterns & Examples
+
+### Backend Test Pattern (Testify Suite)
+Backend handler tests run against a real PostgreSQL database instance:
+
+```go
+package controllers_test
+
+import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/JacobPotter/poke-db/api/models"
+	"github.com/JacobPotter/poke-db/api/routes"
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/suite"
+)
+
+type PokemonTestSuite struct {
+	suite.Suite
+	router *gin.Engine
+}
+
+func (s *PokemonTestSuite) SetupTest() {
+	models.ConnectDatabase()
+	s.router = routes.SetupRouter(models.DB)
+}
+
+func TestPokemonSuite(t *testing.T) {
+	suite.Run(t, new(PokemonTestSuite))
+}
+
+func (s *PokemonTestSuite) TestGetPokemonList() {
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodGet, "/api/v1/pokemon?page=1&pageSize=5", nil)
+
+	s.router.ServeHTTP(w, req)
+
+	s.Equal(http.StatusOK, w.Code)
+	var response models.ListPokemonResponse
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	s.Require().NoError(err)
+	s.NotEmpty(response.Pokemon)
+}
+```
+
+### Frontend Test Pattern (Vitest + Testing Library + MSW)
+Component tests run in Chromium with MSW intercepting API calls (`src/test/mocks/handlers.ts`):
+
+```tsx
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import DarkModeButton from '../DarkModeButton';
+import { DarkModeProvider } from '../../../../context/DarkModeContext';
+
+describe('DarkModeButton', () => {
+  it('renders theme toggle button', () => {
+    render(
+      <DarkModeProvider>
+        <DarkModeButton />
+      </DarkModeProvider>
+    );
+    const button = screen.getByRole('button');
+    expect(button).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## 7. Related Documentation
+
+- [Project Overview & Quickstart](README.md)
+- [System Architecture](ARCHITECTURE.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Backend Development Guide](api/README.md)
+- [Frontend Development Guide](frontend/README.md)
+- [Kubernetes & GitOps Guide](k8s/README.md)

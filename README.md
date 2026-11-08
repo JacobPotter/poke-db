@@ -1,31 +1,77 @@
 # PokeDB
 
-Online Pokedex. Frontend written in React Typescript and Tailwind CSS. Backend api written in Go with Gin and GORM frameworks, with PostgresDB support. Data provided by [Pokeapi](https://pokeapi.co/) via batch scripts run as scheduled jobs on api server.
+**PokeDB** is a full-stack online Pokédex web application. It features a modern, responsive Single Page Application frontend built with React 18, TypeScript, and Tailwind CSS, backed by a RESTful API written in Go 1.23 with Gin, GORM, and PostgreSQL 15+. Data is sourced and synchronized from [PokeAPI](https://pokeapi.co/) via scheduled batch ingestion jobs.
 
-For live version, please visit [Poke-DB](https://poke-db.webwizardssoftware.com)
+For the live version, visit [Poke-DB](https://poke-db.webwizardssoftware.com).
 
-<img width="1512" alt="Screenshot 2024-10-30 at 12 44 35 PM" src="https://github.com/user-attachments/assets/a7ec3b94-6fbd-462e-abbc-25a3302e8834">
+<img width="1512" alt="PokeDB Screenshot" src="https://github.com/user-attachments/assets/a7ec3b94-6fbd-462e-abbc-25a3302e8834">
+
+---
+
+## Architecture & Documentation Map
+
+PokeDB is divided into several focused subsystems with dedicated technical documentation:
+
+| Subsystem | Description | Guide Link |
+|---|---|---|
+| **System Architecture** | High-level topology, Mermaid diagrams, database split migrations, and request flow | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| **Backend API** | Go 1.23 REST API (Gin + GORM + PostgreSQL), endpoints, testing & seeding | [api/README.md](api/README.md) |
+| **Frontend Client** | React 18 SPA (TypeScript + Tailwind CSS + TanStack Query + Storybook) | [frontend/README.md](frontend/README.md) |
+| **Kubernetes & GitOps** | Kustomize overlays, ArgoCD deployments, preview environments, notifications | [k8s/README.md](k8s/README.md) |
+| **Contributing** | Branching workflow, Conventional Commits, and pre-PR validation checklist | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| **AI Agent & Developer Guide** | Technical specifications, command reference, architecture patterns, and conventions for AI assistants (GitHub Copilot, Claude, Junie, Cursor) | [AGENTS.md](AGENTS.md) |
 
 ---
 
 ## Prerequisites
 
 Ensure you have the following installed locally:
-- [Go](https://go.dev/) (v1.23 or later)
-- [Node.js](https://nodejs.org/) (v18 or later) & `npm`
-- [PostgreSQL](https://www.postgresql.org/) (running locally or in a container)
+- **[Go](https://go.dev/)** (v1.23 or later)
+- **[Node.js](https://nodejs.org/)** (v18 or later) & `npm`
+- **[PostgreSQL](https://www.postgresql.org/)** (v15+ running locally or in a container)
+- **[Docker](https://www.docker.com/)** (optional, for Docker Compose and local containers)
 
 ---
 
-## Local Development
+## Quickstart Options
 
-### 1. Database Setup
-Create a PostgreSQL database (e.g. `pokedb`):
+### Option 1: Docker Compose Full Stack (Fastest All-in-One)
+Run the entire stack (PostgreSQL with pre-seeded data, backend API, and frontend client) with a single command:
+
+```bash
+docker compose up --build
+```
+
+- **Frontend Client**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8080` (Base: `/api/v1`)
+- **Swagger Documentation**: `http://localhost:8080/swagger/index.html`
+- **PostgreSQL Database**: `localhost:5432` (`user: postgres`, `password: postgres`, `db: pokedb`)
+
+To run in detached mode or tear down:
+```bash
+docker compose up -d --build
+docker compose down
+```
+
+---
+
+### Option 2: Local Development (Go + Node)
+
+#### 1. Database Setup
+Create a PostgreSQL 15+ database (e.g. `pokedb`):
 ```sql
 CREATE DATABASE pokedb;
 ```
 
-### 2. Backend API
+#### 2. Seed Database
+Restore the offline mock database dump file (`api/seed/mock-dump.sql`) to immediately populate tables, sequences, and seed data without making external network calls:
+
+```bash
+# Run from repository root
+psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
+```
+
+#### 3. Backend API Server
 1. Navigate to the `api` directory:
    ```bash
    cd api
@@ -37,72 +83,16 @@ CREATE DATABASE pokedb;
    DB_PASSWORD=your_password
    DB_NAME=pokedb
    PORT=8080
+   # DB_PORT=5432 (optional)
    ```
-3. Run the API server (migrations are run automatically on startup):
+3. Run the API server (core migrations run automatically):
    ```bash
    go run main.go
    ```
    The API will start at `http://localhost:8080`.
 
-### 3. Database Seeding & Data Refresh
-
-There are two ways to seed and populate your local database:
-
-#### Option 1: Offline Mock Database Dump (Instant & Recommended for Fast Setup)
-Restore the pre-generated PostgreSQL SQL dump file (`api/seed/mock-dump.sql`) to immediately populate your database with schema tables, sequences, and seed data without making external network calls:
-
-> **Note**: For best results, import the SQL dump into a freshly created database before starting the API server for the first time.
-
-- **From repository root**:
-  ```bash
-  psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
-  ```
-
-- **From `api/` directory**:
-  ```bash
-  cd api
-  psql -h localhost -U postgres -d pokedb -f seed/mock-dump.sql
-  ```
-
-*(Adjust `-h`, `-U`, or `-d` if your database host, user, or name differs from the defaults in `.env`)*
-
-#### Option 2: Live PokeAPI Data Ingestion
-The backend includes a standalone data ingestion command (`api/cmd/refresh-db`, logic in `api/refresh/`) that fetches live Pokémon species, moves, items, types, locations, and evolution chains from the PokeAPI.
-
-##### Quick Sample Seed (Live Subset)
-Populates a small sample subset (~50 records per category) for rapid local development:
-```bash
-cd api
-go test -v ./refresh -run TestRefreshDBSuite
-```
-
-> Requires **PostgreSQL 15+** (the evolution tables use a `NULLS NOT DISTINCT` unique index). Set `DB_PORT` if your database is not on 5432.
-
-##### Full Database Seed (Live Ingestion)
-Fetches the complete dataset (~1,500 Pokémon and full associations). Because this makes extensive API calls to PokeAPI, pass an extended timeout:
-```bash
-cd api
-FULL_SEED_TEST=true go test -v -timeout 30m ./refresh -run TestRefreshDBSuite
-```
-
-Or run the command directly (`REFRESH_TEST_MODE=true` fetches only a sample subset):
-```bash
-cd api
-go run ./cmd/refresh-db
-```
-
-#### Refresh in Kubernetes
-The refresh doesn't run inside the API server. In Kubernetes:
-- the `refresh-db-seed` Argo CD PostSync hook seeds empty databases (`/app/refresh-db -if-empty`, which is a no-op once the database has data);
-- the `refresh-db` CronJob refreshes nightly.
-
-To trigger a one-off run:
-```bash
-kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
-```
-
-### 4. Frontend Client
-1. Navigate to the `frontend` directory:
+#### 4. Frontend Client
+1. Navigate to the `frontend` directory in a new terminal:
    ```bash
    cd frontend
    ```
@@ -114,67 +104,106 @@ kubectl create job --from=cronjob/refresh-db refresh-db-manual -n poke-db
    ```bash
    npm run dev
    ```
-   The frontend will be available at `http://localhost:5173`. API requests sent to `/api` are automatically proxied to `http://localhost:8080`.
+   The frontend will be available at `http://localhost:5173`. Requests to `/api` are automatically proxied to `http://localhost:8080`.
 
-### 5. Docker Compose Full Stack (Quick Testing & Local Run)
-Run the complete stack (Postgres with automatic seed data, backend API, and frontend) locally with a single command:
-```bash
-docker compose up --build
-```
-- **Frontend**: `http://localhost:3000`
-- **Backend API**: `http://localhost:8080` (Swagger docs: `http://localhost:8080/swagger/index.html`)
-- **PostgreSQL**: `localhost:5432` (`user: postgres`, `password: postgres`, `db: pokedb`)
+---
 
-To run in detached mode or tear down:
-```bash
-docker compose up -d --build
-docker compose down
-```
+### Option 3: Local Kubernetes Development
+Run the complete stack inside a local Kubernetes cluster (Kind, Minikube, or Docker Desktop):
 
-### 6. Local Kubernetes Full Stack Development (Alternative)
-You can build and run the entire stack (Postgres, API, Frontend) inside a local Kubernetes cluster (e.g., Kind, Minikube, Docker Desktop):
 ```bash
-scripts/local-dev.sh up             # builds images, applies k8s/overlays/local, seeds database
-scripts/local-dev.sh port-forward   # forwards frontend (3000), API (8080), and Postgres (5432)
-scripts/local-dev.sh down           # tears down local environment
+# Build local images, apply k8s/overlays/local, and seed database
+scripts/local-dev.sh up
+
+# Port-forward frontend (3000), API (8080), and PostgreSQL (5432)
+scripts/local-dev.sh port-forward
+
+# Tear down local cluster resources
+scripts/local-dev.sh down
 ```
 
 ---
 
-## Testing
+## Database Seeding & Data Refresh
 
-### Backend API Tests
-The simplest way to get a PostgreSQL test database, seeded from `api/seed/mock-dump.sql`, is `scripts/test-db.sh` using the Kubernetes Postgres manifests on port 5433:
+There are two methods to populate the database:
+
+### 1. Offline SQL Dump (Instant & Recommended)
 ```bash
-scripts/test-db.sh test                       # start/seed DB if needed, then go test ./...
-scripts/test-db.sh test ./refresh/...         # just the refresh job suite
-eval "$(scripts/test-db.sh env)"              # export DB_* for go test / GoLand in this shell
-scripts/test-db.sh down                       # stop and wipe (next "up" re-seeds)
+psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
 ```
 
-Or point `api/.env` at your own PostgreSQL 15+ database and run `cd api && go test -v ./...`.
+### 2. Live PokeAPI Ingestion (`api/refresh`)
+The standalone ingestion command (`api/cmd/refresh-db`) fetches live data directly from PokeAPI.
 
-### Frontend Tests
-Run Vitest browser tests:
+- **Quick sample subset (~50 records per entity)**:
+  ```bash
+  cd api
+  go test -v ./refresh -run TestRefreshDBSuite
+  ```
+- **Full database ingestion (~1,500 Pokémon, long timeout)**:
+  ```bash
+  cd api
+  FULL_SEED_TEST=true go test -v -timeout 30m ./refresh -run TestRefreshDBSuite
+  ```
+- **Direct CLI binary execution**:
+  ```bash
+  cd api
+  REFRESH_TEST_MODE=true go run ./cmd/refresh-db
+  ```
+
+---
+
+## Testing & Quality Assurance
+
+### Backend API Tests (Go / Testify)
+Use the automated test container script (manages an ephemeral PostgreSQL test DB on port 5433):
+
+```bash
+# Start test database and run all backend tests
+scripts/test-db.sh test
+
+# Run a specific package or test
+scripts/test-db.sh test ./controllers/...
+
+# Export DB_* environment variables into your shell
+eval "$(scripts/test-db.sh env)"
+
+# Stop and remove test database container
+scripts/test-db.sh down
+```
+
+Or run directly with `api/.env` pointing to a running PostgreSQL 15+ database:
+```bash
+cd api
+go test -v ./...
+```
+
+### Frontend Tests (Vitest + Playwright + MSW)
+Frontend tests execute in a real headless Chromium browser via Playwright and MSW API mocking:
+
 ```bash
 cd frontend
-npm test
-```
-Or run tests in headless/CI mode:
-```bash
-npx vitest run
-```
 
-Run linter:
-```bash
+# Run test suite once (CI / headless mode)
+npx vitest run
+
+# Run tests in interactive watch mode
+npm test
+
+# Run a specific test file
+npx vitest run src/components/ui/tests/DarkModeButton.test.tsx
+
+# Run linter & typecheck
 npm run lint
+npm run build
 ```
 
 ---
 
-## Developer Tooling & UI
+## Developer Tooling & UI Explorers
 
-- **Swagger API Docs**: `http://localhost:8080/swagger/index.html`
+- **Swagger API Documentation**: `http://localhost:8080/swagger/index.html` (Regenerate with `cd api && swag init`)
 - **Storybook UI Component Explorer**:
   ```bash
   cd frontend
@@ -186,8 +215,15 @@ npm run lint
 
 ## Deployment & Infrastructure (Kubernetes & ArgoCD)
 
-PokeDB includes multi-environment Kubernetes manifests structured with Kustomize and declarative ArgoCD Application configurations in the `k8s/` directory.
+PokeDB is deployed declaratively using Kustomize and ArgoCD GitOps:
 
-- **Container Registry**: Multi-stage Docker images are built and published automatically to GHCR (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`) with `:pr-<N>` tags on pull requests and `:latest` / `:sha-<short>` tags on merge to `main`. After a merge, CI commits the new `sha-<short>` tag into `k8s/overlays/prod`.
-- **GitOps Sync**: ArgoCD reconciles production into `poke-db`. An ApplicationSet creates a `poke-db-pr-<N>` preview environment for each PR labelled `preview`.
-- **Deployment Details**: See [`k8s/README.md`](k8s/README.md) for full deployment instructions, Kustomize overlay usage, GHCR visibility configuration, and cluster diagnostic commands.
+- **Continuous Integration**: GitHub Actions (`.github/workflows/ci.yml`) runs tests and publishes container images to GitHub Container Registry (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`).
+- **Production GitOps**: On merge to `main`, CI tags images with `:sha-<short>`, updates `k8s/overlays/prod/kustomization.yaml`, and ArgoCD rolls out to the `poke-db` namespace.
+- **Ephemeral Preview Environments**: Applying the `preview` label on any pull request spins up an isolated `poke-db-pr-<N>` environment via an ArgoCD ApplicationSet.
+- **Full Guide**: See [`k8s/README.md`](k8s/README.md) for Kustomize overlays, ArgoCD manifests, and notifications configuration.
+
+---
+
+## Contributing
+
+Please review [CONTRIBUTING.md](CONTRIBUTING.md) for our code of conduct, branching strategy, Conventional Commit guidelines, and pre-PR checklist.
