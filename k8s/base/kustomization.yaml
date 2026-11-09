@@ -7,3 +7,4 @@ resources:
   - refresh-db-cronjob.yaml
   - refresh-db-seed-hook.yaml
   - frontend.yaml
+  - httproute.yaml

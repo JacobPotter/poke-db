@@ -10,6 +10,7 @@ description: Use when working with Kubernetes manifests, ArgoCD applications, Ku
 - **Deployment Engine**: ArgoCD Application for production (`../../../k8s/apps/argocd-prod.yaml`), ApplicationSet for per-PR previews (`k8s/apps/argocd-preview-appset.yaml`).
 - **Namespaces**: Production = `poke-db`, Local = `poke-db-local`, Preview = `poke-db-pr-<N>`.
 - **Registry**: GHCR — `ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`.
+- **SSH Session Requirement**: An SSH session is required to run all commands. The agent should be able to create an SSH session before executing any commands and can prompt the user to enter credentials if needed for the connection.
 
 ---
 
@@ -38,6 +39,12 @@ k8s/
 ---
 
 ## Execution Steps
+
+### 0. SSH Session Requirement
+
+- **SSH session required**: An SSH session is required to run all commands in this skill (e.g., `kubectl`, `argocd`, `scripts/local-dev.sh`).
+- **Agent SSH capability**: The agent should be able to create and establish an SSH session before executing any commands.
+- **Credential prompting**: The agent can prompt the user to enter credentials if needed for the connection.
 
 ### 1. Manifest Modifications — Always Edit Git-Tracked Files
 
@@ -97,7 +104,7 @@ k8s/
 
 ### 8. Diagnostics & Verification via Kubernetes MCP and CLI
 
-Leverage the Kubernetes MCP server (`kubernetes` toolset) or `kubectl` for real-time cluster inspection:
+An SSH session is required to execute all CLI commands. Ensure an SSH session is created before executing commands. Leverage the Kubernetes MCP server (`kubernetes` toolset) or `kubectl` for real-time cluster inspection:
 
 ```bash
 # Production status & logs
@@ -128,7 +135,7 @@ kubectl logs -n argocd -l app.kubernetes.io/name=argocd-notifications-controller
 
 ### 10. Local Kubernetes Development
 
-Use `../../../scripts/local-dev.sh` for local cluster development:
+An SSH session is required to execute local cluster development commands. Use `../../../scripts/local-dev.sh` within an SSH session for local cluster development:
 ```bash
 scripts/local-dev.sh up             # Build images, deploy, seed
 scripts/local-dev.sh port-forward   # Forward ports (3000, 8080, 5432)
@@ -139,6 +146,7 @@ scripts/local-dev.sh down           # Tear down
 
 ## Key Constraints
 
+- **SSH session required for all commands** — An SSH session is required to run all commands. The agent should be able to create an SSH session before running any commands (`kubectl`, `argocd`, scripts) and can prompt the user to enter credentials if needed for the connection.
 - **Never manually edit `../../../k8s/overlays/prod/kustomization.yaml` image tags** — the CI `deploy-prod` job manages them.
 - **Never use `:latest` for production** — only `sha-<short>` tags are deployed.
 - **Base images in `../../../k8s/base` use `:latest`** — overlays override them with specific tags.

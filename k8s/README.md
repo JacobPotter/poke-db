@@ -11,6 +11,7 @@ k8s/
 ├── base/
 │   ├── api.yaml                    # API Deployment, Service, ConfigMap, Secret
 │   ├── frontend.yaml               # Frontend Deployment and Service
+│   ├── httproute.yaml              # Envoy Gateway HTTPRoute to frontend
 │   ├── postgres.yaml               # Postgres PVC, Secret, ConfigMap, Deployment, Service
 │   ├── refresh-db-cronjob.yaml     # Nightly PokeAPI -> Postgres refresh (CronJob)
 │   ├── refresh-db-seed-hook.yaml   # Argo CD PostSync hook: seeds an empty database
