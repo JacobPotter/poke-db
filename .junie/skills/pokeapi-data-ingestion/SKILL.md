@@ -84,10 +84,10 @@ if *ifEmpty {
 
 Two K8s resources handle data ingestion:
 
-| Resource | Manifest | Schedule | Command |
+| Resource | Manifest (in `poke-db-gitops`) | Schedule | Command |
 |----------|----------|----------|---------|
-| **CronJob** | `../../../k8s/base/refresh-db-cronjob.yaml` | 00:00 UTC daily | `/app/refresh-db` |
-| **PostSync Hook** | `../../../k8s/base/refresh-db-seed-hook.yaml` | After every ArgoCD sync | `/app/refresh-db -if-empty` |
+| **CronJob** | `base/refresh-db-cronjob.yaml` | 00:00 UTC daily | `/app/refresh-db` |
+| **PostSync Hook** | `base/refresh-db-seed-hook.yaml` | After every ArgoCD sync | `/app/refresh-db -if-empty` |
 
 **Both use the API image** — the Dockerfile (`../../../api/Dockerfile`) builds both `poke-api` and `refresh-db` binaries into the same image.
 

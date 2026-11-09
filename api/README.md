@@ -268,4 +268,4 @@ func (s *ExampleTestSuite) TestGetPokemonList() {
 - [System Architecture](../ARCHITECTURE.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 - [Frontend Development Guide](../frontend/README.md)
-- [Kubernetes & GitOps Guide](../k8s/README.md)
+- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/poke-db-gitops)

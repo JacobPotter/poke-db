@@ -185,4 +185,4 @@ Opens the Storybook explorer on `http://localhost:6006`.
 - [System Architecture](../ARCHITECTURE.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
 - [Backend Development Guide](../api/README.md)
-- [Kubernetes & GitOps Guide](../k8s/README.md)
+- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/poke-db-gitops)

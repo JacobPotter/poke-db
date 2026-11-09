@@ -1,6 +1,6 @@
 # GitHub Copilot Instructions: PokeDB
 
-This repository contains **PokeDB**, a full-stack Pokémon database application consisting of a Go backend REST API, a React TypeScript frontend, and Kubernetes GitOps configurations.
+This repository contains **PokeDB**, a full-stack Pokémon database application consisting of a Go backend REST API and a React TypeScript frontend. Kubernetes deployment manifests and ArgoCD configurations are managed in the dedicated [JacobPotter/poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) repository.
 
 For complete architectural patterns, database migration rules, testing strategies, and command references, always refer to [AGENTS.md](../AGENTS.md) and [ARCHITECTURE.md](../ARCHITECTURE.md).
 
@@ -10,7 +10,7 @@ For complete architectural patterns, database migration rules, testing strategie
 
 - **Backend (`/api`)**: Go 1.23+, Gin Web Framework, GORM ORM, PostgreSQL 15+, Swaggo.
 - **Frontend (`/frontend`)**: React 18, TypeScript 5.5, Vite 5, Tailwind CSS 3.4, TanStack Query v5 (`@tanstack/react-query`), Storybook 8, Vitest (Playwright Chromium browser mode), MSW.
-- **Infrastructure (`/k8s`)**: Kustomize base & overlays, ArgoCD GitOps applications.
+- **Infrastructure**: Maintained in the separate [JacobPotter/poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) repository (Kustomize base & overlays, ArgoCD GitOps applications).
 
 ---
 

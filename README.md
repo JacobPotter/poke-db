@@ -17,7 +17,7 @@ PokeDB is divided into several focused subsystems with dedicated technical docum
 | **System Architecture** | High-level topology, Mermaid diagrams, database split migrations, and request flow | [ARCHITECTURE.md](ARCHITECTURE.md) |
 | **Backend API** | Go 1.23 REST API (Gin + GORM + PostgreSQL), endpoints, testing & seeding | [api/README.md](api/README.md) |
 | **Frontend Client** | React 18 SPA (TypeScript + Tailwind CSS + TanStack Query + Storybook) | [frontend/README.md](frontend/README.md) |
-| **Kubernetes & GitOps** | Kustomize overlays, ArgoCD deployments, preview environments, notifications | [k8s/README.md](k8s/README.md) |
+| **Kubernetes & GitOps** | Kustomize overlays, ArgoCD deployments, preview environments, notifications | [poke-db-gitops repository](https://github.com/JacobPotter/poke-db-gitops) |
 | **Contributing** | Branching workflow, Conventional Commits, and pre-PR validation checklist | [CONTRIBUTING.md](CONTRIBUTING.md) |
 | **AI Agent & Developer Guide** | Technical specifications, command reference, architecture patterns, and conventions for AI assistants (GitHub Copilot, Claude, Junie, Cursor) | [AGENTS.md](AGENTS.md) |
 
@@ -105,22 +105,6 @@ psql -h localhost -U postgres -d pokedb -f api/seed/mock-dump.sql
    npm run dev
    ```
    The frontend will be available at `http://localhost:5173`. Requests to `/api` are automatically proxied to `http://localhost:8080`.
-
----
-
-### Option 3: Local Kubernetes Development
-Run the complete stack inside a local Kubernetes cluster (Kind, Minikube, or Docker Desktop):
-
-```bash
-# Build local images, apply k8s/overlays/local, and seed database
-scripts/local-dev.sh up
-
-# Port-forward frontend (3000), API (8080), and PostgreSQL (5432)
-scripts/local-dev.sh port-forward
-
-# Tear down local cluster resources
-scripts/local-dev.sh down
-```
 
 ---
 
@@ -215,12 +199,12 @@ npm run build
 
 ## Deployment & Infrastructure (Kubernetes & ArgoCD)
 
-PokeDB is deployed declaratively using Kustomize and ArgoCD GitOps:
+PokeDB uses a dedicated GitOps repository ([`poke-db-gitops`](https://github.com/JacobPotter/poke-db-gitops)) for declarative Kubernetes deployment and ArgoCD management:
 
 - **Continuous Integration**: GitHub Actions (`.github/workflows/ci.yml`) runs tests and publishes container images to GitHub Container Registry (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`).
-- **Production GitOps**: On merge to `main`, CI tags images with `:sha-<short>`, updates `k8s/overlays/prod/kustomization.yaml`, and ArgoCD rolls out to the `poke-db` namespace.
-- **Ephemeral Preview Environments**: Applying the `preview` label on any pull request spins up an isolated `poke-db-pr-<N>` environment via an ArgoCD ApplicationSet.
-- **Full Guide**: See [`k8s/README.md`](k8s/README.md) for Kustomize overlays, ArgoCD manifests, and notifications configuration.
+- **Production GitOps Promotion**: On merge to `main`, CI triggers a `repository_dispatch` event (`promote-prod`) to `poke-db-gitops`, which updates `overlays/prod/kustomization.yaml` with the new `:sha-<short>` image tags and triggers ArgoCD rollout.
+- **Ephemeral Preview Environments**: Applying the `preview` label on any pull request causes the ArgoCD ApplicationSet in `poke-db-gitops` to spin up an isolated `poke-db-pr-<N>` preview environment.
+- **GitOps Repository**: See [JacobPotter/poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) for Kustomize overlays, ArgoCD manifests, and promotion workflows.
 
 ---
 

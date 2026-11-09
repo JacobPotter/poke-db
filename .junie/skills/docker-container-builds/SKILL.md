@@ -84,7 +84,7 @@ CMD ["nginx", "-g", "daemon off;"]
 - `:sha-b6a6a6b` — built from commit `b6a6a6b...` on main (7-character short SHA).
 - `:latest` — always points to the last main build.
 
-**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job commits the `:sha-<short>` tag into `../../../k8s/overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
+**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job dispatches a promotion event to `poke-db-gitops`, which commits the `:sha-<short>` tag into `overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
 
 ### 4. CI Pipeline Flow
 
@@ -95,7 +95,8 @@ PR or push to main
     → frontend tests (if frontend/ changed)
   → publish (both images always)
     → deploy-prod (push to main only)
-      → commits sha-<short> to k8s/overlays/prod
+      → repository_dispatch to poke-db-gitops
+      → promote.yml commits sha-<short> to overlays/prod
       → ArgoCD syncs production
 ```
 
@@ -103,19 +104,10 @@ PR or push to main
 
 ### 5. Local Image Building
 
-**Using `../../../scripts/local-dev.sh`:**
+**Using Docker Compose:**
 ```bash
-scripts/local-dev.sh up    # Builds images, deploys to local K8s, seeds DB
-scripts/local-dev.sh build # Builds images only
+docker compose up --build    # Builds local images and starts full stack
 ```
-
-The script:
-1. Builds both images with `docker build -t ghcr.io/jacobpotter/poke-db-{api,frontend}:latest`.
-2. Detects Kind or Minikube and loads images into the cluster:
-   - **Kind**: `kind load docker-image <image>`
-   - **Minikube**: `minikube image load <image>`
-3. Applies `../../../k8s/overlays/local` (patches `imagePullPolicy: IfNotPresent`).
-4. Seeds the database with `../../../api/seed/mock-dump.sql`.
 
 **Manual build commands:**
 ```bash
@@ -124,10 +116,6 @@ docker build -t ghcr.io/jacobpotter/poke-db-api:latest ./api
 
 # Build Frontend image
 docker build -t ghcr.io/jacobpotter/poke-db-frontend:latest ./frontend
-
-# Load into Kind
-kind load docker-image ghcr.io/jacobpotter/poke-db-api:latest
-kind load docker-image ghcr.io/jacobpotter/poke-db-frontend:latest
 ```
 
 ### 6. Container Inspection via Docker MCP
