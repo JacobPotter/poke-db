@@ -18,10 +18,6 @@ type TypeHandler struct {
 // NewTypeHandler creates a new instance of TypeHandler with the given *gorm.DB.
 // It returns a pointer to the created TypeHandler.
 //
-// @param db *gorm.DB - The database object to be used by TypeHandler.
-//
-// @returns *TypeHandler - A pointer to the created TypeHandler object.
-//
 // Example Usage:
 //
 //	handler := NewTypeHandler(db)
@@ -125,7 +121,7 @@ func (h *TypeHandler) GetType(c *gin.Context) {
 //
 // @Produce json
 //
-// @Success 200 {object}
+// @Success 200 {array} models.MoveType
 //
 // @Router /type [get]
 func (h *TypeHandler) ListType(c *gin.Context) {
