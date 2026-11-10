@@ -22,9 +22,9 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/evolution": {
+        "/healthz": {
             "get": {
-                "description": "List Evolutions",
+                "description": "Returns the health status of the API service",
                 "consumes": [
                     "application/json"
                 ],
@@ -32,459 +32,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "evolution"
+                    "health"
                 ],
-                "summary": "List Evolutions",
+                "summary": "Health check",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Evolutions"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create a new evolution",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution"
-                ],
-                "summary": "Creates Evolution",
-                "parameters": [
-                    {
-                        "description": "The new evolution",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Evolution"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Evolution"
-                        }
-                    }
-                }
-            }
-        },
-        "/evolution/{id}": {
-            "get": {
-                "description": "Get evolution by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution"
-                ],
-                "summary": "Get Evolution",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Evolution"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update evolution by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution"
-                ],
-                "summary": "Update Evolution",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "The updated evolution",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Evolution"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Evolution"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete evolution by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution"
-                ],
-                "summary": "Delete Evolution",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "deleted",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/evolution_requirements": {
-            "get": {
-                "description": "List Evolution Requirements",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution_requirements"
-                ],
-                "summary": "List Evolution Requirements",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create a new evolution requirement",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution_requirements"
-                ],
-                "summary": "Creates Evolution Requirement",
-                "parameters": [
-                    {
-                        "description": "The new evolution requirement",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                }
-            }
-        },
-        "/evolution_requirements/{id}": {
-            "get": {
-                "description": "Get evolution requirement by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution_requirements"
-                ],
-                "summary": "Get Evolution Requirement",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution Requirement GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update evolution requirement by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution_requirements"
-                ],
-                "summary": "Update Evolution Requirement",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution Requirement GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "The updated evolution requirement",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.EvolutionRequirement"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete evolution requirement by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "evolution_requirements"
-                ],
-                "summary": "Delete Evolution Requirement",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Evolution Requirement GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "deleted",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/moves": {
-            "get": {
-                "description": "List Moves",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "moves"
-                ],
-                "summary": "List Moves",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Moves"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create a new move",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "moves"
-                ],
-                "summary": "Creates Move",
-                "parameters": [
-                    {
-                        "description": "The new move",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Move"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Move"
-                        }
-                    }
-                }
-            }
-        },
-        "/moves/{id}": {
-            "get": {
-                "description": "Get move by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "moves"
-                ],
-                "summary": "Get Move",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Move GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Move"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update move by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "moves"
-                ],
-                "summary": "Update Move",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Move GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "The updated move",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Move"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Move"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete move by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "moves"
-                ],
-                "summary": "Delete Move",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Move GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "deleted",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.HealthResponse"
                         }
                     }
                 }
@@ -507,39 +62,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Varieties"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create a new pokemon",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pokemon"
-                ],
-                "summary": "Creates Pokemon",
-                "parameters": [
-                    {
-                        "description": "The new pokemon",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Pokemon"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Pokemon"
+                            "$ref": "#/definitions/models.ListPokemonResponse"
                         }
                     }
                 }
@@ -575,75 +98,6 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
-            "put": {
-                "description": "Update pokemon by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pokemon"
-                ],
-                "summary": "Update Pokemon",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Pokemon GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "The updated pokemon",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Pokemon"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Pokemon"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete pokemon by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "pokemon"
-                ],
-                "summary": "Delete Pokemon",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Pokemon GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "deleted",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
             }
         },
         "/type": {
@@ -663,39 +117,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Types"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create a new type",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "type"
-                ],
-                "summary": "Creates Type",
-                "parameters": [
-                    {
-                        "description": "The new type",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Type"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/models.Type"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MoveType"
+                            }
                         }
                     }
                 }
@@ -713,11 +138,11 @@ const docTemplate = `{
                 "tags": [
                     "type"
                 ],
-                "summary": "Get Type",
+                "summary": "Get MoveType",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Type GenericId",
+                        "description": "MoveType GenericId",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -727,76 +152,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Type"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "Update type by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "type"
-                ],
-                "summary": "Update Type",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Type GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "The updated type",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Type"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/models.Type"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "Delete type by GenericId",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "type"
-                ],
-                "summary": "Delete Type",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Type GenericId",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "deleted",
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/models.MoveType"
                         }
                     }
                 }
@@ -804,78 +160,137 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Evolution": {
+        "models.HealthResponse": {
             "type": "object",
             "properties": {
-                "evolution_requirement": {
-                    "$ref": "#/definitions/models.EvolutionRequirement"
-                },
-                "evolution_requirement_id": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "level_requirement": {
-                    "type": "integer"
-                },
-                "pokemon_id": {
-                    "type": "integer"
-                },
-                "target_pokemon_id": {
-                    "type": "integer"
+                "status": {
+                    "type": "string",
+                    "example": "ok"
                 }
             }
         },
-        "models.EvolutionRequirement": {
+        "models.ListPokemonParams": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
+                "pokemonName": {
                     "type": "string"
+                },
+                "pokemonTypeId": {
+                    "type": "integer"
                 }
             }
         },
-        "models.Evolutions": {
+        "models.ListPokemonResponse": {
             "type": "object",
             "properties": {
-                "evolutions": {
+                "nextPage": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "params": {
+                    "$ref": "#/definitions/models.ListPokemonParams"
+                },
+                "pokemon": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Evolution"
+                        "$ref": "#/definitions/models.PokemonSpecies"
                     }
+                },
+                "prevPage": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
         "models.Move": {
             "type": "object",
             "properties": {
-                "damage": {
+                "accuracy": {
                     "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
+                "learnedByPokemon": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Pokemon"
+                    }
+                },
+                "moveType": {
+                    "$ref": "#/definitions/models.MoveType"
+                },
+                "moveTypeID": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
-                "type": {
-                    "$ref": "#/definitions/models.Type"
+                "power": {
+                    "type": "integer"
                 },
-                "type_id": {
+                "pp": {
+                    "type": "integer"
+                },
+                "priority": {
                     "type": "integer"
                 }
             }
         },
-        "models.Moves": {
+        "models.MoveType": {
             "type": "object",
             "properties": {
-                "moves": {
+                "double_damage_from": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Move"
+                        "type": "integer"
+                    }
+                },
+                "double_damage_to": {
+                    "description": "TODO: convert to manytomany table somehow",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "half_damage_from": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "half_damage_to": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "img_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "no_damage_from": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "no_damage_to": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
                     }
                 }
             }
@@ -883,16 +298,19 @@ const docTemplate = `{
         "models.Pokemon": {
             "type": "object",
             "properties": {
-                "evolutions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Evolution"
-                    }
+                "cry": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "move_set": {
+                "is_default": {
+                    "type": "boolean"
+                },
+                "learnable_moves": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Move"
@@ -901,70 +319,60 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "previous_evolution": {
-                    "$ref": "#/definitions/models.Evolution"
+                "pokemon_species": {
+                    "$ref": "#/definitions/models.PokemonSpecies"
+                },
+                "pokemon_species_id": {
+                    "type": "integer"
                 },
                 "primary_type": {
-                    "$ref": "#/definitions/models.Type"
+                    "$ref": "#/definitions/models.MoveType"
                 },
-                "primary_type_id_id": {
+                "primary_type_id": {
                     "type": "integer"
                 },
                 "secondary_type": {
-                    "$ref": "#/definitions/models.Type"
+                    "$ref": "#/definitions/models.MoveType"
                 },
                 "secondary_type_id": {
                     "type": "integer"
+                },
+                "sprite_url": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "integer"
                 }
             }
         },
-        "models.Varieties": {
+        "models.PokemonSpecies": {
             "type": "object",
             "properties": {
-                "pokemon": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Pokemon"
-                    }
-                }
-            }
-        },
-        "models.Type": {
-            "type": "object",
-            "properties": {
+                "has_gender_differences": {
+                    "type": "boolean"
+                },
+                "hatch_counter": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
+                },
+                "is_baby": {
+                    "type": "boolean"
+                },
+                "is_legendary": {
+                    "type": "boolean"
+                },
+                "is_mythical": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string"
                 },
-                "no_effect": {
+                "varieties": {
                     "type": "array",
                     "items": {
-                        "type": "integer"
-                    }
-                },
-                "not_very_effective": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "super_effective": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                }
-            }
-        },
-        "models.Types": {
-            "type": "object",
-            "properties": {
-                "moveTypes": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.Type"
+                        "$ref": "#/definitions/models.Pokemon"
                     }
                 }
             }

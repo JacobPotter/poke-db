@@ -110,7 +110,7 @@ func (h *PokemonHandler) GetPokemon(c *gin.Context) {
 //
 // @Produce json
 //
-// @Success 200 {object} models.Varieties
+// @Success 200 {object} models.ListPokemonResponse
 //
 // @Router /pokemon [get]
 func (h *PokemonHandler) ListPokemon(c *gin.Context) {
