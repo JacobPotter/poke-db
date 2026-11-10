@@ -75,7 +75,7 @@ poke-db-gitops/
 - Each preview gets:
   - Namespace: `poke-db-pr-<N>`
   - Images: `ghcr.io/jacobpotter/poke-db-{api,frontend}:sha-{{.head_short_sha}}` (triggers rolling updates whenever new commits are pushed)
-  - Routing: HTTPRoute matches `/pr-<N>/` and `/pr-<N>` on `poke-db.pttr-dev-lab` with `URLRewrite` (`ReplacePrefixMatch: /`)
+  - Routing: HTTPRoute hostname `pr-<N>.poke-db.pttr-dev-lab` on Envoy Gateway
   - Source: `poke-db-gitops` `overlays/preview`
   - Own Postgres instance (seeded by the PostSync hook)
 - To create a preview: add the `preview` label to the PR in `poke-db`. ArgoCD creates the environment within ~5 minutes.
@@ -84,7 +84,7 @@ poke-db-gitops/
 ### 5. Release Flow
 
 1. **PR opened in `poke-db`**: CI builds and pushes `:pr-<N>` and `:sha-<short>` images to GHCR.
-2. **`preview` label added**: ArgoCD ApplicationSet creates `poke-db-pr-<N>` namespace with its own stack deploying `:sha-<short>` images and routing under `/pr-<N>/`.
+2. **`preview` label added**: ArgoCD ApplicationSet creates `poke-db-pr-<N>` namespace with its own stack deploying `:sha-<short>` images and routing under `pr-<N>.poke-db.pttr-dev-lab`.
 3. **PR updated**: New commits push a new `:sha-<short>` image and update `head_short_sha`, automatically rolling out updated pods in the preview environment.
 4. **PR merged to `main`**: `poke-db` CI pushes `:sha-<short>` and `:latest` tags, then triggers `repository_dispatch` (`promote-prod`) to `poke-db-gitops`.
 5. **GitOps promotion workflow**: `promote.yml` in `poke-db-gitops` updates `overlays/prod/kustomization.yaml` with the `sha-<short>` tags and commits to `main`.
