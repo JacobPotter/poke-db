@@ -59,7 +59,7 @@ jobs:
   publish:
     needs: [backend, frontend]
     # Run even if a test suite was skipped, but not if one failed.
-    if: ${{ !failure() && !cancelled() }}
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     strategy:
       matrix:
         include:
