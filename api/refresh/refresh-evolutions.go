@@ -209,6 +209,8 @@ func (r RefreshDB) getSpeciesFromApi(species interface{}) (speciesModel *models.
 		speciesModel = r.getPokemonSpeciesFromName(pokemonSpecies.Name)
 	case map[string]interface{}:
 		speciesModel = r.getPokemonSpeciesFromName(pokemonSpecies["name"].(string))
+	case nil:
+		return nil
 	default:
 		log.Printf("Unknown type for party species: %T", pokemonSpecies)
 	}

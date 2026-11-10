@@ -1,5 +1,5 @@
-# Pin prod to this commit's images by committing the sha-<short> tag into
-# k8s/overlays/prod. Argo CD deploys from the committed overlay.
+# Trigger production deployment in the GitOps repository (JacobPotter/poke-db-gitops)
+# via repository_dispatch event with the built sha-<short> container images.
 # Called from ci.yml on pushes to main only.
 name: Deploy prod
 
@@ -16,8 +16,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      # Push as a GitHub App (Contents: read & write) that is on the main ruleset's
-      # bypass list. GITHUB_TOKEN can't be added to a bypass list.
+      # Obtain installation token for poke-db-gitops via GitHub App.
       # Needs: Actions variable DEPLOY_APP_ID, secret DEPLOY_APP_PRIVATE_KEY.
       - name: Get GitHub App token
         id: app-token
@@ -25,40 +24,22 @@ jobs:
         with:
           app-id: ${{ vars.DEPLOY_APP_ID }}
           private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: "poke-db-gitops"
 
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-          token: ${{ steps.app-token.outputs.token }}
-
-      - name: Set prod image tags
-        working-directory: k8s/overlays/prod
-        run: |
-          # Must match docker/metadata-action type=sha,format=short (7 chars) of the triggering commit.
-          SHORT="${GITHUB_SHA::7}"
-          echo "SHORT=$SHORT" >> "$GITHUB_ENV"
-          kustomize edit set image \
-            "ghcr.io/jacobpotter/poke-db-api=ghcr.io/jacobpotter/poke-db-api:sha-$SHORT" \
-            "ghcr.io/jacobpotter/poke-db-frontend=ghcr.io/jacobpotter/poke-db-frontend:sha-$SHORT"
-
-      - name: Commit and push
+      - name: Dispatch promotion event to GitOps repository
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
         run: |
-          if git diff --quiet; then echo "No changes"; exit 0; fi
-          # Commit as the app's bot user.
-          BOT="${APP_SLUG}[bot]"
-          BOT_ID=$(gh api "/users/${BOT}" --jq .id)
-          git config user.name "$BOT"
-          git config user.email "${BOT_ID}+${BOT}@users.noreply.github.com"
-          git commit -am "chore(deploy): prod -> sha-${SHORT} [skip ci]"
-          # App-token pushes trigger workflows (unlike GITHUB_TOKEN); [skip ci] prevents a loop.
-          # Retry if main moved while this job ran.
-          for attempt in 1 2 3; do
-            if git push origin HEAD:main; then exit 0; fi
-            echo "Push rejected (attempt $attempt), rebasing onto latest main"
-            git pull --rebase origin main
-          done
-          echo "Failed to push after 3 attempts" >&2
-          exit 1
+          SHORT="${GITHUB_SHA::7}"
+          gh api /repos/${{ github.repository_owner }}/poke-db-gitops/dispatches \
+            --input - <<< '{
+              "event_type": "promote-prod",
+              "client_payload": {
+                "commit_sha": "'"$GITHUB_SHA"'",
+                "short_sha": "'"$SHORT"'",
+                "api_image": "ghcr.io/jacobpotter/poke-db-api:sha-'"$SHORT"'",
+                "frontend_image": "ghcr.io/jacobpotter/poke-db-frontend:sha-'"$SHORT"'",
+                "actor": "'"$GITHUB_ACTOR"'"
+              }
+            }'

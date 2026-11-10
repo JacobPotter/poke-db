@@ -1,5 +1,5 @@
 # Build and push one image to GHCR.
-#   PRs:          :pr-<N>
+#   PRs:          :pr-<N>, :sha-<short>
 #   push to main: :latest, :sha-<short>, :<short>
 name: Publish image
 
@@ -42,7 +42,7 @@ jobs:
           tags: |
             type=raw,value=pr-${{ github.event.pull_request.number }},enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=latest,enable=${{ github.event_name == 'push' }}
-            type=sha,format=short,prefix=sha-,enable=${{ github.event_name == 'push' }}
+            type=sha,format=short,prefix=sha-
             type=sha,format=short,prefix=,enable=${{ github.event_name == 'push' }}
 
       - name: Build and push

@@ -21,7 +21,7 @@ export const PokemonPage: FC = () => {
     const queryClient = useQueryClient()
 
 
-    const [leftScreenOutletName, setLeftScreenOutletName] = useState<TabName>(pathname.split("/")[3] as TabName);
+    const currentTab: TabName = (pathname.split("/")[2] as TabName) || 'summary';
     const navigate = useNavigate();
 
 
@@ -43,7 +43,7 @@ export const PokemonPage: FC = () => {
 
 
     const handleTabChange = useCallback((tabName: string) => {
-        navigate({pathname: `/pokemon/${tabName}`, search: `?${searchParams.toString()}`}, {relative: "path"});
+        navigate({pathname: `/pokemon/${tabName}`, search: `?${searchParams.toString()}`});
     }, [navigate, searchParams]);
 
 
@@ -71,18 +71,15 @@ export const PokemonPage: FC = () => {
 
         <Pokedex.TabButtons>
 
-            <Pokedex.TabButton pulse={leftScreenOutletName === 'summary'}
+            <Pokedex.TabButton pulse={currentTab === 'summary'}
                                onClick={() => {
-                                   setLeftScreenOutletName('summary');
                                    handleTabChange('summary')
                                }} type={'info'}/>
-            <Pokedex.TabButton pulse={leftScreenOutletName === 'evolutions'}
+            <Pokedex.TabButton pulse={currentTab === 'evolutions'}
                                onClick={() => {
-                                   setLeftScreenOutletName('evolutions');
                                    handleTabChange('evolutions')
                                }} type={'other'}/>
-            <Pokedex.TabButton pulse={leftScreenOutletName === 'stats'} onClick={() => {
-                setLeftScreenOutletName('stats');
+            <Pokedex.TabButton pulse={currentTab === 'stats'} onClick={() => {
                 handleTabChange('stats');
             }}
                                type={'details'}/>

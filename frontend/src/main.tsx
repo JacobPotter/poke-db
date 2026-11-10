@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to={'pokemon/1/summary'}/>
+                element: <Navigate to={'/pokemon/summary'} replace />
             },
             {
                 path: 'pokemon',
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <Navigate to={"summary"}/>
+                        element: <Navigate to={"summary"} replace />
                     },
                     {
                         path: 'summary',
@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
                     {
                         path: 'stats',
                         element: <ComingSoon/>
+                    },
+                    {
+                        path: '*',
+                        element: <Navigate to={"summary"} replace />
                     }
                 ]
             },
@@ -62,6 +66,10 @@ export const router = createBrowserRouter([
             {
                 path: 'moves',
                 element: <MovesPage/>
+            },
+            {
+                path: '*',
+                element: <Navigate to={'/pokemon/summary'} replace />
             }
         ]
     },

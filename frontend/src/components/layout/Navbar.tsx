@@ -34,10 +34,10 @@ export function Navbar() {
                 <Logo className={"py-2 h-12"}/>
                 <h1 className="text-3xl">PokeDB</h1>
                 <div className="hidden h-10 md:flex md:space-x-6 items-center justify-center text-center pl-10">
-                    <NavbarItem path={'pokemon'} text={'Pokemon'}/>
-                    <NavbarItem path={'types'} text={'Types'}/>
-                    <NavbarItem path={'evolutions'} text={'Evolutions'}/>
-                    <NavbarItem path={'moves'} text={'Moves'}/>
+                    <NavbarItem path={'/pokemon'} text={'Pokemon'}/>
+                    <NavbarItem path={'/types'} text={'Types'}/>
+                    <NavbarItem path={'/evolutions'} text={'Evolutions'}/>
+                    <NavbarItem path={'/moves'} text={'Moves'}/>
 
                 </div>
             </div>
@@ -50,13 +50,13 @@ export function Navbar() {
         <div id="menu"
              className={`absolute top-0 bottom-0 left-0 w-full min-h-screen text-lg text-center uppercase bg-red-700 dark:bg-red-900 text-white z-30 bg-opacity-85 ${!showHamburgerMenu ? "hidden" : ""}`}>
             <div className="grid grid-cols-2 justify-center items-center gap-3 my-32 mx-6">
-                <NavLink data-testid="mobile-pokemon-menu-item" onClick={clearHamburgerMenu} to={"pokemon"}
+                <NavLink data-testid="mobile-pokemon-menu-item" onClick={clearHamburgerMenu} to={"/pokemon"}
                          className="rounded-md shadow bg-red-500 dark:bg-red-700">Pokemon</NavLink>
-                <NavLink data-testid="mobile-types-menu-item" onClick={clearHamburgerMenu} to={"types"}
+                <NavLink data-testid="mobile-types-menu-item" onClick={clearHamburgerMenu} to={"/types"}
                          className="rounded-md shadow bg-red-500 dark:bg-red-700">Types</NavLink>
-                <NavLink data-testid="mobile-evolutions-menu-item" onClick={clearHamburgerMenu} to={"evolutions"}
+                <NavLink data-testid="mobile-evolutions-menu-item" onClick={clearHamburgerMenu} to={"/evolutions"}
                          className="rounded-md shadow bg-red-500 dark:bg-red-700">Evolutions</NavLink>
-                <NavLink data-testid="mobile-moves-menu-item" onClick={clearHamburgerMenu} to={"moves"}
+                <NavLink data-testid="mobile-moves-menu-item" onClick={clearHamburgerMenu} to={"/moves"}
                          className="rounded-md shadow bg-red-500 dark:bg-red-700">Moves</NavLink>
             </div>
         </div>

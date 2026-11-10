@@ -36,15 +36,14 @@ func (r RefreshDB) refreshMoves() {
 		}
 
 		var pokemon []models.Pokemon
-
-		for _, pokemonNamedResource := range clientMove.LearnedByPokemon {
-			var tempPokemon models.Pokemon
-			tx := r.DB.Where("name = ?", pokemonNamedResource.Name).First(&tempPokemon)
-			if tx.Error != nil {
-				log.Printf("Error getting from db: %s", tx.Error)
-				continue
+		if len(clientMove.LearnedByPokemon) > 0 {
+			names := make([]string, len(clientMove.LearnedByPokemon))
+			for i, p := range clientMove.LearnedByPokemon {
+				names[i] = p.Name
 			}
-			pokemon = append(pokemon, tempPokemon)
+			if tx := r.DB.Where("name IN ?", names).Find(&pokemon); tx.Error != nil {
+				log.Printf("Error getting learned pokemon from db: %s", tx.Error)
+			}
 		}
 
 		var moveType models.MoveType
