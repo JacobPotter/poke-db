@@ -8,7 +8,7 @@ description: Use when working with Docker images, the CI build-and-push workflow
 - **API image**: `../../../api/Dockerfile` — multi-stage Go build → Debian slim runtime.
 - **Frontend image**: `../../../frontend/Dockerfile` — multi-stage Node build → nginx runtime.
 - **Registry**: GitHub Container Registry (GHCR) — `ghcr.io/jacobpotter/poke-db-{api,frontend}`.
-- **Tagging**: `:pr-<N>` on PRs, `:sha-<short>` and `:latest` on merge to `main`.
+- **Tagging**: `:pr-<N>` and `:sha-<short>` on PRs, `:sha-<short>` and `:latest` on merge to `main`.
 
 ---
 
@@ -76,12 +76,12 @@ CMD ["nginx", "-g", "daemon off;"]
 
 | Event | Tags Pushed | Used By |
 |-------|-------------|---------|
-| **Pull Request** | `:pr-<N>` | Preview environments (ApplicationSet) |
+| **Pull Request** | `:pr-<N>`, `:sha-<short>` | Preview environments (`sha-<short>` injected by ApplicationSet) |
 | **Push to main** | `:sha-<short>`, `:latest` | Production (`sha-<short>`), local/manual (`latest`) |
 
 **Tag format:**
 - `:pr-42` — built from PR #42 head commit.
-- `:sha-b6a6a6b` — built from commit `b6a6a6b...` on main (7-character short SHA).
+- `:sha-b6a6a6b` — built from commit `b6a6a6b...` (7-character short SHA) on PRs and main.
 - `:latest` — always points to the last main build.
 
 **Important**: Production never deploys from `:latest`. The `deploy-prod` CI job dispatches a promotion event to `poke-db-gitops`, which commits the `:sha-<short>` tag into `overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
