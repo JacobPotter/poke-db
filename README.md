@@ -12,14 +12,14 @@ For the live version, visit [Poke-DB](https://poke-db.webwizardssoftware.com).
 
 PokeDB is divided into several focused subsystems with dedicated technical documentation:
 
-| Subsystem | Description | Guide Link |
-|---|---|---|
-| **System Architecture** | High-level topology, Mermaid diagrams, database split migrations, and request flow | [ARCHITECTURE.md](ARCHITECTURE.md) |
-| **Backend API** | Go 1.23 REST API (Gin + GORM + PostgreSQL), endpoints, testing & seeding | [api/README.md](api/README.md) |
-| **Frontend Client** | React 18 SPA (TypeScript + Tailwind CSS + TanStack Query + Storybook) | [frontend/README.md](frontend/README.md) |
-| **Kubernetes & GitOps** | Kustomize overlays, ArgoCD deployments, preview environments, notifications | [poke-db-gitops repository](https://github.com/JacobPotter/poke-db-gitops) |
-| **Contributing** | Branching workflow, Conventional Commits, and pre-PR validation checklist | [CONTRIBUTING.md](CONTRIBUTING.md) |
-| **AI Agent & Developer Guide** | Technical specifications, command reference, architecture patterns, and conventions for AI assistants (GitHub Copilot, Claude, Junie, Cursor) | [AGENTS.md](AGENTS.md) |
+| Subsystem                      | Description                                                                                                                                   | Guide Link                                                                 |
+|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| **System Architecture**        | High-level topology, Mermaid diagrams, database split migrations, and request flow                                                            | [ARCHITECTURE.md](ARCHITECTURE.md)                                         |
+| **Backend API**                | Go 1.23 REST API (Gin + GORM + PostgreSQL), endpoints, testing & seeding                                                                      | [api/README.md](api/README.md)                                             |
+| **Frontend Client**            | React 18 SPA (TypeScript + Tailwind CSS + TanStack Query + Storybook)                                                                         | [frontend/README.md](frontend/README.md)                                   |
+| **Kubernetes & GitOps**        | Kustomize overlays, ArgoCD deployments, preview environments, notifications                                                                   | [cluster-gitops repository](https://github.com/JacobPotter/cluster-gitops) |
+| **Contributing**               | Branching workflow, Conventional Commits, and pre-PR validation checklist                                                                     | [CONTRIBUTING.md](CONTRIBUTING.md)                                         |
+| **AI Agent & Developer Guide** | Technical specifications, command reference, architecture patterns, and conventions for AI assistants (GitHub Copilot, Claude, Junie, Cursor) | [AGENTS.md](AGENTS.md)                                                     |
 
 ---
 
@@ -199,12 +199,17 @@ npm run build
 
 ## Deployment & Infrastructure (Kubernetes & ArgoCD)
 
-PokeDB uses a dedicated GitOps repository ([`poke-db-gitops`](https://github.com/JacobPotter/poke-db-gitops)) for declarative Kubernetes deployment and ArgoCD management:
+PokeDB uses a dedicated operations GitOps repository ([`cluster-gitops`](https://github.com/JacobPotter/cluster-gitops))
+for declarative Kubernetes deployment and ArgoCD management:
 
 - **Continuous Integration**: GitHub Actions (`.github/workflows/ci.yml`) runs tests and publishes container images to GitHub Container Registry (`ghcr.io/jacobpotter/poke-db-api` and `ghcr.io/jacobpotter/poke-db-frontend`).
-- **Production GitOps Promotion**: On merge to `main`, CI triggers a `repository_dispatch` event (`promote-prod`) to `poke-db-gitops`, which updates `overlays/prod/kustomization.yaml` with the new `:sha-<short>` image tags and triggers ArgoCD rollout.
-- **Ephemeral Preview Environments**: Applying the `preview` label on any pull request causes the ArgoCD ApplicationSet in `poke-db-gitops` to spin up an isolated `poke-db-pr-<N>` preview environment.
-- **GitOps Repository**: See [JacobPotter/poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) for Kustomize overlays, ArgoCD manifests, and promotion workflows.
+- **Production GitOps Promotion**: On merge to `main`, CI triggers a `repository_dispatch` event (`promote-prod`) to
+  `cluster-gitops`, which updates `apps/poke-db/overlays/prod/kustomization.yaml` with the new `:sha-<short>` image tags
+  and triggers ArgoCD rollout.
+- **Ephemeral Preview Environments**: Applying the `preview` label on any pull request causes the ArgoCD ApplicationSet
+  in `cluster-gitops` to spin up an isolated `poke-db-pr-<N>` preview environment.
+- **GitOps Repository**: See [JacobPotter/cluster-gitops](https://github.com/JacobPotter/cluster-gitops) for Kustomize
+  overlays, ArgoCD manifests, and promotion workflows.
 
 ---
 

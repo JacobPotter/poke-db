@@ -117,7 +117,7 @@ To decouple API startup from heavy migration logic and ensure schema stability:
    `models.MigrateAll()` is invoked exclusively by:
    - The standalone `refresh-db` binary (`api/cmd/refresh-db`)
    - The refresh test suite (`api/refresh/refresh-db_test.go`)
-   - The ArgoCD PostSync hook (`base/refresh-db-seed-hook.yaml` in `poke-db-gitops`)
+   - The ArgoCD PostSync hook (`apps/poke-db/base/refresh-db-seed-hook.yaml` in `cluster-gitops`)
 
 ```mermaid
 classDiagram
@@ -268,7 +268,9 @@ graph TD
 
 ## 6. CI/CD & GitOps Promotion Model
 
-PokeDB uses GitHub Actions in this repository for continuous integration and container image publishing, combined with a dedicated GitOps repository ([`poke-db-gitops`](https://github.com/JacobPotter/poke-db-gitops)) and ArgoCD for deployments.
+PokeDB uses GitHub Actions in this repository for continuous integration and container image publishing, combined with a
+dedicated GitOps repository ([`cluster-gitops`](https://github.com/JacobPotter/cluster-gitops)) and ArgoCD for
+deployments.
 
 ```mermaid
 sequenceDiagram
@@ -277,7 +279,7 @@ sequenceDiagram
     participant GH as GitHub (JacobPotter/poke-db)
     participant CI as GitHub Actions CI
     participant GHCR as GitHub Container Registry (ghcr.io)
-    participant GitOps as GitOps Repo (poke-db-gitops)
+   participant GitOps as GitOps Repo (cluster-gitops)
     participant Argo as ArgoCD Controller
     participant K8s as Kubernetes Cluster
 
@@ -289,7 +291,7 @@ sequenceDiagram
     opt PR has "preview" label
         Dev->>GH: Add label "preview"
         Argo->>GH: ApplicationSet detects label "preview" on PR #123
-        Argo->>GitOps: Fetch overlays/preview
+       Argo ->> GitOps: Fetch apps/poke-db/overlays/preview
         Argo->>K8s: Deploy to namespace poke-db-pr-123 (images :pr-123)
         K8s->>K8s: PostSync hook seeds DB if empty
         Argo->>GH: Post commit status check (continuous-delivery/poke-db-pr-123)
@@ -299,18 +301,21 @@ sequenceDiagram
     GH->>CI: Trigger CI on main branch
     CI->>GHCR: Push images :latest and :sha-abc1234
     CI->>GitOps: repository_dispatch (promote-prod)
-    GitOps->>GitOps: promote.yml updates overlays/prod/kustomization.yaml
+   GitOps ->> GitOps: promote.yml updates apps/poke-db/overlays/prod/kustomization.yaml
     Argo->>GitOps: Detects commit on main
-    Argo->>K8s: Sync overlays/prod to namespace poke-db
+   Argo ->> K8s: Sync apps/poke-db/overlays/prod to namespace poke-db
     Argo->>GH: Post commit status check (continuous-delivery/poke-db-prod)
 ```
 
 ### Production Release Pipeline
 1. Pull requests run backend and frontend test suites and publish preview container images (`ghcr.io/jacobpotter/poke-db-api:pr-<N>` and `ghcr.io/jacobpotter/poke-db-frontend:pr-<N>`).
 2. When merged to `main`, CI tags images with `:latest` and `:sha-<short>`.
-3. The `deploy-prod` GitHub Actions job sends a `repository_dispatch` event (`promote-prod`) with image tags and commit metadata to `JacobPotter/poke-db-gitops`.
-4. The promotion workflow in `poke-db-gitops` updates `overlays/prod/kustomization.yaml` with the new short SHA tag and commits the change.
-5. ArgoCD detects the change on `poke-db-gitops` `main`, synchronizes manifests, and performs a rolling update of the `poke-db` production namespace.
+3. The `deploy-prod` GitHub Actions job sends a `repository_dispatch` event (`promote-prod`) with image tags and commit
+   metadata to `JacobPotter/cluster-gitops`.
+4. The promotion workflow in `cluster-gitops` updates `apps/poke-db/overlays/prod/kustomization.yaml` with the new short
+   SHA tag and commits the change.
+5. ArgoCD detects the change on `cluster-gitops` `main`, synchronizes manifests, and performs a rolling update of the
+   `poke-db` production namespace.
 6. ArgoCD notifications report sync status and pod health back to GitHub commit statuses.
 
 ---
@@ -321,4 +326,4 @@ sequenceDiagram
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Backend Development Guide](api/README.md)
 - [Frontend Development Guide](frontend/README.md)
-- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/poke-db-gitops)
+- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/cluster-gitops)

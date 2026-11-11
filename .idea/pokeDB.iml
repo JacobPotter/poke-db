@@ -5,6 +5,6 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="poke-db-gitops" />
+    <orderEntry type="module" module-name="cluster-gitops" />
   </component>
 </module>

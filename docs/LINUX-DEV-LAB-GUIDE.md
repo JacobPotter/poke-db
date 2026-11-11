@@ -510,7 +510,8 @@ Open `https://localhost:8080` in your browser (accept the self-signed certificat
 
 ### 5.4 Configure ArgoCD: Production & Preview Environments
 
-The [poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) repository includes ready-to-use ArgoCD manifests for two environments:
+The [cluster-gitops](https://github.com/JacobPotter/cluster-gitops) repository includes ready-to-use ArgoCD manifests
+for two environments:
 
 - **Production** (`apps/argocd-prod.yaml`) — deploys from `overlays/prod`, targeting namespace `poke-db` on the `main` branch.
 - **Preview** (`apps/argocd-preview-appset.yaml`) — an ApplicationSet that creates a separate preview environment for every open PR labelled `preview`, each with its own namespace (`poke-db-pr-<N>`) and Postgres instance.
@@ -518,8 +519,8 @@ The [poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) repository i
 #### Deploy Production
 
 ```bash
-# Apply the production Application from poke-db-gitops
-kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-prod.yaml
+# Apply the production Application from cluster-gitops
+kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-prod.yaml
 
 # Verify
 argocd app get poke-db-prod
@@ -528,8 +529,8 @@ argocd app get poke-db-prod
 #### Deploy Preview Environments
 
 ```bash
-# Apply the preview ApplicationSet from poke-db-gitops
-kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-preview-appset.yaml
+# Apply the preview ApplicationSet from cluster-gitops
+kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-preview-appset.yaml
 
 # Verify
 argocd appset get poke-db-previews
@@ -561,7 +562,7 @@ ArgoCD can post commit status checks (`pending`, `success`, `failure`) back to G
    ```
 3. **Apply the notifications ConfigMap**:
    ```bash
-   kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-notifications-cm.yaml
+   kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-notifications-cm.yaml
    ```
 
 Status checks appear under `continuous-delivery/<app-name>` on commits and PRs.
@@ -832,13 +833,13 @@ npm install
 npm run build
 
 # Deploy via ArgoCD — Production
-kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-prod.yaml
+kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-prod.yaml
 
 # Deploy via ArgoCD — Preview environments (one per PR labelled "preview")
-kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-preview-appset.yaml
+kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-preview-appset.yaml
 
 # Optional: GitHub commit status notifications
-kubectl apply -f https://raw.githubusercontent.com/JacobPotter/poke-db-gitops/main/apps/argocd-notifications-cm.yaml
+kubectl apply -f https://raw.githubusercontent.com/JacobPotter/cluster-gitops/main/apps/argocd-notifications-cm.yaml
 
 # Verify deployments
 argocd app get poke-db-prod

@@ -84,7 +84,9 @@ CMD ["nginx", "-g", "daemon off;"]
 - `:sha-b6a6a6b` — built from commit `b6a6a6b...` (7-character short SHA) on PRs and main.
 - `:latest` — always points to the last main build.
 
-**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job dispatches a promotion event to `poke-db-gitops`, which commits the `:sha-<short>` tag into `overlays/prod/kustomization.yaml`, and ArgoCD deploys from that committed overlay.
+**Important**: Production never deploys from `:latest`. The `deploy-prod` CI job dispatches a promotion event to
+`cluster-gitops`, which commits the `:sha-<short>` tag into `overlays/prod/kustomization.yaml`, and ArgoCD deploys from
+that committed overlay.
 
 ### 4. CI Pipeline Flow
 
@@ -95,7 +97,7 @@ PR or push to main
     → frontend tests (if frontend/ changed)
   → publish (both images always)
     → deploy-prod (push to main only)
-      → repository_dispatch to poke-db-gitops
+      → repository_dispatch to cluster-gitops
       → promote.yml commits sha-<short> to overlays/prod
       → ArgoCD syncs production
 ```
