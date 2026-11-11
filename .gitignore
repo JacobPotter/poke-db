@@ -4,5 +4,5 @@ api/.idea/
 /frontend/coverage/
 /.vite/vitest/results.json
 .junie/plans
-.idea
+.idea/
 /.junie/commands/
