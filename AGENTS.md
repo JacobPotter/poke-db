@@ -6,19 +6,24 @@ This guide provides technical specifications, architecture overviews, build inst
 
 ## 1. Repository Layout & Tech Stack
 
-PokeDB is organized as two independent applications. Kubernetes deployment manifests and ArgoCD configurations are maintained in the dedicated [`poke-db-gitops`](https://github.com/JacobPotter/poke-db-gitops) repository. There is no root-level build tool; commands are run from `api/`, `frontend/`, or the repository root.
+PokeDB is organized as two independent applications. Kubernetes deployment manifests and ArgoCD configurations are
+maintained in the dedicated [`cluster-gitops`](https://github.com/JacobPotter/cluster-gitops) repository. There is no
+root-level build tool; commands are run from `api/`, `frontend/`, or the repository root.
 
 - **Backend (`/api`)**:
   - **Runtime & Language**: Go 1.23+ (`go.mod` specifies Go 1.23, module `github.com/JacobPotter/poke-db/api`).
   - **Frameworks & Libraries**: Gin Web Framework (`github.com/gin-gonic/gin`), GORM (`gorm.io/gorm`, `gorm.io/driver/postgres`), Swaggo (`github.com/swaggo/gin-swagger`), Testify (`github.com/stretchr/testify`).
   - **Database**: PostgreSQL 15+ with GORM auto-migrations and seed dump support.
-  - **External Ingestion**: PokeAPI ingestion in `api/refresh`, run by the standalone `api/cmd/refresh-db` binary as a Kubernetes CronJob (`base/refresh-db-cronjob.yaml` in `poke-db-gitops`) and an Argo CD PostSync seed hook (`-if-empty`).
+  - **External Ingestion**: PokeAPI ingestion in `api/refresh`, run by the standalone `api/cmd/refresh-db` binary as a
+    Kubernetes CronJob (`apps/poke-db/base/refresh-db-cronjob.yaml` in `cluster-gitops`) and an Argo CD PostSync seed
+    hook (`-if-empty`).
 - **Frontend (`/frontend`)**:
   - **Runtime & Build**: Node.js 18+ (tested with Node 23 & npm 10), Vite 5, TypeScript 5.5, Tailwind CSS 3.4.
   - **State & Data Fetching**: `@tanstack/react-query` v5, `axios-hooks`.
   - **UI & Testing Tools**: React 18, Storybook 8, Vitest 2.1 (Playwright Chromium browser mode), `@testing-library/react`, Mock Service Worker (MSW).
 - **Deployment & Infra**:
-  - Maintained in the separate [JacobPotter/poke-db-gitops](https://github.com/JacobPotter/poke-db-gitops) repository (Kustomize base & overlays, ArgoCD Application configurations, and promotion workflows).
+  - Maintained in the separate [JacobPotter/cluster-gitops](https://github.com/JacobPotter/cluster-gitops) repository
+    (Kustomize base & overlays, ArgoCD Application configurations, and promotion workflows).
 
 ---
 
@@ -219,4 +224,4 @@ describe('DarkModeButton', () => {
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Backend Development Guide](api/README.md)
 - [Frontend Development Guide](frontend/README.md)
-- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/poke-db-gitops)
+- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/cluster-gitops)

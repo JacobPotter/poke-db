@@ -1,4 +1,4 @@
-# Trigger production deployment in the GitOps repository (JacobPotter/poke-db-gitops)
+# Trigger production deployment in the GitOps repository (JacobPotter/cluster-gitops)
 # via repository_dispatch event with the built sha-<short> container images.
 # Called from ci.yml on pushes to main only.
 name: Deploy prod
@@ -16,7 +16,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      # Obtain installation token for poke-db-gitops via GitHub App.
+      # Obtain installation token for cluster-gitops via GitHub App.
       # Needs: Actions variable DEPLOY_APP_ID, secret DEPLOY_APP_PRIVATE_KEY.
       - name: Get GitHub App token
         id: app-token
@@ -25,14 +25,14 @@ jobs:
           app-id: ${{ vars.DEPLOY_APP_ID }}
           private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
-          repositories: "poke-db-gitops"
+          repositories: "cluster-gitops"
 
       - name: Dispatch promotion event to GitOps repository
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           SHORT="${GITHUB_SHA::7}"
-          gh api /repos/${{ github.repository_owner }}/poke-db-gitops/dispatches \
+          gh api /repos/${{ github.repository_owner }}/cluster-gitops/dispatches \
             --input - <<< '{
               "event_type": "promote-prod",
               "client_payload": {

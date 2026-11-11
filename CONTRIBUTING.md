@@ -79,10 +79,13 @@ npx vitest run
 2. **CI Automation**: GitHub Actions (`.github/workflows/ci.yml`) will automatically run backend tests, frontend tests, linting, and build validation. It will also build and push container images to GitHub Container Registry (GHCR) tagged with `:pr-<N>`.
 3. **Ephemeral Preview Environments (`preview` label)**:
    - If your changes need visual verification or end-to-end testing in a Kubernetes environment, add the **`preview`** label to your PR.
-   - The ArgoCD ApplicationSet in [`poke-db-gitops`](https://github.com/JacobPotter/poke-db-gitops) will automatically spin up an isolated preview environment in namespace `poke-db-pr-<N>` deploying your PR's container images.
+   - The ArgoCD ApplicationSet in [`cluster-gitops`](https://github.com/JacobPotter/cluster-gitops) will automatically
+     spin up an isolated preview environment in namespace `poke-db-pr-<N>` deploying your PR's container images.
    - Removing the `preview` label or closing the PR automatically destroys the preview environment.
 4. **Code Review**: Address any feedback or requested changes from reviewers.
-5. **Merge**: Once approved and all CI checks pass, your PR will be merged into `main`. The `deploy-prod` pipeline will dispatch a promotion event to `poke-db-gitops` to update `overlays/prod/kustomization.yaml` and trigger production rollout via ArgoCD.
+5. **Merge**: Once approved and all CI checks pass, your PR will be merged into `main`. The `deploy-prod` pipeline will
+   dispatch a promotion event to `cluster-gitops` to update `apps/poke-db/overlays/prod/kustomization.yaml` and trigger
+   production rollout via ArgoCD.
 
 ---
 
@@ -92,4 +95,4 @@ npx vitest run
 - [System Architecture](ARCHITECTURE.md)
 - [Backend Development Guide](api/README.md)
 - [Frontend Development Guide](frontend/README.md)
-- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/poke-db-gitops)
+- [Kubernetes & GitOps Repository](https://github.com/JacobPotter/cluster-gitops)
