@@ -20,9 +20,9 @@ export const EvolutionChainItem: FC<EvolutionChainLinkProps> = ({chainLink, clas
                       className={"p-1 rounded-lg bg-sky-600 border-2 border-sky-500 z-10 " + className}>
         {variety && (
             <>
-                <SkeletonIcon className={`w-16 h-auto md:w-24 lg:w-32 ${imageLoading ? "block" : "hidden"}`}/>
+                <SkeletonIcon className={`w-20 sm:w-24 md:w-28 lg:w-36 h-auto ${imageLoading ? "block" : "hidden"}`}/>
                 <img
-                    className={`w-16 h-auto md:w-24 lg:w-32 ${imageLoading ? "hidden" : "inline"}`}
+                    className={`w-20 sm:w-24 md:w-28 lg:w-36 h-auto [image-rendering:pixelated] ${imageLoading ? "hidden" : "inline"}`}
                     src={variety.sprite_url}
                     alt={`${pokemonSpecies?.name}_icon`}
                     onLoad={() => setImageLoading(false)}

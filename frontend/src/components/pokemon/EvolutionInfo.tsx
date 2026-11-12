@@ -8,8 +8,8 @@ export const EvolutionInfo: FC<{ details: EvolutionDetails[] | undefined }> = ({
     if (!details) return <></>
 
     return (<div key={details[0]?.chainLinkId} className={"flex justify-evenly items-stretch gap-1.5 bg-white"}>
-        {details?.map((detail) => (
-            <EvolutionDetail detail={detail}/>
+        {details?.map((detail, index) => (
+            <EvolutionDetail key={`${detail.chainLinkId}-${index}`} detail={detail}/>
         ))}
     </div>)
 

@@ -11,7 +11,7 @@ export const handlers = [
     http.get("/api/v1/type", () => {
         return HttpResponse.json(mockMoveTypeResponse);
     }),
-    http.get("api/v1/pokemon", () => {
+    http.get("/api/v1/pokemon", () => {
         return HttpResponse.json(mockPokemonResponse);
     }),
     http.get("/api/v1/evolution/chain/:id", (responseResolver) => {

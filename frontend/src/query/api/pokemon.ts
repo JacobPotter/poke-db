@@ -12,10 +12,10 @@ export const getPokemon = async (page: number, pokemonName?: string, pokemonType
     });
 
     return {
-        pokemon: data.pokemon,
-        total: data.total,
-        pageSize: data.pageSize,
-        pokemonName: data.params.pokemonName,
-        pokemonTypeId: data.params.pokemonTypeId
+        pokemon: data?.pokemon ?? [],
+        total: data?.total ?? 0,
+        pageSize: data?.pageSize ?? 12,
+        pokemonName: data?.params?.pokemonName,
+        pokemonTypeId: data?.params?.pokemonTypeId
     };
 }

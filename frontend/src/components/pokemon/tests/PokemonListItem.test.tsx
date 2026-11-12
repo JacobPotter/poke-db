@@ -14,7 +14,7 @@ describe("PokemonListItem", () => {
 
 
         expect(getByText("Bulbasaur")).toBeTruthy()
-        expect(getByRole("img")).toBeTruthy
+        expect(getByRole("img")).toBeTruthy()
     })
 
     it("should change style with active prop", () => {
