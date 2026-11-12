@@ -3,6 +3,7 @@ import {PokemonSummary} from "../PokemonSummary.tsx";
 import pokemon_page_1 from '@/test/fixtures/pokemon_page_1.json'
 import {loader} from "@/loaders/pokemon.ts";
 import Pokedex from "@/components/ui/pokedex/Pokedex.tsx";
+import {render} from "@/test/utils";
 
 describe("PokemonSummary", () => {
     it("Should render correctly with species info and cry player", async () => {

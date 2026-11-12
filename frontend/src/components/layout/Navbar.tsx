@@ -31,7 +31,7 @@ export function Navbar() {
     };
     return <>
         <header
-            className="sticky top-0 z-30 backdrop-blur-md bg-slate-100/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80 mb-3 sm:mb-4">
+            className="sticky top-0 z-50 backdrop-blur-md bg-slate-100/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80 mb-3 sm:mb-4">
             <nav className={"flex items-center justify-between px-3 py-1.5 max-w-7xl mx-auto"}>
                 <div className={"flex items-center justify-center space-x-2 z-40 font-mono"}>
                     <Logo className={"py-1 h-11"}/>

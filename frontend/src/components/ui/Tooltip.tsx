@@ -28,7 +28,7 @@ export const Tooltip: FC<PropsWithChildren<TooltipProps>> = ({body, children, po
         <div className="group relative flex flex-col items-center justify-center">
             {children}
             <div
-                className={`z-20 absolute ${tooltipPositionStyle} mx-auto min-w-max hidden scale-0 transform rounded-lg px-3 py-2 text-xs font-medium transition-all duration-500 group-hover:block group-hover:scale-100`}>
+                className={`z-20 absolute ${tooltipPositionStyle} mx-auto min-w-max hidden scale-0 transform rounded-lg px-3 py-2 text-xs font-medium transition-all duration-500 group-hover:block group-hover:scale-100 pointer-events-none`}>
                 <div className="flex flex-col items-center shadow-lg">
                     <div className="rounded bg-gray-800 p-2 text-center text-xs text-white">
                         {body}

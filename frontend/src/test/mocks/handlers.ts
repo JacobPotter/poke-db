@@ -11,8 +11,22 @@ export const handlers = [
     http.get("/api/v1/type", () => {
         return HttpResponse.json(mockMoveTypeResponse);
     }),
-    http.get("/api/v1/pokemon", () => {
-        return HttpResponse.json(mockPokemonResponse);
+    http.get("/api/v1/pokemon", ({request}) => {
+        const url = new URL(request.url);
+        const page = parseInt(url.searchParams.get("page") ?? "1", 10) || 1;
+        const pageSizeParam = url.searchParams.get("pageSize");
+        const pageSize = pageSizeParam ? (parseInt(pageSizeParam, 10) || 6) : 6;
+        const start = (page - 1) * pageSize;
+        const end = start + pageSize;
+        const pagedPokemon = mockPokemonResponse.pokemon.slice(start, end);
+
+        return HttpResponse.json({
+            ...mockPokemonResponse,
+            page,
+            pageSize,
+            total: mockPokemonResponse.pokemon.length,
+            pokemon: pagedPokemon
+        });
     }),
     http.get("/api/v1/evolution/chain/:id", (responseResolver) => {
         const url = responseResolver.request.url

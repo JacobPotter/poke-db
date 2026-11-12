@@ -1,4 +1,4 @@
-import {MoveType} from "../../models/pokemon.ts";
+import {MoveType} from "@/models/pokemon.ts";
 import {capitalize} from "lodash";
 import {useMoveTypes} from "@/query/hooks/useMoveTypes.ts";
 import {FC} from "react";
@@ -76,7 +76,7 @@ export const TypesSummary = ({moveType}: { moveType?: MoveType }) => {
             </div>
 
             {/* Damage Relations Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-y-auto max-h-[460px] pr-0.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-y-auto flex-1 min-h-0 pr-0.5">
                 {/* Attacking / Damage To */}
                 <div className="flex flex-col gap-2">
                     <span

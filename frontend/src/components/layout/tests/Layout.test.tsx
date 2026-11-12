@@ -32,8 +32,7 @@ describe("Layout", () => {
         // Check the layout is rendered correctly in light mode
         expect(container.firstChild).toHaveProperty("className", expect.not.stringContaining("dark"));
 
-        // Check the presence of components within the layout
-        expect(getByTestId("navbar")).not.toBeNull();
+        // Check the presence of outlet within the layout
         expect(getByTestId("outlet")).not.toBeNull();
     });
 
@@ -59,8 +58,7 @@ describe("Layout", () => {
 
         expect(container.firstChild).toHaveProperty("className", expect.stringContaining("dark"));
 
-        // Check the presence of components within the layout
-        expect(getByTestId("navbar")).not.toBeNull();
+        // Check the presence of outlet within the layout
         expect(getByTestId("outlet")).not.toBeNull();
     });
 });

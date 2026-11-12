@@ -2,7 +2,7 @@
 import {describe, expect, it, vi} from 'vitest'
 import {render} from 'vitest-browser-react'
 import {DarkModeButton} from '../DarkModeButton.tsx'
-import {DarkModeContext} from '../../../context/DarkModeContext.tsx'
+import {DarkModeContext} from '@/context/DarkModeContext.tsx'
 
 describe('DarkModeButton', () => {
     it('renders a dark mode icon when in light mode and triggers toggle on click', async () => {
@@ -49,5 +49,48 @@ describe('DarkModeButton', () => {
         // In dark mode, show sun/light icon to allow switching to light
         expect(lightIcon).toBeTruthy()
         expect(darkIcon).toBeNull()
+    })
+
+    it('keeps the toggle knob within the button bounds in both dark and light modes', () => {
+        const toggleDarkMode = vi.fn()
+
+        const {container, unmount} = render(
+            <DarkModeContext.Provider value={{dark: true, toggleDarkMode}}>
+                <DarkModeButton/>
+            </DarkModeContext.Provider>,
+        )
+
+        const darkButton = container.querySelector('button') as HTMLButtonElement
+        const darkKnob = darkButton.querySelector('span') as HTMLSpanElement
+        expect(darkButton).toBeTruthy()
+        expect(darkKnob).toBeTruthy()
+
+        const buttonRectDark = darkButton.getBoundingClientRect()
+        const knobRectDark = darkKnob.getBoundingClientRect()
+
+        // Knob must be within container bounds (with slight sub-pixel rounding tolerance)
+        expect(knobRectDark.left).toBeGreaterThanOrEqual(buttonRectDark.left - 1)
+        expect(knobRectDark.right).toBeLessThanOrEqual(buttonRectDark.right + 1)
+        expect(knobRectDark.top).toBeGreaterThanOrEqual(buttonRectDark.top - 1)
+        expect(knobRectDark.bottom).toBeLessThanOrEqual(buttonRectDark.bottom + 1)
+
+        unmount()
+
+        const {container: lightContainer} = render(
+            <DarkModeContext.Provider value={{dark: false, toggleDarkMode}}>
+                <DarkModeButton/>
+            </DarkModeContext.Provider>,
+        )
+
+        const lightButton = lightContainer.querySelector('button') as HTMLButtonElement
+        const lightKnob = lightButton.querySelector('span') as HTMLSpanElement
+        expect(lightButton).toBeTruthy()
+        expect(lightKnob).toBeTruthy()
+
+        const buttonRectLight = lightButton.getBoundingClientRect()
+        const knobRectLight = lightKnob.getBoundingClientRect()
+
+        expect(knobRectLight.left).toBeGreaterThanOrEqual(buttonRectLight.left - 1)
+        expect(knobRectLight.right).toBeLessThanOrEqual(buttonRectLight.right + 1)
     })
 })
