@@ -6,31 +6,37 @@ import {loader} from "@/loaders/pokemon.ts";
 import {PokemonSpecies} from "@/models/pokemon.ts";
 import {getPokemonQueryOptions} from "@/query/keyFactories.ts";
 import {prefetchPokemonHelper} from "@/query/helpers/prefetchPokemonHelper.ts";
+import {DEFAULT_PAGE_SIZE, normalizePageSize} from "@/query/api/pokemon.ts";
 
 
 export const usePokemon = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const currentPage = Number(searchParams.get("page") ?? "1")
+    const currentPage = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
     const pokemonName = searchParams.get("pokemonName") ?? undefined
     const pokemonTypeId = searchParams.get("pokemonTypeId") ?? undefined
-    const {pokemonData: initialData} = useLoaderData() as Awaited<
-        ReturnType<ReturnType<typeof loader>>>
+    const pageSize = normalizePageSize(searchParams.get("pageSize"))
+    const loaderData = useLoaderData() as Awaited<
+        ReturnType<ReturnType<typeof loader>>> | undefined
+    const initialData = loaderData?.pokemonData
 
 
     const queryClient = useQueryClient()
 
 
-    const {data = {pokemon: [], total: 0, pageSize: 12}, isFetching} = useQuery({
-        ...getPokemonQueryOptions(currentPage, pokemonName, pokemonTypeId),
+    const {data = {pokemon: [], total: 0, pageSize: DEFAULT_PAGE_SIZE}, isFetching} = useQuery({
+        ...getPokemonQueryOptions(currentPage, pokemonName, pokemonTypeId, pageSize),
         initialData: initialData
     })
+
+    const effectivePageSize = normalizePageSize(data.pageSize || pageSize);
+    const totalPages = Math.max(1, Math.ceil((data.total || 0) / effectivePageSize));
 
     const [currentPokemon, setCurrentPokemon] = useState<PokemonSpecies | undefined>(data.pokemon[0])
 
 
     const handlePrevious = useCallback(() => {
-        if (currentPage === 1) return;
+        if (currentPage <= 1) return;
         setSearchParams((params) => {
             params.set("page", (currentPage - 1).toString())
             return params;
@@ -38,12 +44,12 @@ export const usePokemon = () => {
     }, [currentPage, setSearchParams]);
 
     const handleNext = useCallback(() => {
-        if (currentPage === Math.ceil(data.total / data.pageSize)) return
+        if (currentPage >= totalPages) return
         setSearchParams((params) => {
             params.set("page", (currentPage + 1).toString())
             return params;
         })
-    }, [currentPage, data.total, data.pageSize, setSearchParams])
+    }, [currentPage, totalPages, setSearchParams])
 
     const handlePokemonSelect = (pokemonId: number) => {
         const pokemon = data.pokemon.find(p => p.id === pokemonId) ?? data.pokemon[0]
@@ -79,20 +85,18 @@ export const usePokemon = () => {
     }, [currentPokemon, data.pokemon, setSearchParams]);
 
     useEffect(() => {
-
         if (data.total === 0) return;
-        if (data.total <= data.pageSize) return;
+        if (data.total <= effectivePageSize) return;
 
-        if (currentPage < Math.ceil(data.total / data.pageSize)) {
-            prefetchPokemonHelper(queryClient, currentPage + 1, pokemonName, pokemonTypeId);
+        if (currentPage < totalPages) {
+            prefetchPokemonHelper(queryClient, currentPage + 1, pokemonName, pokemonTypeId, effectivePageSize);
         }
-
 
         if (currentPage > 1) {
-            prefetchPokemonHelper(queryClient, currentPage - 1, pokemonName, pokemonTypeId);
+            prefetchPokemonHelper(queryClient, currentPage - 1, pokemonName, pokemonTypeId, effectivePageSize);
         }
 
-    }, [queryClient, data.total, data.pageSize, currentPage, pokemonName, pokemonTypeId])
+    }, [queryClient, data.total, effectivePageSize, totalPages, currentPage, pokemonName, pokemonTypeId])
 
     return {
         pokemon: data.pokemon,
@@ -100,7 +104,8 @@ export const usePokemon = () => {
         handlePrevious,
         currentPage,
         total: data.total,
-        pageSize: data.pageSize,
+        pageSize: effectivePageSize,
+        totalPages,
         currentPokemon,
         handlePokemonSelect,
         setSearchParams,

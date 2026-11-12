@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {MoveType} from "../../models/pokemon.ts";
+import {MoveType} from "@/models/pokemon.ts";
 import {capitalize} from "lodash";
 import {useMoveTypes} from "@/query/hooks/useMoveTypes.ts";
 import {BoltIcon, ShieldCheckIcon} from "@heroicons/react/24/solid";
@@ -57,7 +57,7 @@ export const TypeDetails: FC<TypeDetailsProps> = ({moveType}) => {
             </div>
 
             {/* Analysis cards */}
-            <div className="flex flex-col gap-3 overflow-y-auto max-h-[460px] pr-0.5">
+            <div className="flex flex-col gap-3 overflow-y-auto flex-1 min-h-0 pr-0.5">
                 {/* Offensive Profile */}
                 <div
                     className="bg-sky-900/60 border border-sky-700/50 rounded-xl p-2.5 flex flex-col gap-1.5 shadow-sm">

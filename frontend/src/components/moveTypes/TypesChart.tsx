@@ -48,7 +48,8 @@ export const TypesChart: FC = () => {
             </div>
 
             {/* Matrix Table */}
-            <div className="overflow-auto max-h-[380px] border border-sky-700/60 rounded-xl bg-sky-950/60 shadow-inner">
+            <div
+                className="overflow-auto flex-1 min-h-0 border border-sky-700/60 rounded-xl bg-sky-950/60 shadow-inner">
                 <table className="w-full text-center border-collapse text-[10px] sm:text-xs">
                     <thead>
                     <tr className="sticky top-0 bg-sky-900 text-white z-10 border-b border-sky-700">

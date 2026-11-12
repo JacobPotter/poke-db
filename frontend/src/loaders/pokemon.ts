@@ -3,6 +3,7 @@ import {LoaderFunctionArgs} from "react-router-dom";
 import {MoveType, PokemonSpecies} from "@/models/pokemon.ts";
 import {getPokemonQueryOptions, MOVE_TYPE_DEFAULT_QUERY_OPTIONS} from "@/query/keyFactories.ts";
 import {getImagesQueryOptions} from "@/query/api/images.ts";
+import {normalizePageSize} from "@/query/api/pokemon.ts";
 
 export const loader =
     (queryClient: QueryClient) =>
@@ -12,14 +13,15 @@ export const loader =
             const pokemonName = url.searchParams.get("pokemonName") ?? undefined
             const pokemonTypeId = url.searchParams.get("pokemonTypeId") ?? undefined
             const pokemonId = url.searchParams.get("pokemonId") ?? undefined
-
+            const pageSize = normalizePageSize(url.searchParams.get("pageSize"))
+            const pageNum = parseInt(page, 10) || 1
 
             const pokemonData = queryClient.getQueryData<{
                     pokemon: PokemonSpecies[],
                     total: number,
                     pageSize: number
-                }>(getPokemonQueryOptions(parseInt(page), pokemonName, pokemonTypeId).queryKey) ??
-                (await queryClient.fetchQuery(getPokemonQueryOptions(parseInt(page), pokemonName, pokemonTypeId)));
+                }>(getPokemonQueryOptions(pageNum, pokemonName, pokemonTypeId, pageSize).queryKey) ??
+                (await queryClient.fetchQuery(getPokemonQueryOptions(pageNum, pokemonName, pokemonTypeId, pageSize)));
 
             if (pokemonData?.pokemon && pokemonData.pokemon.length > 0 && pokemonId) {
                 let imageUrls = pokemonData.pokemon.map(p => {

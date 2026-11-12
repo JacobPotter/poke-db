@@ -37,6 +37,28 @@ export const PokemonPage: FC = () => {
     const totalPages = Math.max(1, Math.ceil((total ?? 1) / (pageSize ?? 1)));
     const hasActiveFilters = Boolean(searchParams.get("pokemonName") || searchParams.get("pokemonTypeId"));
 
+    const handlePrevPokemon = useCallback(() => {
+        if (pokemon && pokemon.length > 0) {
+            const currentIndex = pokemon.findIndex(p => p.id === currentPokemon?.id);
+            if (currentIndex > 0) {
+                handlePokemonSelect(pokemon[currentIndex - 1].id);
+            } else if (currentPage > 1) {
+                handlePrevious();
+            }
+        }
+    }, [pokemon, currentPokemon, currentPage, handlePokemonSelect, handlePrevious]);
+
+    const handleNextPokemon = useCallback(() => {
+        if (pokemon && pokemon.length > 0) {
+            const currentIndex = pokemon.findIndex(p => p.id === currentPokemon?.id);
+            if (currentIndex >= 0 && currentIndex < pokemon.length - 1) {
+                handlePokemonSelect(pokemon[currentIndex + 1].id);
+            } else if (currentPage < totalPages) {
+                handleNext();
+            }
+        }
+    }, [pokemon, currentPokemon, currentPage, totalPages, handlePokemonSelect, handleNext]);
+
     const handleTabChange = useCallback((tabName: string) => {
         navigate({pathname: `/pokemon/${tabName}`, search: `?${searchParams.toString()}`});
     }, [navigate, searchParams]);
@@ -56,6 +78,33 @@ export const PokemonPage: FC = () => {
             <Pokedex.LeftScreen loading={loading}>
                 <Outlet context={{pokemonSpecies: currentPokemon}}/>
             </Pokedex.LeftScreen>
+
+            <Pokedex.LeftControls
+                dpad={{
+                    onLeft: handlePrevPokemon,
+                    onRight: handleNextPokemon,
+                    onUp: handlePrevious,
+                    onDown: handleNext,
+                    disabled: loading
+                }}
+                statusText={currentPokemon?.id ? `#${String(currentPokemon.id).padStart(3, '0')} ${currentPokemon.name?.toUpperCase()}` : "READY"}
+                statusLabel="Active Pokemon"
+                onBlackButtonClick={() => {
+                    const audio = document.querySelector('audio');
+                    if (audio) {
+                        audio.currentTime = 0;
+                        audio.play().catch(() => {
+                        });
+                    } else {
+                        refresh();
+                    }
+                }}
+                blackButtonLabel="Play Cry"
+                onRedPillClick={resetFilters}
+                redPillLabel="Reset Filters"
+                onCyanPillClick={toggleFilter}
+                cyanPillLabel={editForm ? "Close Filter" : "Open Filter"}
+            />
 
             <Pokedex.RightScreen size={'large'} loading={loading}>
                 {!editForm ? (
@@ -96,51 +145,63 @@ export const PokemonPage: FC = () => {
             </Pokedex.TabButtons>
 
             <Pokedex.KeyboardButtons>
-                <div className="grid grid-cols-5 gap-1.5 sm:gap-2 items-center justify-center w-full">
+                <div className="flex items-center justify-between gap-1.5 sm:gap-2.5 w-full">
+                    {/* Dual Horizontal Dark Pill Vents */}
+                    <Pokedex.DualPillVents className="hidden sm:flex flex-shrink-0"/>
+
+                    {/* Previous Page Button (Silver Square) */}
                     <Pokedex.KeyboardButton
                         onClick={handlePrevious}
                         disabled={currentPage <= 1}
                         ariaLabel="Previous Page"
-                        className={'justify-self-end w-full'}
+                        variant="silver"
+                        className={'flex-1 max-w-[64px] sm:max-w-[72px]'}
                     >
                         <ArrowLeftIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                     </Pokedex.KeyboardButton>
 
+                    {/* Page Readout LCD Matrix Indicator */}
                     <div
-                        className={'text-xs sm:text-sm md:text-base font-mono font-bold text-center flex items-center justify-center gap-1 text-slate-100 select-none'}>
+                        className={'px-2 py-1 rounded bg-slate-950 border border-slate-700/80 shadow-inner text-xs sm:text-sm font-mono font-bold text-center flex items-center justify-center gap-1 text-slate-100 min-w-[50px] select-none'}>
                         <span>{currentPage}</span>
                         <span className="text-slate-400">/</span>
                         <span>{totalPages}</span>
                     </div>
 
+                    {/* Next Page Button (Silver Square) */}
                     <Pokedex.KeyboardButton
                         onClick={handleNext}
                         disabled={currentPage >= totalPages}
                         ariaLabel="Next Page"
-                        className={'justify-self-start w-full'}
+                        variant="silver"
+                        className={'flex-1 max-w-[64px] sm:max-w-[72px]'}
                     >
                         <ArrowRightIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                     </Pokedex.KeyboardButton>
 
+                    {/* Circular Yellow Action / Filter Dial */}
                     <Pokedex.KeyboardButton
                         onClick={toggleFilter}
                         ariaLabel={editForm ? "Close Filter" : "Open Filter"}
-                        className="w-full relative"
+                        variant="dial"
+                        className="flex-shrink-0"
                     >
                         <div className="relative flex items-center justify-center">
                             <FunnelIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                             {hasActiveFilters && (
                                 <span
-                                    className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 ring-1 ring-slate-900"></span>
+                                    className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-600 ring-1 ring-slate-900 animate-pulse"></span>
                             )}
                         </div>
                     </Pokedex.KeyboardButton>
 
+                    {/* Reset Filter Button (Silver Square) */}
                     <Pokedex.KeyboardButton
                         onClick={resetFilters}
                         disabled={!hasActiveFilters}
                         ariaLabel="Reset Filters"
-                        className="w-full"
+                        variant="silver"
+                        className="flex-1 max-w-[64px] sm:max-w-[72px]"
                     >
                         <ArrowUturnLeftIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                     </Pokedex.KeyboardButton>

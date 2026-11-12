@@ -50,6 +50,24 @@ export function TypesPage() {
                 )}
             </Pokedex.LeftScreen>
 
+            <Pokedex.LeftControls
+                dpad={{
+                    onLeft: handlePrev,
+                    onRight: handleNext,
+                    onUp: handlePrev,
+                    onDown: handleNext,
+                    disabled: !moveTypes || moveTypes.length === 0
+                }}
+                statusText={selectedType?.name ? `TYPE: ${selectedType.name.toUpperCase()}` : "READY"}
+                statusLabel="Active Type"
+                onBlackButtonClick={handleRefresh}
+                blackButtonLabel="Refresh Types"
+                onRedPillClick={() => setTabIndex(0)}
+                redPillLabel="Type Summary"
+                onCyanPillClick={() => setTabIndex(1)}
+                cyanPillLabel="Type Matchups"
+            />
+
             <Pokedex.RightScreen size={'large'}>
                 <TypeList onTypeSelect={handleTypeSelect} moveTypes={moveTypes} listIndex={listIndex}/>
             </Pokedex.RightScreen>
@@ -81,25 +99,35 @@ export function TypesPage() {
             </Pokedex.TabButtons>
 
             <Pokedex.KeyboardButtons>
-                <div className="flex justify-evenly items-center w-full">
+                <div className="flex items-center justify-between gap-2 sm:gap-3 w-full">
+                    {/* Dual Horizontal Dark Pill Vents */}
+                    <Pokedex.DualPillVents className="hidden sm:flex flex-shrink-0"/>
+
                     <Pokedex.KeyboardButton
                         disabled={listIndex <= 0}
                         onClick={handlePrev}
                         ariaLabel="Previous Type"
-                        className="w-1/3"
+                        variant="silver"
+                        className="flex-1 max-w-[120px]"
                     >
-                        <ArrowLeftIcon className={'w-4 h-4 sm:w-6 sm:h-6'}/>
+                        <ArrowLeftIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                     </Pokedex.KeyboardButton>
-                    <div className="text-xs sm:text-sm font-mono font-bold text-slate-100">
-                        {listIndex + 1} / {moveTypes?.length || 1}
+
+                    <div
+                        className="px-3 py-1 rounded bg-slate-950 border border-slate-700/80 shadow-inner text-xs sm:text-sm font-mono font-bold text-center text-slate-100 select-none">
+                        <span>{listIndex + 1}</span>
+                        <span className="text-slate-400 mx-1">/</span>
+                        <span>{moveTypes?.length || 1}</span>
                     </div>
+
                     <Pokedex.KeyboardButton
                         disabled={!moveTypes || listIndex >= moveTypes.length - 1}
                         onClick={handleNext}
                         ariaLabel="Next Type"
-                        className="w-1/3"
+                        variant="silver"
+                        className="flex-1 max-w-[120px]"
                     >
-                        <ArrowRightIcon className={'w-4 h-4 sm:w-6 sm:h-6'}/>
+                        <ArrowRightIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
                     </Pokedex.KeyboardButton>
                 </div>
             </Pokedex.KeyboardButtons>
