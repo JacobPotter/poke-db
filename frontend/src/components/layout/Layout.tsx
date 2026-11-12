@@ -1,16 +1,21 @@
 import {Outlet} from "react-router-dom";
 import {useContext} from "react";
 import {DarkModeContext} from "../../context/DarkModeContext.tsx";
-import {Navbar} from "./Navbar.tsx";
+import {DarkModeButton} from "../ui/DarkModeButton.tsx";
 
 
 function Layout() {
     const {dark} = useContext(DarkModeContext)
     return (
         <div className={dark ? "dark" : ""}>
-            <div className="bg-red-50 dark:bg-red-950 text-red-950 dark:text-red-50 min-h-screen pb-2">
-                <Navbar/>
-                <Outlet/>
+            <div
+                className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen w-full flex flex-col justify-center items-center p-2 sm:p-4 md:p-6 transition-colors relative">
+                <div className="fixed top-3 right-3 sm:top-4 sm:right-4 z-50">
+                    <DarkModeButton/>
+                </div>
+                <main className="w-full flex-grow flex items-center justify-center">
+                    <Outlet/>
+                </main>
             </div>
         </div>
     )

@@ -2,8 +2,7 @@ import {PokemonSpecies, PokemonVariety} from "../../models/pokemon.ts";
 import {SummaryItem} from "../ui/SummaryItem.tsx";
 import {capitalize} from "lodash";
 import {useCallback, useEffect, useRef, useState} from "react";
-import {PlayIcon} from "@heroicons/react/24/solid";
-import {isSafari} from 'react-device-detect';
+import {PauseIcon, PlayIcon, SpeakerWaveIcon} from "@heroicons/react/24/solid";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/24/outline";
 import {useOutletContext} from "react-router-dom";
 
@@ -17,43 +16,74 @@ export const PokemonSummary = () => {
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progress, setProgress] = useState(0);
-
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
 
     const handlePlay = () => {
-        if (audioRef.current) {
-            audioRef?.current.play();
+        if (!audioRef.current || !selectedPokemonVariety?.cry) return;
+        if (isPlaying) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            setIsPlaying(false);
+            setProgress(0);
+        } else {
+            audioRef.current.play().then(() => {
+                setIsPlaying(true);
+            }).catch(() => {
+                setIsPlaying(false);
+            });
         }
     };
 
     useEffect(() => {
-        setVarietyIndex(0)
+        setVarietyIndex(0);
+        setIsPlaying(false);
+        setProgress(0);
     }, [pokemonSpecies]);
 
 
     useEffect(() => {
         if (!selectedPokemonVariety) {
-            return
+            return;
         }
 
-        setProgress(0)
+        setProgress(0);
+        setIsPlaying(false);
+
+        const audio = audioRef.current;
+        if (!audio) return;
 
         const handleTimeUpdate = () => {
-            if (audioRef?.current)
-                setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+            if (audio && audio.duration) {
+                setCurrentTime(audio.currentTime);
+                setProgress((audio.currentTime / audio.duration) * 100);
+            }
         };
 
-        if (audioRef.current) {
-            audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
-        }
+        const handleLoadedMetadata = () => {
+            if (audio) {
+                setDuration(audio.duration || 0);
+            }
+        };
 
+        const handleEnded = () => {
+            setIsPlaying(false);
+            setProgress(0);
+            setCurrentTime(0);
+        };
+
+        audio.addEventListener("timeupdate", handleTimeUpdate);
+        audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.addEventListener("ended", handleEnded);
 
         return () => {
-            if (audioRef.current) {
-                audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
-            }
-        }
+            audio.removeEventListener("timeupdate", handleTimeUpdate);
+            audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+            audio.removeEventListener("ended", handleEnded);
+        };
 
-    }, [selectedPokemonVariety?.cry]);
+    }, [selectedPokemonVariety]);
 
 
     useEffect(() => {
@@ -61,75 +91,163 @@ export const PokemonSummary = () => {
         setSelectedPokemonVariety(pokemonSpecies?.varieties[varietyIndex] as PokemonVariety);
     }, [pokemonSpecies, varietyIndex]);
 
+    const formatVarietyName = useCallback((varietyName?: string) => {
+        if (!varietyName) return "";
+        const parts = varietyName.split("-");
+        if (parts.length <= 1) return "";
+        return parts.slice(1).map(capitalize).join(" ");
+    }, []);
 
-    useEffect(() => {
-        let timeout: NodeJS.Timeout;
-        if (progress === 100) {
-            timeout = setTimeout(() => setProgress(0), 200)
-        }
-
-        return () => {
-            clearTimeout(timeout)
-        }
-
-    }, [progress]);
-
-
-    const showVariety = useCallback(() => {
-        return pokemonSpecies && pokemonSpecies?.varieties.length > 1 && selectedPokemonVariety && selectedPokemonVariety?.name?.split("-").length > 2;
-    }, [pokemonSpecies, selectedPokemonVariety]);
+    const speciesName = pokemonSpecies?.name ? capitalize(pokemonSpecies.name) : (selectedPokemonVariety?.name ? capitalize(selectedPokemonVariety.name) : "");
+    const varietyLabel = formatVarietyName(selectedPokemonVariety?.name);
 
     return (
-        <section className={'relative flex flex-col items-center justify-center font-mono h-full'}>
-            <div className={'max-w-md flex flex-col flex-grow w-full justify-between'}>
-                <h1 className="sm:text-lg md:text-3xl lg:text-4xl xl:text-5xl z-10">{pokemonSpecies && pokemonSpecies?.varieties[0].name && pokemonSpecies.name?.split("-").length > 1 ? `${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[0])} ${capitalize(pokemonSpecies?.varieties[0]?.name.split("-")[1])}` : capitalize(pokemonSpecies?.varieties[0]?.name)} #{pokemonSpecies?.varieties[0]?.id} {varietyIndex > 0 ? showVariety() ? capitalize(`${selectedPokemonVariety?.name.split("-")[1]}-${capitalize(selectedPokemonVariety?.name.split("-")[2])}`) : capitalize(selectedPokemonVariety?.name.split("-")[1]) : <></>}</h1>
-                <div className="translate-y-[10%] md:translate-y-0 flex items-center justify-end sm:justify-center">
-                    <img src={selectedPokemonVariety?.sprite_url} alt={selectedPokemonVariety?.name}
-                         className={'h-auto w-2/5 md:w-3/4 lg:w-full animate-bounce'}/>
+        <section className={'relative flex flex-col items-center justify-between font-mono h-full w-full'}>
+            {/* Header info */}
+            <div className="w-full flex items-center justify-between border-b border-sky-600/50 pb-2 mb-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        <span>{speciesName}</span>
+                        <span
+                            className="text-sky-300 font-mono text-base sm:text-lg">#{pokemonSpecies?.id ?? selectedPokemonVariety?.id}</span>
+                    </h1>
+                    {varietyLabel && (
+                        <span
+                            className="text-xs px-2 py-0.5 rounded-full bg-amber-400 text-slate-900 font-bold uppercase tracking-wider shadow-sm">
+                            {varietyLabel}
+                        </span>
+                    )}
                 </div>
             </div>
-            <div className={'grid grid-cols-2 gap-2 w-full'}>
-                {!isSafari && <div className={'col-span-2'}>
-                    <div className="flex items-center justify-between">
-                        <button
-                            className={'rounded-full bg-sky-800 p-2'} onClick={handlePlay}>
-                            <PlayIcon className={'text-sky-50 h-6 w-6 xs:h-8 xs:w-8 sm:h-12 sm:w-12'}/>
-                        </button>
-                        <div className="rounded-xl p-1.5 sm:p-3 bg-sky-600 w-3/4 ">
-                            <div
-                                className="border-2 rounded-lg h-4 xs:h-6 overflow-hidden">
-                                <div style={{transform: `translateX(${progress - 100}%)`}}
-                                     className={`h-full transition-all duration-75 bg-sky-500`}></div>
-                            </div>
-                        </div>
-                    </div>
-                    <audio ref={audioRef} src={selectedPokemonVariety?.cry}/>
-                </div>}
-                <SummaryItem><img className={'w-16 xs:w-20 sm:w-auto mx-auto'}
-                                  src={selectedPokemonVariety?.primary_type.img_url}
-                                  alt={selectedPokemonVariety?.primary_type.name}/></SummaryItem>
-                <SummaryItem>{selectedPokemonVariety?.secondary_type?.name ?
-                    <img className={'w-16 xs:w-20 sm:w-auto mx-auto'}
-                         src={selectedPokemonVariety.secondary_type.img_url}
-                         alt={selectedPokemonVariety.secondary_type.img_url}/> : 'None'}</SummaryItem>
-                <SummaryItem>Weight: {(selectedPokemonVariety?.weight ?? 0) / 10}kg</SummaryItem>
-                <SummaryItem>Height: {(selectedPokemonVariety?.height ?? 0) / 10}m</SummaryItem>
+
+            {/* Sprite display area */}
+            <div
+                className="relative flex-grow flex items-center justify-center w-full my-1 sm:my-2 min-h-[220px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[340px]">
+                {pokemonSpecies && pokemonSpecies.varieties && pokemonSpecies.varieties.length > 1 && (
+                    <button
+                        type="button"
+                        aria-label="Previous variety"
+                        disabled={varietyIndex <= 0}
+                        onClick={() => setVarietyIndex(prev => Math.max(0, prev - 1))}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-sky-900/80 hover:bg-sky-700 text-sky-100 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-md border border-sky-500/40"
+                    >
+                        <ChevronLeftIcon className="w-5 h-5"/>
+                    </button>
+                )}
+
+                <div
+                    onClick={handlePlay}
+                    title="Click to play cry"
+                    className="group relative cursor-pointer flex items-center justify-center p-2 rounded-2xl transition-transform duration-300"
+                >
+                    <div
+                        className="absolute inset-0 bg-radial from-sky-400/20 via-transparent to-transparent rounded-full filter blur-xl group-hover:from-sky-300/30"></div>
+                    <img
+                        src={selectedPokemonVariety?.sprite_url}
+                        alt={selectedPokemonVariety?.name || speciesName}
+                        className="relative animate-bounce h-40 sm:h-48 md:h-60 lg:h-72 xl:h-80 max-h-80 w-auto object-contain [image-rendering:pixelated] drop-shadow-[0_10px_14px_rgba(0,0,0,0.4)]"
+                    />
+                </div>
+
+                {pokemonSpecies && pokemonSpecies.varieties && pokemonSpecies.varieties.length > 1 && (
+                    <button
+                        type="button"
+                        aria-label="Next variety"
+                        disabled={varietyIndex >= pokemonSpecies.varieties.length - 1}
+                        onClick={() => setVarietyIndex(prev => Math.min(pokemonSpecies.varieties.length - 1, prev + 1))}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-sky-900/80 hover:bg-sky-700 text-sky-100 disabled:opacity-20 disabled:pointer-events-none transition-all shadow-md border border-sky-500/40"
+                    >
+                        <ChevronRightIcon className="w-5 h-5"/>
+                    </button>
+                )}
             </div>
 
-            {pokemonSpecies && pokemonSpecies?.varieties.length > 1 && <>
-                <button disabled={!pokemonSpecies?.varieties[varietyIndex - 1]}
-                        className={`absolute top-1/4 -left-3 md:top-1/3`}
-                        onClick={() => setVarietyIndex(varietyIndex - 1)}>
-                    <ChevronLeftIcon
-                        className={'w-5 h-5'}/></button>
-                <button disabled={!pokemonSpecies?.varieties[varietyIndex + 1]}
-                        className={'absolute top-1/4 -right-3 md:top-1/3'}
-                        onClick={() => setVarietyIndex(varietyIndex + 1)}>
-                    <ChevronRightIcon
-                        className={'w-5 h-5'}/></button>
-            </>}
+            {/* Bottom details & cry player */}
+            <div className="grid grid-cols-2 gap-2 w-full pt-1">
+                {/* Audio Cry Player Bar */}
+                <div
+                    className="col-span-2 bg-sky-900/70 border border-sky-600/60 rounded-xl p-2 sm:p-2.5 flex items-center gap-3 shadow-inner">
+                    <button
+                        type="button"
+                        aria-label={isPlaying ? "Pause Pokemon Cry" : "Play Pokemon Cry"}
+                        title={isPlaying ? "Pause Cry" : "Play Cry"}
+                        disabled={!selectedPokemonVariety?.cry}
+                        className={`rounded-full p-2 text-white shadow transition-all flex-shrink-0 ${
+                            isPlaying
+                                ? "bg-amber-500 hover:bg-amber-400 ring-2 ring-amber-300 scale-105"
+                                : "bg-sky-600 hover:bg-sky-500 active:scale-95 disabled:opacity-40"
+                        }`}
+                        onClick={handlePlay}
+                    >
+                        {isPlaying ? (
+                            <PauseIcon className="h-5 w-5 sm:h-6 sm:w-6"/>
+                        ) : (
+                            <PlayIcon className="h-5 w-5 sm:h-6 sm:w-6 text-sky-50"/>
+                        )}
+                    </button>
 
+                    <div className="flex-grow flex flex-col justify-center gap-1 min-w-0">
+                        <div
+                            className="flex items-center justify-between text-[11px] sm:text-xs text-sky-200 uppercase font-mono tracking-wider">
+                            <span className="flex items-center gap-1 truncate">
+                                <SpeakerWaveIcon
+                                    className={`w-3.5 h-3.5 ${isPlaying ? "text-amber-300 animate-pulse" : "text-sky-300"}`}/>
+                                Cry Audio
+                            </span>
+                            <span>
+                                {selectedPokemonVariety?.cry
+                                    ? (duration > 0 ? `${currentTime.toFixed(1)}s / ${duration.toFixed(1)}s` : "Ready")
+                                    : "Unavailable"}
+                            </span>
+                        </div>
+                        <div
+                            className="w-full bg-sky-950/80 border border-sky-700/60 rounded-full h-2.5 overflow-hidden p-0.5">
+                            <div
+                                style={{width: `${Math.min(100, Math.max(0, progress))}%`}}
+                                className="h-full bg-gradient-to-r from-sky-400 to-amber-300 rounded-full transition-all duration-75"
+                            ></div>
+                        </div>
+                    </div>
+                    <audio ref={audioRef} src={selectedPokemonVariety?.cry} preload="metadata"/>
+                </div>
 
+                {/* Primary Type */}
+                <SummaryItem className="flex items-center justify-center p-1.5">
+                    {selectedPokemonVariety?.primary_type?.img_url ? (
+                        <img
+                            className="h-6 sm:h-7 w-auto max-w-full object-contain mx-auto"
+                            src={selectedPokemonVariety.primary_type.img_url}
+                            alt={selectedPokemonVariety.primary_type.name}
+                        />
+                    ) : (
+                        <span
+                            className="text-xs uppercase font-bold text-sky-100">{selectedPokemonVariety?.primary_type?.name ?? "-"}</span>
+                    )}
+                </SummaryItem>
+
+                {/* Secondary Type */}
+                <SummaryItem className="flex items-center justify-center p-1.5">
+                    {selectedPokemonVariety?.secondary_type?.img_url ? (
+                        <img
+                            className="h-6 sm:h-7 w-auto max-w-full object-contain mx-auto"
+                            src={selectedPokemonVariety.secondary_type.img_url}
+                            alt={selectedPokemonVariety.secondary_type.name}
+                        />
+                    ) : (
+                        <span className="text-xs uppercase font-bold text-sky-300/70">None</span>
+                    )}
+                </SummaryItem>
+
+                {/* Weight */}
+                <SummaryItem className="text-xs sm:text-sm font-semibold flex items-center justify-center">
+                    Weight: {((selectedPokemonVariety?.weight ?? 0) / 10).toFixed(1)} kg
+                </SummaryItem>
+
+                {/* Height */}
+                <SummaryItem className="text-xs sm:text-sm font-semibold flex items-center justify-center">
+                    Height: {((selectedPokemonVariety?.height ?? 0) / 10).toFixed(1)} m
+                </SummaryItem>
+            </div>
         </section>
-    )
+    );
 };

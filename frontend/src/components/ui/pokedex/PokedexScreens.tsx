@@ -33,7 +33,7 @@ const RightScreenLoading: React.FC = () => {
     </div>
 }
 export const LeftScreenContainer: React.FC<PropsWithChildren<Loadable>> = ({children, loading}) => <div
-    className={`max-h-72 min-h-64  xs:max-h-96 xs:min-h-80 md:max-h-full md:min-h-[575px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-b-none md:rounded-b-lg p-4 md:row-span-6`}>
+    className={`min-h-[380px] sm:min-h-[440px] md:min-h-[640px] lg:min-h-[680px] xl:min-h-[720px] md:max-h-full border-slate-700/90 dark:border-slate-800 border-2 md:border-4 bg-sky-800/90 dark:bg-slate-900/95 text-sky-50 shadow-inner rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-7 md:row-span-6 flex flex-col justify-between`}>
     {loading ? <LeftScreenLoading/> : children}
 </div>;
 export const RightScreenContainer: React.FC<PropsWithChildren<Sizeable & Loadable>> = ({
@@ -41,6 +41,6 @@ export const RightScreenContainer: React.FC<PropsWithChildren<Sizeable & Loadabl
                                                                                            loading = false,
                                                                                            size = 'small'
                                                                                        }) => <div
-    className={`min-h-40 max-h-44 sm:max-h-60 md:max-h-full md::min-h-[575px] border-slate-400 border-2 md:border-4 bg-sky-700 text-sky-50 rounded-lg rounded-t-none md:rounded-t-lg overflow-y-auto ${size === 'small' ? "md:row-span-5" : 'md:row-span-6'}`}>
+    className={`min-h-[320px] max-h-[520px] md:min-h-[640px] lg:min-h-[680px] xl:min-h-[720px] md:max-h-full border-slate-700/90 dark:border-slate-800 border-2 md:border-4 bg-sky-800/90 dark:bg-slate-900/95 text-sky-50 shadow-inner rounded-xl md:rounded-2xl overflow-y-auto p-2 sm:p-3 md:p-4 lg:p-5 ${size === 'small' ? "md:row-span-5" : 'md:row-span-6'}`}>
     {loading ? <RightScreenLoading/> : children}
 </div>;

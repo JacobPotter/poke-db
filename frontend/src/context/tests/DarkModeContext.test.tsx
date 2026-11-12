@@ -1,10 +1,14 @@
 // DarkModeContext.test.tsx
 import {FC, useContext} from 'react'
-import {describe, expect, it} from 'vitest'
+import {beforeEach, describe, expect, it} from 'vitest'
 import {render} from '@/test/utils'
 import {DarkModeContext, DarkModeProvider} from '../DarkModeContext.tsx'
 
 describe('DarkModeProvider', () => {
+    beforeEach(() => {
+        localStorage.clear();
+    });
+
     it('initializes with dark mode true and toggles on invoking toggleDarkMode', async () => {
         // Arrange
         const TestComponent: FC = () => {

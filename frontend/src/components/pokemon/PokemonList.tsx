@@ -9,13 +9,20 @@ interface PokemonListProps {
 }
 
 export const PokemonList: React.FC<PokemonListProps> = ({pokemon, pokemonId, onPokemonSelect}) => {
-
-    return (<div
-        className={`grid grid-cols-4 md:grid-cols-2 items-center justify-center gap-0.5 xs:gap-2 sm:gap-x-3 sm:gap-y-1.5 md:gap-3 lg:gap-5 xl:gap-6 2xl:gap-8 p-1 sm:p-2 md:p-3 lg:p-4 xl:p-6 2xl:p-8`}>
-        {pokemon.map((pokemon, index) => {
-            return <PokemonListItem onPokemonSelect={onPokemonSelect} key={`${pokemon.name}_list_item`}
-                                    active={pokemonId ? pokemon.id === parseInt(pokemonId) : index === 0}
-                                    pokemonSpecies={pokemon}/>
-        })}
-    </div>)
-}
+    return (
+        <div
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 xl:grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 p-1 sm:p-2 md:p-3">
+            {pokemon.map((p, index) => {
+                const isActive = pokemonId ? p.id === parseInt(pokemonId) : index === 0;
+                return (
+                    <PokemonListItem
+                        onPokemonSelect={onPokemonSelect}
+                        key={`${p.name}_${p.id}_list_item`}
+                        active={isActive}
+                        pokemonSpecies={p}
+                    />
+                );
+            })}
+        </div>
+    );
+};

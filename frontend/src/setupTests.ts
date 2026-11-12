@@ -5,12 +5,10 @@
 import "./index.css"
 import 'vitest-browser-react'
 import '@testing-library/jest-dom/vitest';
-import {beforeAll, afterAll, afterEach} from "vitest";
+import {afterAll, afterEach, beforeAll, expect} from "vitest";
 // import 'vitest-canvas-mock'
-
 // https://www.npmjs.com/package/@testing-library/jest-dom#with-another-jest-compatible-expect
 import * as matchers from "@testing-library/jest-dom/matchers";
-import {expect} from "vitest";
 
 // for msw
 import {worker} from "./test/mocks/worker.ts";
@@ -25,7 +23,12 @@ beforeAll(() => worker.start());
 
 // Reset any request handlers that we may add during the tests,
 // so they don't affect other tests.
-afterEach(() => worker.resetHandlers());
+afterEach(() => {
+    worker.resetHandlers();
+    if (typeof localStorage !== "undefined") {
+        localStorage.clear();
+    }
+});
 
 // Clean up after the tests are finished.
 afterAll(() => worker.stop());

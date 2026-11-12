@@ -9,8 +9,8 @@ import {EvolutionsPage} from "./components/pages/EvolutionsPage.tsx";
 import {TypesPage} from "./components/pages/TypesPage.tsx";
 import {MovesPage} from "./components/pages/MovesPage.tsx";
 import {PokemonSummary} from "./components/pokemon/PokemonSummary.tsx";
+import {PokemonDetails} from "./components/pokemon/PokemonDetails.tsx";
 import {EvolutionChainSummary} from "./components/pokemon/EvolutionChainSummary.tsx";
-import {ComingSoon} from "./components/ui/ComingSoon.tsx";
 import {QueryClientProvider} from "@tanstack/react-query";
 import {queryClient} from "./query/queryClient.ts";
 import {loader as pokemonLoader} from "./loaders/pokemon.ts";
@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path: 'stats',
-                        element: <ComingSoon/>
+                        element: <PokemonDetails/>
                     },
                     {
                         path: '*',
