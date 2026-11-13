@@ -6,7 +6,7 @@ import {loader} from "@/loaders/pokemon.ts";
 import {PokemonSpecies} from "@/models/pokemon.ts";
 import {getPokemonQueryOptions} from "@/query/keyFactories.ts";
 import {prefetchPokemonHelper} from "@/query/helpers/prefetchPokemonHelper.ts";
-import {DEFAULT_PAGE_SIZE, normalizePageSize} from "@/query/api/pokemon.ts";
+import {DEFAULT_DESKTOP_PAGE_SIZE, DEFAULT_MOBILE_PAGE_SIZE, normalizePageSize} from "@/query/api/pokemon.ts";
 
 
 export const usePokemon = () => {
@@ -15,7 +15,28 @@ export const usePokemon = () => {
     const currentPage = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
     const pokemonName = searchParams.get("pokemonName") ?? undefined
     const pokemonTypeId = searchParams.get("pokemonTypeId") ?? undefined
-    const pageSize = normalizePageSize(searchParams.get("pageSize"))
+
+    const [isMobile, setIsMobile] = useState<boolean>(() => {
+        if (typeof window !== "undefined") {
+            return window.innerWidth < 768;
+        }
+        return false;
+    });
+
+    useEffect(() => {
+        if (typeof window === "undefined" || !window.matchMedia) return;
+        const mediaQuery = window.matchMedia("(max-width: 767px)");
+        const handler = (e: MediaQueryListEvent) => {
+            setIsMobile(e.matches);
+        };
+        setIsMobile(mediaQuery.matches);
+        mediaQuery.addEventListener("change", handler);
+        return () => mediaQuery.removeEventListener("change", handler);
+    }, []);
+
+    const rawPageSize = searchParams.get("pageSize");
+    const defaultPageSize = isMobile ? DEFAULT_MOBILE_PAGE_SIZE : DEFAULT_DESKTOP_PAGE_SIZE;
+    const pageSize = rawPageSize ? normalizePageSize(rawPageSize, defaultPageSize) : defaultPageSize;
     const loaderData = useLoaderData() as Awaited<
         ReturnType<ReturnType<typeof loader>>> | undefined
     const initialData = loaderData?.pokemonData
@@ -24,12 +45,12 @@ export const usePokemon = () => {
     const queryClient = useQueryClient()
 
 
-    const {data = {pokemon: [], total: 0, pageSize: DEFAULT_PAGE_SIZE}, isFetching} = useQuery({
+    const {data = {pokemon: [], total: 0, pageSize: defaultPageSize}, isFetching} = useQuery({
         ...getPokemonQueryOptions(currentPage, pokemonName, pokemonTypeId, pageSize),
         initialData: initialData
     })
 
-    const effectivePageSize = normalizePageSize(data.pageSize || pageSize);
+    const effectivePageSize = normalizePageSize(data.pageSize || pageSize, defaultPageSize);
     const totalPages = Math.max(1, Math.ceil((data.total || 0) / effectivePageSize));
 
     const [currentPokemon, setCurrentPokemon] = useState<PokemonSpecies | undefined>(data.pokemon[0])

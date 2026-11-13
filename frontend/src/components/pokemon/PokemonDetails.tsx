@@ -115,54 +115,62 @@ export const PokemonDetails = ({pokemon: propPokemon}: PokemonDetailsProps) => {
     }
 
     return (
-        <section className="flex flex-col justify-between h-full w-full font-mono text-sky-50 p-1 sm:p-2">
+        <section className="flex flex-col justify-between h-full w-full font-mono text-sky-50 p-1 sm:p-2 min-h-0">
             {/* Header */}
-            <div className="border-b border-sky-600/50 pb-2 mb-2 flex items-center justify-between">
+            <div className="border-b border-sky-600/50 pb-1.5 mb-1.5 flex items-center justify-between shrink-0">
                 <div>
-                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                    <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tight text-white flex items-center gap-2">
                         <span>{speciesName}</span>
-                        <span className="text-sky-300 text-sm sm:text-base font-normal">Base Stats</span>
+                        <span className="text-sky-300 text-xs sm:text-sm md:text-base font-normal">Base Stats</span>
                     </h1>
                 </div>
                 <div className="text-right">
-                    <span className="text-xs uppercase text-sky-300 tracking-wider">Total</span>
-                    <div className="text-lg sm:text-xl font-extrabold text-amber-300">{totalStat}</div>
+                    <span className="text-[10px] sm:text-xs uppercase text-sky-300 tracking-wider">Total</span>
+                    <div className="text-base sm:text-lg md:text-xl font-extrabold text-amber-300">{totalStat}</div>
                 </div>
             </div>
 
-            {/* Traits Badges */}
-            <div className="flex flex-wrap gap-1.5 mb-3">
+            {/* Traits & Physical Measurements */}
+            <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-1.5 shrink-0">
+                <span
+                    className="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
+                    Weight: {((variety?.weight ?? 0) / 10).toFixed(1)} kg
+                </span>
+                <span
+                    className="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
+                    Height: {((variety?.height ?? 0) / 10).toFixed(1)} m
+                </span>
                 {pokemonSpecies.is_legendary && (
                     <span
-                        className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                        className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">
                         Legendary
                     </span>
                 )}
                 {pokemonSpecies.is_mythical && (
                     <span
-                        className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/40">
+                        className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/40">
                         Mythical
                     </span>
                 )}
                 {pokemonSpecies.is_baby && (
                     <span
-                        className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-400/40">
+                        className="text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full bg-pink-500/20 text-pink-300 border border-pink-400/40">
                         Baby
                     </span>
                 )}
                 <span
-                    className="text-[11px] px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
+                    className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
                     Hatch Cycles: {pokemonSpecies.hatch_counter ?? 20}
                 </span>
                 <span
-                    className="text-[11px] px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
+                    className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full bg-sky-900/60 text-sky-200 border border-sky-600/40">
                     Gender Diff: {pokemonSpecies.has_gender_differences ? "Yes" : "No"}
                 </span>
             </div>
 
             {/* Stats Bars List */}
             <div
-                className="flex flex-col gap-2.5 flex-grow justify-center bg-sky-900/40 rounded-xl p-3 border border-sky-700/40">
+                className="flex flex-col gap-1 sm:gap-1.5 flex-grow justify-evenly bg-sky-900/40 rounded-xl p-2 sm:p-2.5 border border-sky-700/40 min-h-0">
                 {stats.map((stat) => {
                     const Icon = stat.icon;
                     const percent = Math.min(100, Math.round((stat.value / stat.max) * 100));
@@ -179,7 +187,7 @@ export const PokemonDetails = ({pokemon: propPokemon}: PokemonDetailsProps) => {
                                 </div>
                             </div>
                             <div
-                                className="w-full bg-sky-950/80 rounded-full h-2.5 overflow-hidden border border-sky-800/60 p-0.5">
+                                className="w-full bg-sky-950/80 rounded-full h-2 sm:h-2.5 overflow-hidden border border-sky-800/60 p-0.5">
                                 <div
                                     style={{width: `${percent}%`}}
                                     className={`h-full rounded-full ${stat.barColor} transition-all duration-500 shadow-sm`}

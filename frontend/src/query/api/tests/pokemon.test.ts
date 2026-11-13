@@ -12,16 +12,28 @@ describe("normalizePageSize and query helpers", () => {
         expect(normalizePageSize("")).toBe(6);
     });
 
-    it("should accept valid page sizes between 6 and 8", () => {
+    it("should return custom fallback if specified when input is undefined/null/empty", () => {
+        expect(normalizePageSize(undefined, 3)).toBe(3);
+        expect(normalizePageSize(null, 3)).toBe(3);
+        expect(normalizePageSize("", 3)).toBe(3);
+    });
+
+    it("should accept valid page sizes between 3 and 8", () => {
+        expect(normalizePageSize(3)).toBe(3);
+        expect(normalizePageSize(4)).toBe(4);
+        expect(normalizePageSize(5)).toBe(5);
         expect(normalizePageSize(6)).toBe(6);
         expect(normalizePageSize(7)).toBe(7);
         expect(normalizePageSize(8)).toBe(8);
+        expect(normalizePageSize("3")).toBe(3);
+        expect(normalizePageSize("4")).toBe(4);
+        expect(normalizePageSize("5")).toBe(5);
         expect(normalizePageSize("6")).toBe(6);
         expect(normalizePageSize("7")).toBe(7);
         expect(normalizePageSize("8")).toBe(8);
     });
 
-    it("should clamp / fallback to 6 for invalid or out-of-range inputs", () => {
+    it("should clamp / fallback for invalid or out-of-range inputs", () => {
         expect(normalizePageSize("abc")).toBe(6);
         expect(normalizePageSize("0")).toBe(6);
         expect(normalizePageSize(0)).toBe(6);
@@ -30,8 +42,10 @@ describe("normalizePageSize and query helpers", () => {
         expect(normalizePageSize(100)).toBe(6);
         expect(normalizePageSize(NaN)).toBe(6);
         expect(normalizePageSize("8abc")).toBe(6);
-        expect(normalizePageSize(5)).toBe(6);
+        expect(normalizePageSize(2)).toBe(6);
         expect(normalizePageSize(9)).toBe(6);
+        expect(normalizePageSize("2", 3)).toBe(3);
+        expect(normalizePageSize("9", 3)).toBe(3);
     });
 
     it("should produce identical queryKey in getPokemonQueryOptions regardless of input format", () => {

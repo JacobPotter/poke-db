@@ -16,19 +16,19 @@ describe("TabButton", () => {
         expect(handleClick).toHaveBeenCalled();
     });
 
-    it("should render 2x5 Keypad container on desktop and touch bar on mobile", () => {
-        const {getByText, getByTestId} = render(
+    it("should render keypad container housing on desktop and mobile", () => {
+        const {getByRole, getByTestId} = render(
             <TabButtonContainer>
                 <TabButton type="info" label="Summary"/>
                 <TabButton type="details" label="Details"/>
                 <TabButton type="other" label="Evolutions"/>
-                <TabButton type="refresh" label="Refresh"/>
             </TabButtonContainer>
         );
 
         expect(getByTestId("tab-button-keypad-grid")).not.toBeNull();
         expect(getByTestId("tab-button-mobile-touch-bar")).not.toBeNull();
-        expect(getByText("5")).not.toBeNull();
-        expect(getByText("0")).not.toBeNull();
+        expect(getByRole("button", {name: "Summary"})).not.toBeNull();
+        expect(getByRole("button", {name: "Details"})).not.toBeNull();
+        expect(getByRole("button", {name: "Evolutions"})).not.toBeNull();
     });
 });
