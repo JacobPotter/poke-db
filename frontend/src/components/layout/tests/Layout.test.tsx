@@ -61,4 +61,46 @@ describe("Layout", () => {
         // Check the presence of outlet within the layout
         expect(getByTestId("outlet")).not.toBeNull();
     });
+
+    it("should provide desktop height chain constraints with minimum height floor and overflow scrolling", () => {
+        const darkModeContextValue = {
+            dark: false, toggleDarkMode: () => {
+            }
+        };
+
+        const TestComponent = () => (
+            <DarkModeContext.Provider value={darkModeContextValue}>
+                <MemoryRouter initialEntries={["/test"]}>
+                    <Routes>
+                        <Route path="/" element={<Layout/>}>
+                            <Route path="test" element={<div data-testid="outlet">Mock Outlet</div>}/>
+                        </Route>
+                    </Routes>
+                </MemoryRouter>
+            </DarkModeContext.Provider>
+        );
+
+        const {container} = render(<TestComponent/>);
+
+        const outerWrapper = container.firstChild as HTMLElement;
+        expect(outerWrapper.className).toContain("w-full");
+        expect(outerWrapper.className).toContain("h-full");
+        expect(outerWrapper.className).toContain("min-h-screen");
+        expect(outerWrapper.className).toContain("md:h-screen");
+        expect(outerWrapper.className).toContain("md:max-h-screen");
+
+        const contentContainer = container.querySelector(".min-h-screen.md\\:min-h-\\[580px\\]");
+        expect(contentContainer).not.toBeNull();
+        expect(contentContainer?.className).toContain("md:h-screen");
+        expect(contentContainer?.className).toContain("md:max-h-screen");
+        expect(contentContainer?.className).toContain("md:overflow-y-auto");
+
+        const mainElement = container.querySelector("main");
+        expect(mainElement).not.toBeNull();
+        expect(mainElement?.className).toContain("w-full");
+        expect(mainElement?.className).toContain("h-full");
+        expect(mainElement?.className).toContain("flex-grow");
+        expect(mainElement?.className).toContain("min-h-0");
+        expect(mainElement?.className).toContain("md:max-h-full");
+    });
 });

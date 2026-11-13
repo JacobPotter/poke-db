@@ -40,7 +40,7 @@ export const PokemonListItem = ({
             onClick={handleSelect}
             aria-label={titleAndAria}
             title={titleAndAria}
-            className={`group relative aspect-square p-2 sm:p-2.5 rounded-xl transition-colors duration-150 flex items-center justify-center cursor-pointer min-w-[48px] min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 overflow-hidden ${
+            className={`group relative aspect-square w-full h-full p-0.5 sm:p-1 md:p-1.5 rounded-lg md:rounded-xl transition-colors duration-150 flex items-center justify-center cursor-pointer min-w-0 min-h-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 overflow-hidden ${
                 active
                     ? "ring-2 ring-amber-400 bg-sky-700/80 shadow-[0_0_12px_rgba(251,191,36,0.6)] text-white"
                     : "bg-sky-800/60 hover:bg-sky-700/70 border border-sky-500/30 text-sky-100 hover:shadow-md hover:border-sky-400/50"

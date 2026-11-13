@@ -8,7 +8,6 @@ import {PokemonPage} from "./components/pages/PokemonPage.tsx";
 import {EvolutionsPage} from "./components/pages/EvolutionsPage.tsx";
 import {TypesPage} from "./components/pages/TypesPage.tsx";
 import {MovesPage} from "./components/pages/MovesPage.tsx";
-import {PokemonSummary} from "./components/pokemon/PokemonSummary.tsx";
 import {PokemonDetails} from "./components/pokemon/PokemonDetails.tsx";
 import {EvolutionChainSummary} from "./components/pokemon/EvolutionChainSummary.tsx";
 import {QueryClientProvider} from "@tanstack/react-query";
@@ -25,7 +24,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to={'/pokemon/summary'} replace />
+                element: <Navigate to={'/pokemon/stats'} replace/>
             },
             {
                 path: 'pokemon',
@@ -34,11 +33,11 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         index: true,
-                        element: <Navigate to={"summary"} replace />
+                        element: <Navigate to={"stats"} replace/>
                     },
                     {
-                        path: 'summary',
-                        element: <PokemonSummary/>
+                        path: 'stats',
+                        element: <PokemonDetails/>
                     },
                     {
                         path: 'evolutions',
@@ -46,12 +45,12 @@ export const router = createBrowserRouter([
                         element: <EvolutionChainSummary/>
                     },
                     {
-                        path: 'stats',
-                        element: <PokemonDetails/>
+                        path: 'summary',
+                        element: <Navigate to={"/pokemon/stats"} replace/>
                     },
                     {
                         path: '*',
-                        element: <Navigate to={"summary"} replace />
+                        element: <Navigate to={"stats"} replace/>
                     }
                 ]
             },
@@ -69,7 +68,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '*',
-                element: <Navigate to={'/pokemon/summary'} replace />
+                element: <Navigate to={'/pokemon/stats'} replace/>
             }
         ]
     },

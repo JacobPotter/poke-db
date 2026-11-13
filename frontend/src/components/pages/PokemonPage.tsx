@@ -1,21 +1,31 @@
 import Pokedex from "../ui/pokedex/Pokedex.tsx";
 import {PokemonList} from "../pokemon/PokemonList.tsx";
+import {PokemonSummary} from "../pokemon/PokemonSummary.tsx";
+import {PokemonDetails} from "../pokemon/PokemonDetails.tsx";
+import {EvolutionChainSummary} from "../pokemon/EvolutionChainSummary.tsx";
 import {FC, useCallback, useEffect, useState} from "react";
-import {ArrowLeftIcon, ArrowRightIcon, ArrowUturnLeftIcon, FunnelIcon} from "@heroicons/react/24/outline";
-import {Outlet, useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {FilterForm} from "../pokemon/FilterForm.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 import {usePokemon} from "@/query/hooks/usePokemon.ts";
 import {getEvolutionChainQueryOptions} from "@/query/keyFactories.ts";
+import {
+    ChartPieIcon,
+    DocumentTextIcon,
+    FunnelIcon
+} from "@heroicons/react/24/outline";
 
 type TabName = "summary" | "stats" | "evolutions";
+type RadioView = 'stats' | 'evolutions' | 'filter';
+
+const RADIO_VIEWS: RadioView[] = ['stats', 'evolutions', 'filter'];
 
 export const PokemonPage: FC = () => {
     const {pathname} = useLocation();
     const [searchParams] = useSearchParams();
     const queryClient = useQueryClient();
 
-    const currentTab: TabName = (pathname.split("/")[2] as TabName) || 'summary';
+    const currentTab: TabName = (pathname.split("/")[2] as TabName) || 'stats';
     const navigate = useNavigate();
 
     const [editForm, setEditForm] = useState<boolean>(false);
@@ -29,13 +39,14 @@ export const PokemonPage: FC = () => {
         handlePokemonSelect,
         total,
         pageSize,
-        resetFilters,
         refresh,
         isFetching: loading
     } = usePokemon();
 
     const totalPages = Math.max(1, Math.ceil((total ?? 1) / (pageSize ?? 1)));
     const hasActiveFilters = Boolean(searchParams.get("pokemonName") || searchParams.get("pokemonTypeId"));
+
+    const activeVariety = currentPokemon?.varieties?.[0];
 
     const handlePrevPokemon = useCallback(() => {
         if (pokemon && pokemon.length > 0) {
@@ -63,9 +74,53 @@ export const PokemonPage: FC = () => {
         navigate({pathname: `/pokemon/${tabName}`, search: `?${searchParams.toString()}`});
     }, [navigate, searchParams]);
 
-    function toggleFilter() {
-        setEditForm(prevState => !prevState);
-    }
+    const handleSelectStats = useCallback(() => {
+        setEditForm(false);
+        if (currentTab !== "stats") {
+            handleTabChange("stats");
+        }
+    }, [currentTab, handleTabChange]);
+
+    const handleSelectEvolutions = useCallback(() => {
+        setEditForm(false);
+        if (currentTab !== "evolutions") {
+            handleTabChange("evolutions");
+        }
+    }, [currentTab, handleTabChange]);
+
+    const handleSelectFilter = useCallback(() => {
+        setEditForm(true);
+    }, []);
+
+    const handleRadioKeyDown = useCallback((e: React.KeyboardEvent<HTMLButtonElement>, view: RadioView) => {
+        let step = 0;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+            step = 1;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            step = -1;
+        } else {
+            return;
+        }
+        e.preventDefault();
+
+        const nextView = RADIO_VIEWS[(RADIO_VIEWS.indexOf(view) + step + RADIO_VIEWS.length) % RADIO_VIEWS.length];
+        if (nextView === 'stats') {
+            handleSelectStats();
+        } else if (nextView === 'evolutions') {
+            handleSelectEvolutions();
+        } else {
+            setEditForm(true);
+        }
+
+        // Focus the radio within the same group so the duplicated responsive trays don't steal focus
+        e.currentTarget.closest('[role="radiogroup"]')
+            ?.querySelectorAll<HTMLButtonElement>('[role="radio"]')[RADIO_VIEWS.indexOf(nextView)]
+            ?.focus();
+    }, [handleSelectStats, handleSelectEvolutions]);
+
+    const isFilterSelected = editForm;
+    const isStatsSelected = currentTab === "stats" && !editForm;
+    const isEvolutionsSelected = currentTab === "evolutions" && !editForm;
 
     useEffect(() => {
         if (currentPokemon?.id) {
@@ -74,9 +129,9 @@ export const PokemonPage: FC = () => {
     }, [currentPokemon, queryClient]);
 
     return (
-        <Pokedex>
+        <Pokedex onRefresh={refresh} refreshLabel="Refresh Pokemon Data">
             <Pokedex.LeftScreen loading={loading}>
-                <Outlet context={{pokemonSpecies: currentPokemon}}/>
+                <PokemonSummary pokemonSpecies={currentPokemon}/>
             </Pokedex.LeftScreen>
 
             <Pokedex.LeftControls
@@ -91,120 +146,110 @@ export const PokemonPage: FC = () => {
                 statusLabel="Active Pokemon"
                 onBlackButtonClick={() => {
                     const audio = document.querySelector('audio');
-                    if (audio) {
+                    if (audio && audio.src) {
                         audio.currentTime = 0;
                         audio.play().catch(() => {
+                        });
+                    } else if (activeVariety?.cry) {
+                        const tempAudio = new Audio(activeVariety.cry);
+                        tempAudio.play().catch(() => {
                         });
                     } else {
                         refresh();
                     }
                 }}
                 blackButtonLabel="Play Cry"
-                onRedPillClick={resetFilters}
-                redPillLabel="Reset Filters"
-                onCyanPillClick={toggleFilter}
-                cyanPillLabel={editForm ? "Close Filter" : "Open Filter"}
             />
 
             <Pokedex.RightScreen size={'large'} loading={loading}>
                 {!editForm ? (
-                    <PokemonList
-                        onPokemonSelect={handlePokemonSelect}
-                        pokemon={pokemon ?? []}
-                        pokemonId={currentPokemon && currentPokemon.id ? currentPokemon.id.toString() : "1"}
-                    />
+                    currentTab === 'evolutions' ? (
+                        <EvolutionChainSummary
+                            pokemonSpecies={currentPokemon}
+                            onPokemonSelect={handlePokemonSelect}
+                        />
+                    ) : (
+                        <PokemonDetails pokemon={currentPokemon}/>
+                    )
                 ) : (
                     <FilterForm onSubmit={() => setEditForm(false)}/>
                 )}
             </Pokedex.RightScreen>
 
             <Pokedex.TabButtons>
-                <Pokedex.TabButton
-                    pulse={currentTab === 'summary'}
-                    onClick={() => handleTabChange('summary')}
-                    type={'info'}
-                    label="Pokemon Summary"
-                />
-                <Pokedex.TabButton
-                    pulse={currentTab === 'stats'}
-                    onClick={() => handleTabChange('stats')}
-                    type={'details'}
-                    label="Pokemon Base Stats"
-                />
-                <Pokedex.TabButton
-                    pulse={currentTab === 'evolutions'}
-                    onClick={() => handleTabChange('evolutions')}
-                    type={'other'}
-                    label="Evolution Chain"
-                />
-                <Pokedex.TabButton
-                    type={'refresh'}
-                    onClick={() => refresh()}
-                    label="Refresh Pokemon Data"
+                <PokemonList
+                    onPokemonSelect={handlePokemonSelect}
+                    pokemon={pokemon ?? []}
+                    pokemonId={currentPokemon && currentPokemon.id ? currentPokemon.id.toString() : "1"}
                 />
             </Pokedex.TabButtons>
 
             <Pokedex.KeyboardButtons>
-                <div className="flex items-center justify-between gap-1.5 sm:gap-2.5 w-full">
-                    {/* Dual Horizontal Dark Pill Vents */}
+                <div className="flex items-center justify-between gap-2 sm:gap-3 md:gap-4 w-full">
+                    {/* Left Dual Pill Vents */}
                     <Pokedex.DualPillVents className="hidden sm:flex flex-shrink-0"/>
 
-                    {/* Previous Page Button (Silver Square) */}
-                    <Pokedex.KeyboardButton
-                        onClick={handlePrevious}
-                        disabled={currentPage <= 1}
-                        ariaLabel="Previous Page"
-                        variant="silver"
-                        className={'flex-1 max-w-[64px] sm:max-w-[72px]'}
-                    >
-                        <ArrowLeftIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
-                    </Pokedex.KeyboardButton>
-
-                    {/* Page Readout LCD Matrix Indicator */}
                     <div
-                        className={'px-2 py-1 rounded bg-slate-950 border border-slate-700/80 shadow-inner text-xs sm:text-sm font-mono font-bold text-center flex items-center justify-center gap-1 text-slate-100 min-w-[50px] select-none'}>
-                        <span>{currentPage}</span>
-                        <span className="text-slate-400">/</span>
-                        <span>{totalPages}</span>
+                        role="radiogroup"
+                        aria-label="Right screen view selection"
+                        className="grid grid-cols-3 gap-1.5 sm:gap-2 md:gap-2.5 flex-1 w-full items-center"
+                    >
+                        {/* Base Stats View Pill */}
+                        <Pokedex.PillButton
+                            color="red"
+                            size="large"
+                            role="radio"
+                            selected={isStatsSelected}
+                            tabIndex={isStatsSelected ? 0 : -1}
+                            onClick={handleSelectStats}
+                            onKeyDown={(e) => handleRadioKeyDown(e, 'stats')}
+                            ariaLabel="View Base Stats"
+                            title="View Base Stats"
+                        >
+                            <DocumentTextIcon
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 text-white drop-shadow-sm"/>
+                        </Pokedex.PillButton>
+
+                        {/* Evolution Chain View Pill */}
+                        <Pokedex.PillButton
+                            color="cyan"
+                            size="large"
+                            role="radio"
+                            selected={isEvolutionsSelected}
+                            tabIndex={isEvolutionsSelected ? 0 : -1}
+                            onClick={handleSelectEvolutions}
+                            onKeyDown={(e) => handleRadioKeyDown(e, 'evolutions')}
+                            ariaLabel="View Evolution Chain"
+                            title="View Evolution Chain"
+                        >
+                            <ChartPieIcon
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 text-white drop-shadow-sm"/>
+                        </Pokedex.PillButton>
+
+                        {/* Filter Pill Button */}
+                        <Pokedex.PillButton
+                            color={hasActiveFilters || editForm ? "amber" : "slate"}
+                            size="large"
+                            role="radio"
+                            selected={isFilterSelected}
+                            tabIndex={isFilterSelected ? 0 : -1}
+                            onClick={handleSelectFilter}
+                            onKeyDown={(e) => handleRadioKeyDown(e, 'filter')}
+                            ariaLabel="Filter"
+                            title="Filter Pokemon"
+                            className="relative"
+                        >
+                            <FunnelIcon
+                                className={`w-4 h-4 sm:w-5 sm:h-5 md:w-5.5 md:h-5.5 ${hasActiveFilters || editForm ? 'text-amber-950' : 'text-white'} drop-shadow-sm`}/>
+                            {hasActiveFilters && !editForm && (
+                                <span
+                                    className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 ring-2 ring-slate-900 animate-pulse"/>
+                            )}
+                        </Pokedex.PillButton>
                     </div>
 
-                    {/* Next Page Button (Silver Square) */}
-                    <Pokedex.KeyboardButton
-                        onClick={handleNext}
-                        disabled={currentPage >= totalPages}
-                        ariaLabel="Next Page"
-                        variant="silver"
-                        className={'flex-1 max-w-[64px] sm:max-w-[72px]'}
-                    >
-                        <ArrowRightIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
-                    </Pokedex.KeyboardButton>
-
-                    {/* Circular Yellow Action / Filter Dial */}
-                    <Pokedex.KeyboardButton
-                        onClick={toggleFilter}
-                        ariaLabel={editForm ? "Close Filter" : "Open Filter"}
-                        variant="dial"
-                        className="flex-shrink-0"
-                    >
-                        <div className="relative flex items-center justify-center">
-                            <FunnelIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
-                            {hasActiveFilters && (
-                                <span
-                                    className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-red-600 ring-1 ring-slate-900 animate-pulse"></span>
-                            )}
-                        </div>
-                    </Pokedex.KeyboardButton>
-
-                    {/* Reset Filter Button (Silver Square) */}
-                    <Pokedex.KeyboardButton
-                        onClick={resetFilters}
-                        disabled={!hasActiveFilters}
-                        ariaLabel="Reset Filters"
-                        variant="silver"
-                        className="flex-1 max-w-[64px] sm:max-w-[72px]"
-                    >
-                        <ArrowUturnLeftIcon className={'w-4 h-4 sm:w-5 sm:h-5'}/>
-                    </Pokedex.KeyboardButton>
+                    {/* Right Dual Pill Vents */}
+                    <Pokedex.DualPillVents className="hidden sm:flex flex-shrink-0"/>
                 </div>
             </Pokedex.KeyboardButtons>
         </Pokedex>

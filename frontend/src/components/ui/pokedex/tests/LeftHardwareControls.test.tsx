@@ -53,8 +53,8 @@ describe("LeftHardwareControls", () => {
             );
 
             const dpad = getByRole("group", {name: "Directional Pad"}).element();
-            expect(dpad.className).toContain("lg:w-[104px]");
-            expect(dpad.className).toContain("lg:h-[104px]");
+            expect(dpad.className).toContain("md:w-24");
+            expect(dpad.className).toContain("md:h-24");
 
             const molding = dpad.querySelectorAll(":scope > div.absolute");
             expect(molding.length).toBe(3);
@@ -124,19 +124,22 @@ describe("LeftHardwareControls", () => {
     });
 
     describe("StatusDisplay Component", () => {
-        it("should render formatted text and label correctly", () => {
+        it("should render formatted text and label correctly with high-contrast styling", () => {
             const {getByText, getByRole} = render(
                 <StatusDisplay text="#025 PIKACHU" label="Target Pokemon"/>
             );
 
-            expect(getByText("Target Pokemon")).not.toBeNull();
+            const labelEl = getByText("Target Pokemon").element();
+            expect(labelEl).not.toBeNull();
+            expect(labelEl.className).toContain("text-emerald-300");
+            expect(labelEl.className).toContain("font-extrabold");
             expect(getByText("#025 PIKACHU")).not.toBeNull();
             expect(getByRole("status")).not.toBeNull();
         });
     });
 
     describe("PillButton Component", () => {
-        it("should render red and cyan pill buttons with click events", async () => {
+        it("should render red and cyan pill buttons with click events and 3D physical styling", async () => {
             const onRed = vi.fn();
             const onCyan = vi.fn();
 
@@ -150,11 +153,93 @@ describe("LeftHardwareControls", () => {
             const redBtn = getByRole("button", {name: "Option Red"});
             const cyanBtn = getByRole("button", {name: "Option Cyan"});
 
+            expect(redBtn.element().className).toContain("shadow-[inset_0_1.5px_0_rgba(255,255,255,0.35),0_2px_4px_rgba(0,0,0,0.5)]");
+            expect(cyanBtn.element().className).toContain("shadow-[inset_0_1.5px_0_rgba(255,255,255,0.4),0_2px_4px_rgba(0,0,0,0.5)]");
+            expect(redBtn.element().className).not.toContain("ring-amber-400");
+
             await redBtn.click();
             expect(onRed).toHaveBeenCalledTimes(1);
 
             await cyanBtn.click();
             expect(onCyan).toHaveBeenCalledTimes(1);
+        });
+
+        it("should render backlit LED glow without yellow outline ring when selected across colors", () => {
+            const {getByRole} = render(
+                <div className="flex gap-2">
+                    <PillButton color="red" selected={true} ariaLabel="Selected Red"/>
+                    <PillButton color="cyan" selected={true} ariaLabel="Selected Cyan"/>
+                    <PillButton color="amber" selected={true} ariaLabel="Selected Amber"/>
+                    <PillButton color="slate" selected={true} ariaLabel="Selected Slate"/>
+                </div>
+            );
+
+            const redBtn = getByRole("button", {name: "Selected Red"});
+            const cyanBtn = getByRole("button", {name: "Selected Cyan"});
+            const amberBtn = getByRole("button", {name: "Selected Amber"});
+            const slateBtn = getByRole("button", {name: "Selected Slate"});
+
+            // Red LED glow
+            expect(redBtn.element().className).toContain("shadow-[0_0_16px_rgba(239,68,68,0.85)");
+            expect(redBtn.element().className).not.toContain("ring-amber-400");
+
+            // Cyan LED glow
+            expect(cyanBtn.element().className).toContain("shadow-[0_0_16px_rgba(56,189,248,0.85)");
+            expect(cyanBtn.element().className).not.toContain("ring-amber-400");
+
+            // Amber LED glow
+            expect(amberBtn.element().className).toContain("shadow-[0_0_16px_rgba(245,158,11,0.85)");
+            expect(amberBtn.element().className).not.toContain("ring-amber-400");
+
+            // Slate LED glow
+            expect(slateBtn.element().className).toContain("shadow-[0_0_14px_rgba(148,163,184,0.75)");
+            expect(slateBtn.element().className).not.toContain("ring-amber-400");
+        });
+
+        it("should support radio role, aria-checked, tabIndex, and keyboard events", () => {
+            const onKeyDown = vi.fn();
+
+            const {getByRole} = render(
+                <div role="radiogroup" aria-label="Controls">
+                    <PillButton
+                        role="radio"
+                        color="red"
+                        selected={true}
+                        tabIndex={0}
+                        ariaLabel="Radio 1"
+                        onKeyDown={onKeyDown}
+                    />
+                    <PillButton
+                        role="radio"
+                        color="cyan"
+                        selected={false}
+                        tabIndex={-1}
+                        ariaLabel="Radio 2"
+                    />
+                </div>
+            );
+
+            const radio1 = getByRole("radio", {name: "Radio 1"});
+            const radio2 = getByRole("radio", {name: "Radio 2"});
+
+            expect(radio1.element().getAttribute("aria-checked")).toBe("true");
+            expect(radio1.element().getAttribute("tabindex")).toBe("0");
+            expect(radio2.element().getAttribute("aria-checked")).toBe("false");
+            expect(radio2.element().getAttribute("tabindex")).toBe("-1");
+
+            radio1.element().dispatchEvent(new KeyboardEvent("keydown", {key: "ArrowRight", bubbles: true}));
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
+        });
+
+        it("should have distinct high-contrast keyboard focus styling separate from selection glow", () => {
+            const {getByRole} = render(
+                <PillButton color="red" ariaLabel="Focusable Button"/>
+            );
+
+            const btn = getByRole("button", {name: "Focusable Button"});
+            expect(btn.element().className).toContain("focus-visible:ring-2");
+            expect(btn.element().className).toContain("focus-visible:ring-white/90");
+            expect(btn.element().className).toContain("focus-visible:ring-offset-2");
         });
     });
 
@@ -224,6 +309,38 @@ describe("LeftHardwareControls", () => {
             const rightBtn = getByRole("button", {name: "D-Pad Right"});
             await rightBtn.click();
             expect(onRight).toHaveBeenCalledTimes(1);
+        });
+
+        it("should render filter and refresh buttons with active filter state indicator", async () => {
+            const onFilter = vi.fn();
+            const onRefresh = vi.fn();
+
+            const {getByRole} = render(
+                <LeftHardwareControls
+                    statusText="#025 PIKACHU"
+                    onFilterClick={onFilter}
+                    filterLabel="Open Filter"
+                    isFilterActive={true}
+                    onRefreshClick={onRefresh}
+                    refreshLabel="Refresh Pokemon"
+                />
+            );
+
+            const filterBtn = getByRole("button", {name: "Open Filter"});
+            const refreshBtn = getByRole("button", {name: "Refresh Pokemon"});
+
+            expect(filterBtn).not.toBeNull();
+            expect(refreshBtn).not.toBeNull();
+
+            // Verify active pulse indicator dot on filter button
+            const pulseDot = filterBtn.element().querySelector("span.animate-pulse");
+            expect(pulseDot).not.toBeNull();
+
+            await filterBtn.click();
+            expect(onFilter).toHaveBeenCalledTimes(1);
+
+            await refreshBtn.click();
+            expect(onRefresh).toHaveBeenCalledTimes(1);
         });
     });
 });

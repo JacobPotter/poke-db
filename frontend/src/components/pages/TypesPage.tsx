@@ -4,7 +4,10 @@ import {TypeList} from "../moveTypes/TypesList.tsx";
 import {TypesSummary} from "../moveTypes/TypesSummary.tsx";
 import {TypeDetails} from "../moveTypes/TypeDetails.tsx";
 import {TypesChart} from "../moveTypes/TypesChart.tsx";
-import {ArrowLeftIcon, ArrowRightIcon} from "@heroicons/react/24/outline";
+import {
+    ArrowLeftIcon,
+    ArrowRightIcon
+} from "@heroicons/react/24/outline";
 import {useMoveTypes} from "@/query/hooks/useMoveTypes.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import {MOVE_TYPE_DEFAULT_QUERY_OPTIONS} from "@/query/keyFactories.ts";
@@ -39,7 +42,7 @@ export function TypesPage() {
     const selectedType = moveTypes?.[listIndex];
 
     return (
-        <Pokedex>
+        <Pokedex onRefresh={handleRefresh} refreshLabel="Refresh Move Types">
             <Pokedex.LeftScreen>
                 {tabIndex === 0 ? (
                     <TypesSummary moveType={selectedType}/>
@@ -62,6 +65,15 @@ export function TypesPage() {
                 statusLabel="Active Type"
                 onBlackButtonClick={handleRefresh}
                 blackButtonLabel="Refresh Types"
+                onSummaryClick={() => setTabIndex(0)}
+                summaryLabel="Type Summary"
+                onStatsClick={() => setTabIndex(1)}
+                statsLabel="Type Matchups"
+                onEvolutionsClick={() => setTabIndex(2)}
+                evolutionsLabel="Effectiveness Matrix"
+                currentTab={tabIndex === 0 ? "summary" : tabIndex === 1 ? "stats" : "evolutions"}
+                onRefreshClick={handleRefresh}
+                refreshLabel="Refresh Move Types"
                 onRedPillClick={() => setTabIndex(0)}
                 redPillLabel="Type Summary"
                 onCyanPillClick={() => setTabIndex(1)}
@@ -90,11 +102,6 @@ export function TypesPage() {
                     onClick={() => setTabIndex(2)}
                     type={'other'}
                     label="Effectiveness Matrix"
-                />
-                <Pokedex.TabButton
-                    type={'refresh'}
-                    onClick={handleRefresh}
-                    label="Refresh Move Types"
                 />
             </Pokedex.TabButtons>
 

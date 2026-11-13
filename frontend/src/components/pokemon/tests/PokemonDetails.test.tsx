@@ -12,7 +12,7 @@ describe("PokemonDetails", () => {
 
         const {getByText} = render(
             <PokemonDetails/>,
-            {wrapper: Pokedex.LeftScreen},
+            {wrapper: Pokedex.RightScreen},
             loader,
             {},
             {pokemonSpecies: mockSpecies}
@@ -20,6 +20,8 @@ describe("PokemonDetails", () => {
 
         expect(getByText("Bulbasaur")).toBeTruthy();
         expect(getByText("Base Stats")).toBeTruthy();
+        expect(getByText("Weight: 6.9 kg")).toBeTruthy();
+        expect(getByText("Height: 0.7 m")).toBeTruthy();
         expect(getByText("HP")).toBeTruthy();
         expect(getByText("Attack")).toBeTruthy();
         expect(getByText("Defense")).toBeTruthy();
@@ -31,7 +33,7 @@ describe("PokemonDetails", () => {
     it("should display empty state when no pokemon is selected", () => {
         const {getByText} = render(
             <PokemonDetails pokemon={null}/>,
-            {wrapper: Pokedex.LeftScreen},
+            {wrapper: Pokedex.RightScreen},
             loader,
             {},
             {pokemonSpecies: null}

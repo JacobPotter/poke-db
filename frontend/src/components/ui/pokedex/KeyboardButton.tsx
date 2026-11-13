@@ -21,7 +21,7 @@ export const KeyboardButtonContainer: FC<PropsWithChildren<Sizeable & { classNam
                                                                                                   }) => (
     <section
         data-testid="keyboard-button-container"
-        className={`${size === 'small' ? 'row-span-1' : 'row-span-2'} p-2 sm:p-2.5 bg-slate-800/90 md:bg-slate-800/95 dark:bg-slate-950/90 border-2 border-slate-700/80 dark:border-slate-800 rounded-xl flex items-center justify-center shadow-inner w-full ${className}`}
+        className={`${size === 'small' ? 'row-span-1' : 'row-span-2'} shrink-0 p-1.5 sm:p-2 bg-slate-800/90 md:bg-slate-800/95 dark:bg-slate-950/90 border-2 border-slate-700/80 dark:border-slate-800 rounded-xl flex items-center justify-center shadow-inner w-full ${className}`}
     >
         {children}
     </section>
@@ -76,8 +76,8 @@ export const KeyboardButton: FC<PropsWithChildren<KeyboardButtonProps & Sizeable
                 <div
                     className={`flex items-center ${prefixIcon || suffixIcon ? 'justify-between' : 'justify-center'} ${
                         size === 'small'
-                            ? 'px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm'
-                            : 'px-3 py-1.5 md:px-4 md:py-2.5 text-xs md:text-sm'
+                            ? 'px-2 py-1 md:px-3 md:py-1.5 lg:py-2 text-xs md:text-sm'
+                            : 'px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm'
                     } rounded-md`}
                 >
                     {prefixIcon &&
