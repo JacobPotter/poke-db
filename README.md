@@ -2,9 +2,16 @@
 
 **PokeDB** is a full-stack online Pokédex web application. It features a modern, responsive Single Page Application frontend built with React 18, TypeScript, and Tailwind CSS, backed by a RESTful API written in Go 1.23 with Gin, GORM, and PostgreSQL 15+. Data is sourced and synchronized from [PokeAPI](https://pokeapi.co/) via scheduled batch ingestion jobs.
 
-For the live version, visit [Poke-DB](https://poke-db.webwizardssoftware.com).
+![PokeDB Kanto Pokédex - Desktop Light Mode](docs/screenshots/desktop-light.png)
 
-<img width="1512" alt="PokeDB Screenshot" src="https://github.com/user-attachments/assets/a7ec3b94-6fbd-462e-abbc-25a3302e8834">
+<p align="center">
+  <em>Authentic Gen 1 Kanto dual-panel folding console (Desktop Light Mode)</em>
+</p>
+
+|                                      Desktop Dark Mode                                      |                                   Mobile Johto Clamshell                                    |
+|:-------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|
+| <img src="docs/screenshots/desktop-dark.png" alt="PokeDB Desktop Dark Mode" width="100%" /> | <img src="docs/screenshots/mobile-light.png" alt="PokeDB Mobile Johto Mode" width="100%" /> |
+|                      <em>Dark Red Chassis & High-Contrast Display</em>                      |                      <em>Gen 2 Johto Vertical Clamshell (Mobile)</em>                       |
 
 ---
 
